@@ -87,12 +87,22 @@ async function main() {
         leagueGames: STATE.season._leagueGameLog.length
       };
     });
-    assert.equal(historicalSchedule.games, 82, '历史联盟应生成完整 82 场赛程');
+    assert.equal(historicalSchedule.games, 82, '1984-85 应按真实赛季长度生成 82 场赛程');
     assert.ok(historicalSchedule.opponents.every(team => league1985.teams.includes(team)), '历史赛程不应包含当年不存在的对手');
     assert.ok(historicalSchedule.dayTeams.every(team => league1985.teams.includes(team)), '联盟每日赛程不应包含当年不存在的球队');
     assert.deepEqual(historicalSchedule.standingsTeams.sort(), league1985.teams.slice().sort(), '排名表应只包含当季球队');
     assert.equal(historicalSchedule.processedDays, 1, '历史联盟首个比赛日应能正常模拟');
     assert.ok(historicalSchedule.leagueGames > 0, '历史联盟首个比赛日应产生其他球队赛果');
+    const lockoutSchedule = await page.evaluate(async () => {
+      await window.loadLegendLeagueSeason(1999);
+      STATE.mode = 'legend';
+      STATE.careerTeam = 'NYK';
+      STATE.season = { standings: {}, schedule: [] };
+      initStandings();
+      buildRealSchedule();
+      return STATE.season.schedule.length;
+    });
+    assert.equal(lockoutSchedule, 50, '1998-99 缩水赛季应生成 50 场赛程');
     console.log(JSON.stringify({ report, cards: 5, magic1991, league1985, status: 'ok' }, null, 2));
   } finally {
     if (browser) await browser.close();

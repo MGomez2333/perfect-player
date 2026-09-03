@@ -2613,6 +2613,8 @@ function restoreBaseLeagueRoster() {
     NBA2K_DATA[t] = cloneLeagueData(_baseLeagueRosterSnapshot[t] || []);
   });
   window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = null;
+  window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = null;
+  window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = null;
   window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = null;
   delete NBA2K_DATA._draftClass2026Applied;
 }
@@ -4768,7 +4770,7 @@ function startSeason() {
   setTimeout(quickSimAllGames, 1200);
 }
 
-// ★ 逐场模拟全部 82 场常规赛，点逐个出现
+// ★ 逐场模拟当季全部常规赛，点逐个出现
 function quickSimAllGames() {
   var schedule = STATE.season.schedule;
   if (!schedule || schedule.length === 0) { console.error('[Sim] 赛程为空'); renderDotGrid(); return; }
@@ -5926,14 +5928,15 @@ function buildRealSchedule() {
   // renderGameList();  // 日历模式已注释
 }
 
-/** 为任意规模的历史联盟生成 82 场赛程；奇数队联盟每天允许一队轮休。 */
+/** 按历史数据中的真实赛季场数生成赛程；奇数队联盟每天允许一队轮休。 */
 function buildHistoricalLeagueSchedule(myTeam) {
   var activeTeams = NBA2K_TEAMS.slice();
   var opponents = activeTeams.filter(function(team) { return team !== myTeam; });
   if (!opponents.length) throw new Error('历史联盟没有可用对手');
   var schedule = [];
   var dayMap = {};
-  for (var gameIndex = 0; gameIndex < 82; gameIndex++) {
+  var seasonGames = Math.max(1, Number(window.PERFECT_PLAYER_LEGEND_SEASON_GAMES || 82));
+  for (var gameIndex = 0; gameIndex < seasonGames; gameIndex++) {
     var day = gameIndex + 1;
     var opponent = opponents[gameIndex % opponents.length];
     var home = gameIndex % 2 === 0;
@@ -9313,7 +9316,7 @@ function renderMyCard(isFinal) {
       </div>
       
       <div class="mc-section">
-        <div class="mc-section-title">📊 场均数据 · 已赛 ${gamesPlayed}${isFinal ? '' : '/82'} 场</div>
+        <div class="mc-section-title">📊 场均数据 · 已赛 ${gamesPlayed}${isFinal ? '' : '/' + ((STATE.season.schedule || []).length || 82)} 场</div>
         <div class="mc-stats-grid">
           <div class="mc-stat"><span class="mc-stat-val">${avg.pts}</span><span class="mc-stat-lbl">得分</span></div>
           <div class="mc-stat"><span class="mc-stat-val">${avg.reb}</span><span class="mc-stat-lbl">篮板</span></div>

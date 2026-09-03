@@ -344,6 +344,8 @@
 
   window.loadLegendLeagueSeason = function(endYear) {
     endYear = Number(endYear);
+    // 每次重新应用名单，确保返回年代选择页后切换赛季不会沿用上一次联盟。
+    delete legendLeaguePromises[endYear];
     if (!legendLeaguePromises[endYear]) {
       legendLeaguePromises[endYear] = Promise.all([
         fetchLegendJson('player_seasons_' + endYear + '.json'),
@@ -352,11 +354,15 @@
         var payload = results[0] || {};
         var playerIndex = results[1] || {};
         var grouped = {};
+        var teamGameCounts = {};
+        var seasonGameCount = 0;
         (payload.rows || []).forEach(function(row) {
           if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
+          seasonGameCount = Math.max(seasonGameCount, Number(row.gp || 0));
           var team = canonicalHistoricalTeam(row.team);
           if (!team || typeof NBA2K_DATA === 'undefined' || !Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) return;
           if (!grouped[team]) grouped[team] = {};
+          teamGameCounts[team] = Math.max(Number(teamGameCounts[team] || 0), Number(row.gp || 0));
           var key = row.realId || String(row.name || row.displayName || '').toLowerCase();
           var previous = grouped[team][key];
           if (!previous || Number(row.gp || 0) > Number(previous.gp || 0)) grouped[team][key] = row;
@@ -380,11 +386,15 @@
         });
         NBA2K_TEAMS.splice.apply(NBA2K_TEAMS, [0, NBA2K_TEAMS.length].concat(activeTeams));
         window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = activeTeams.slice();
+        window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = teamGameCounts;
+        window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = seasonGameCount || 82;
         window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = {
           season: endYear,
           label: window.formatLegendSeason(endYear),
           teams: activeTeams.length,
-          players: totalPlayers
+          players: totalPlayers,
+          seasonGames: seasonGameCount || 82,
+          gamesByTeam: Object.assign({}, teamGameCounts)
         };
         if (typeof clearLineupCache === 'function') clearLineupCache();
         if (typeof attachOfficialPlayerHeadshots === 'function') attachOfficialPlayerHeadshots();
