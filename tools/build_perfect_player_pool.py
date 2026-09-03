@@ -33,6 +33,28 @@ TEAM_NAMES = {
     26: "独行侠", 27: "火箭", 28: "灰熊", 29: "鹈鹕", 30: "马刺",
 }
 
+# assets/data/historical/players.json 的西部球队编号沿用旧版顺序，
+# 与当前游戏的 TEAM_NAMES 顺序不同。东部 1-15 相同；西部必须显式转换。
+# 旧编号示例：21=掘金、26=勇士，而当前游戏中 16=掘金、21=勇士。
+HISTORICAL_TEAM_ID_TO_CURRENT = {
+    **{team_id: team_id for team_id in range(1, 16)},
+    16: 26,  # 独行侠
+    17: 27,  # 火箭
+    18: 28,  # 灰熊
+    19: 29,  # 鹈鹕/黄蜂
+    20: 30,  # 马刺
+    21: 16,  # 掘金
+    22: 17,  # 森林狼
+    23: 19,  # 开拓者
+    24: 18,  # 雷霆/超音速
+    25: 20,  # 爵士
+    26: 21,  # 勇士
+    27: 22,  # 快船
+    28: 23,  # 湖人
+    29: 24,  # 太阳
+    30: 25,  # 国王
+}
+
 TEAM_ALIASES = {
     "小牛": 26,
     "达拉斯小牛": 26,
@@ -411,9 +433,9 @@ def player_record(row: dict[str, str], source: dict, history: dict | None, nba_i
     identity = (history or {}).get("realId") or norm(english) or norm(name)
     history_draft_year = number(((history or {}).get("draft") or {}).get("year"), 0)
     historical_teams = {
-        number(snapshot.get("teamId"))
+        HISTORICAL_TEAM_ID_TO_CURRENT[number(snapshot.get("teamId"))]
         for snapshot in ((history or {}).get("rosterSnapshots") or [])
-        if 1 <= number(snapshot.get("teamId")) <= 30
+        if number(snapshot.get("teamId")) in HISTORICAL_TEAM_ID_TO_CURRENT
     }
     # rosters19 is a fantasy all-time compilation whose row team is not a
     # reliable real franchise. Prefer the historical database affiliations so

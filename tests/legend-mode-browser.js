@@ -50,6 +50,9 @@ async function main() {
     });
     assert.equal(magic1991.length, 25, '魔术队应固定包含 25 张队史巅峰卡');
     assert.ok(magic1991.every(player => player.peak), '1990-91 魔术队应全部使用生涯巅峰能力卡');
+    const warriors = await page.evaluate(() => window.PERFECT_PLAYER_LEGEND_DATA.GSW.map(player => player.name));
+    ['Stephen Curry', 'Klay Thompson', 'Kevin Durant', 'Draymond Green', "Wilt Chamberlain"].forEach(name => assert.ok(warriors.includes(name), '勇士队史池缺少 ' + name));
+    ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.includes(name), '勇士队史池错误混入 ' + name));
     console.log(JSON.stringify({ report, cards: 5, magic1991, status: 'ok' }, null, 2));
   } finally {
     if (browser) await browser.close();

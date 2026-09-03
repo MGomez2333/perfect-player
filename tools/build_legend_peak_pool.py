@@ -18,9 +18,27 @@ TEAM_ABBRS = {
 }
 
 
+def load_real_franchise_affiliations() -> dict[str, set[int]]:
+    """Index actual regular-season team rows, including teams omitted by snapshots."""
+    affiliations: dict[str, set[int]] = defaultdict(set)
+    for path in sorted(pool.HIST_DIR.glob("player_seasons_*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for row in payload.get("rows", []):
+            if row.get("type") != "regular":
+                continue
+            team_id = int(row.get("teamId") or 0)
+            if team_id not in TEAM_ABBRS:
+                continue
+            for key in (row.get("realId"), pool.norm(row.get("name")), pool.norm(row.get("displayName"))):
+                if key:
+                    affiliations[str(key)].add(team_id)
+    return affiliations
+
+
 def main() -> None:
     history_index = pool.load_history_index()
     nba_ids = pool.load_nba_ids()
+    affiliations = load_real_franchise_affiliations()
     peaks: dict[str, dict] = {}
 
     for source in pool.SEASONS:
@@ -43,7 +61,12 @@ def main() -> None:
 
     candidates: dict[int, dict[int, dict[str, dict]]] = defaultdict(lambda: defaultdict(dict))
     for identity, record in peaks.items():
-        teams = record.get("historicalTeams") or [record.get("teamId")]
+        teams = set()
+        for key in (identity, pool.norm(record.get("nameEn")), pool.norm(record.get("name"))):
+            teams.update(affiliations.get(str(key), set()))
+        if not teams:
+            teams.update(record.get("historicalTeams") or [record.get("teamId")])
+        record["historicalTeams"] = sorted(teams)
         position = max(1, min(5, int(record.get("pos") or 3)))
         for team_id in teams:
             team_id = int(team_id or 0)
@@ -67,6 +90,12 @@ def main() -> None:
             counts[str(position)] = len(ranked)
         teams_payload[abbr] = roster
         position_counts[abbr] = counts
+
+    # 队伍归属是传奇池的硬约束，不能只检查“每队 25 人”。
+    for team_id, abbr in TEAM_ABBRS.items():
+        for card in teams_payload[abbr]:
+            if team_id not in (card.get("historicalTeams") or [card.get("teamId")]):
+                raise ValueError(f"franchise leak: {abbr} contains {card.get('nameEn') or card.get('name')}")
 
     payload = {
         "version": 1,

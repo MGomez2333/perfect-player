@@ -31,6 +31,21 @@ Object.entries(peaks.teams || {}).forEach(([team, cards]) => {
   [1, 2, 3, 4, 5].forEach(pos => assert.equal(positions.get(pos), 5, `${team} 的位置 ${pos} 应有 5 张卡`));
 });
 
+const teamIds = {
+  BOS:1,BKN:2,NYK:3,PHI:4,TOR:5,CHI:6,CLE:7,DET:8,IND:9,MIL:10,
+  ATL:11,CHA:12,MIA:13,ORL:14,WAS:15,DEN:16,MIN:17,OKC:18,POR:19,UTA:20,
+  GSW:21,LAC:22,LAL:23,PHX:24,SAC:25,DAL:26,HOU:27,MEM:28,NOP:29,SAS:30
+};
+Object.entries(peaks.teams || {}).forEach(([team, cards]) => {
+  cards.forEach(card => assert.ok(
+    (card.historicalTeams || [card.teamId]).includes(teamIds[team]),
+    `${team} 球员泄漏：${card.nameEn || card.name}`
+  ));
+});
+const warriors = new Set(peaks.teams.GSW.map(card => card.nameEn));
+['Stephen Curry', 'Klay Thompson', 'Draymond Green', 'Wilt Chamberlain'].forEach(name => assert.ok(warriors.has(name), `勇士队史池缺少 ${name}`));
+['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.has(name), `勇士队史池错误混入 ${name}`));
+
 const extension = read('assets', 'js', 'perfect-player-hupu-extensions.js');
 assert.match(extension, /showLegendEraSelect/);
 assert.match(extension, /loadLegendSeason/);
