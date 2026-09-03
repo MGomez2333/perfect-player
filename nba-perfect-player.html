@@ -6,6 +6,10 @@
   <title>Perfect Player · 完美球员</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E">
   <style>
+@font-face{font-family:'Fredoka';src:url('assets/fonts/Fredoka.woff2') format('woff2');font-style:normal;font-weight:400 700;font-display:swap}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito.woff2') format('woff2');font-style:normal;font-weight:400 800;font-display:swap}
+@font-face{font-family:'Nunito';src:url('assets/fonts/Nunito-Italic.woff2') format('woff2');font-style:italic;font-weight:400 800;font-display:swap}
+@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/NotoSansSC.woff2') format('woff2');font-style:normal;font-weight:400 900;font-display:swap}
 /* ============================================================
    BuildPlayer — Mobile-First Game Edition
    ============================================================ */
@@ -4770,6 +4774,8 @@ function startSeason() {
 // ★ 逐场模拟当季全部常规赛，点逐个出现
 function quickSimAllGames() {
   var schedule = STATE.season.schedule;
+  // 历史联盟需要同步模拟更多球队；缩短逐场展示间隔，避免大量计时器造成“卡死”错觉。
+  var simDelay = STATE.mode === 'legend' ? 24 : 80;
   if (!schedule || schedule.length === 0) { console.error('[Sim] 赛程为空'); renderDotGrid(); return; }
   var games = schedule.filter(function(g) { return !g.simulated; });
   if (games.length === 0) { renderDotGrid(); return; }
@@ -4944,7 +4950,7 @@ function quickSimAllGames() {
           var esEl = document.getElementById('eventStatusBar');
           if (esEl) esEl.outerHTML = renderEventStatus();
           gi++;
-          setTimeout(simNextWithDelay, 120);
+          setTimeout(simNextWithDelay, simDelay);
         };
         var runPlayedThroughRegularGame = function(severity) {
           ev.injuryGamesLeft = Math.max(0, (ev.injuryGamesLeft || 0) - 1);
@@ -4987,7 +4993,7 @@ function quickSimAllGames() {
           var esH = document.getElementById('eventStatusBar');
           if (esH) esH.outerHTML = renderEventStatus();
           gi++;
-          setTimeout(simNextWithDelay, 120);
+          setTimeout(simNextWithDelay, simDelay);
         };
         if (skipReason === 'injury' && isKeyInjuredRegularGame(g, gi, games.length) && shouldOfferPlayThroughInjury('reg-' + (STATE.season.games.length + 1), true)) {
           showPlayThroughInjuryModal({
@@ -5072,13 +5078,13 @@ function quickSimAllGames() {
 
       // ★ 如果有事件弹窗，先弹窗再继续
       if (evData && typeof showEventModal === 'function') {
-        showEventModal(evData, function() { setTimeout(simNextWithDelay, 120); });
+        showEventModal(evData, function() { setTimeout(simNextWithDelay, simDelay); });
       } else if (branchEv) {
-        showSeasonBranchEvent(branchEv, function() { setTimeout(simNextWithDelay, 120); });
+        showSeasonBranchEvent(branchEv, function() { setTimeout(simNextWithDelay, simDelay); });
       } else {
-        setTimeout(simNextWithDelay, 120);
+        setTimeout(simNextWithDelay, simDelay);
       }
-    } catch(e) { console.error('[Sim] 第' + (gi + 1) + '场异常:', e); gi++; setTimeout(simNextWithDelay, 120); }
+    } catch(e) { console.error('[Sim] 第' + (gi + 1) + '场异常:', e); gi++; setTimeout(simNextWithDelay, simDelay); }
   }
 
   simNextWithDelay();
@@ -19050,6 +19056,7 @@ function saveStandings() {
 }
 
 function processDraft() {
+  if (STATE.mode === 'legend' && processHistoricalDraft()) return;
   if (!STATE._prevStandings) return;
   var st = STATE._prevStandings;
   // 按胜率排（差在前）
@@ -19089,6 +19096,80 @@ function processDraft() {
     });
     if (lowestIdx >= 0) roster[lowestIdx] = rookie;
   });
+}
+
+function getHistoricalIncomingDraftYear() {
+  var firstSeasonEnd = Number(STATE.legendSeason) || 2025;
+  var completedSeasons = Number(STATE.career && STATE.career.seasonCount) || 1;
+  return firstSeasonEnd + completedSeasons - 1;
+}
+
+function historicalDraftPosition(pos) {
+  return ({ 1:'PG', 2:'SG', 3:'SF', 4:'PF', 5:'C' })[Number(pos)] || 'SF';
+}
+
+function historicalDraftTeam(team) {
+  var aliases = { SEA:'OKC', NJN:'BKN', BRK:'BKN', NOH:'NOP', NOK:'NOP', CHH:'CHA', CHO:'CHA', VAN:'MEM', WSB:'WAS', KCK:'SAC', KCO:'SAC', SDC:'LAC', BUF:'LAC', NOJ:'UTA', PHW:'GSW', SFW:'GSW', SYR:'PHI', STL:'ATL' };
+  team = String(team || '').trim().toUpperCase();
+  return aliases[team] || team;
+}
+
+function historicalRookieToLeaguePlayer(item, draftYear, destination) {
+  var pos = historicalDraftPosition(item.pos);
+  var secondary = historicalDraftPosition(item.pos2);
+  var ovr = Math.max(55, Math.min(90, Number(item.ratingSeed) || draftOvrByPick(Number(item.pick) || 60)));
+  var perimeter = Number(item.pos) <= 2;
+  var big = Number(item.pos) >= 4;
+  var attrs = {
+    threePT: ovr + (perimeter ? 2 : big ? -7 : 0), MID: ovr, FIN: ovr + (big ? 4 : 1),
+    DNK: ovr + (big ? 5 : 0), HAN: ovr + (perimeter ? 5 : big ? -5 : 1), PAS: ovr + (perimeter ? 5 : big ? -6 : 0),
+    PDEF: ovr + (perimeter ? 2 : 0), IDEF: ovr + (big ? 5 : -3), BLK: ovr + (big ? 7 : -8),
+    REB: ovr + (big ? 7 : -6), ATH: ovr + 2, STR: ovr + (big ? 6 : -2), CLU: ovr
+  };
+  Object.keys(attrs).forEach(function(key) { attrs[key] = Math.max(30, Math.min(99, Math.round(attrs[key]))); });
+  return Object.assign({
+    name: item.nameEn || item.name || ('Draft_' + draftYear + '_' + item.pick),
+    nameEN: item.nameEn || item.name || '', cname: item.nameCn || item.displayName || item.name || '',
+    pos: pos + (secondary !== pos && Number(item.pos2) ? ' / ' + secondary : ''),
+    height: ({PG:"6'2\"",SG:"6'5\"",SF:"6'7\"",PF:"6'9\"",C:"6'11\""})[pos],
+    type: draftYear + '年真实新秀', ovr: ovr, _age: Number(item.age) || 20, _enterYear: draftYear,
+    _realId: item.realId || '', _historyKey: item.historyKey || '', _historicalDraftPick: Number(item.pick) || 0,
+    _historicalDraftTeam: destination, contract: Number(item.pick) <= 14 ? 4 : (Number(item.pick) <= 30 ? 3 : 2),
+    photoLocal: item.photoLocal || '', _photoLocal: item.photoLocal || '', photoStatus: item.photoStatus || '',
+    _awardStreak: {}
+  }, attrs);
+}
+
+function processHistoricalDraft() {
+  var classes = window.PERFECT_PLAYER_HISTORICAL_DRAFT_CLASSES || {};
+  var destinations = window.PERFECT_PLAYER_HISTORICAL_DRAFT_DESTINATIONS || {};
+  var draftYear = getHistoricalIncomingDraftYear();
+  var draftClass = classes[String(draftYear)] || [];
+  var destinationMap = destinations[String(draftYear)] || {};
+  if (!draftClass.length) return false;
+  var active = {};
+  NBA2K_TEAMS.forEach(function(team) {
+    (NBA2K_DATA[team] || []).forEach(function(player) {
+      if (player._realId) active[player._realId] = true;
+      if (player._historyKey) active[player._historyKey] = true;
+    });
+  });
+  var added = 0;
+  draftClass.slice().sort(function(a, b) { return Number(a.pick || 999) - Number(b.pick || 999); }).forEach(function(item) {
+    if (active[item.realId] || active[item.historyKey]) return;
+    var team = historicalDraftTeam(item.draftTeam || destinationMap[item.realId]);
+    if (!team || !NBA2K_DATA[team] || NBA2K_TEAMS.indexOf(team) < 0) return;
+    var rookie = historicalRookieToLeaguePlayer(item, draftYear, team);
+    NBA2K_DATA[team].push(rookie);
+    active[item.realId] = true;
+    active[item.historyKey] = true;
+    added++;
+    STATE._leagueChanges.rookies.push({ name: rookie.cname || rookie.name, team: team, pick: rookie._historicalDraftPick, draftYear: draftYear });
+    if (STATE._leagueChanges.teamChanges[team]) STATE._leagueChanges.teamChanges[team].rookies.push(rookie.cname || rookie.name);
+  });
+  STATE._leagueChanges.historicalDraft = { year: draftYear, added: added, fixedDestinations: true };
+  if (typeof clearLineupCache === 'function') clearLineupCache();
+  return true;
 }
 
 // ==================== 自由球员系统 ====================
@@ -19410,7 +19491,7 @@ function getLeagueRetirementChance(player, age) {
 function evolveLeague() {
   STATE._leagueChanges = { retired: [], rookies: [], teamChanges: {}, trades: [] };
   var teams = typeof NBA2K_TEAMS !== 'undefined' ? NBA2K_TEAMS : [];
-  var incomingSeasonStart = 2026 + ((STATE.career && STATE.career.seasonCount) || 0);
+  var incomingSeasonStart = STATE.mode === 'legend' ? getHistoricalIncomingDraftYear() : 2026 + ((STATE.career && STATE.career.seasonCount) || 0);
   teams.forEach(function(t) {
     var roster = NBA2K_DATA[t];
     if (!roster || !roster.length) return;
@@ -19451,7 +19532,7 @@ function evolveLeague() {
       if (p.type === '新秀') p.type = '球员';
       newRoster.push(p);
     });
-    while (newRoster.length < 18) { // 休赛期名单补齐到 18 人
+    while (STATE.mode !== 'legend' && newRoster.length < 18) { // 现代模式用虚构新秀补名单；历史模式稍后注入真实选秀结果
       var rk = generateRookie();
       rk._enterYear = incomingSeasonStart;
       newRoster.push(rk);

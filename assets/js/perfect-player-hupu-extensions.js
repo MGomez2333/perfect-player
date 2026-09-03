@@ -134,6 +134,7 @@
   var legendManifestPromise = null;
   var legendPlayersPromise = null;
   var legendPeaksPromise = null;
+  var legendDraftPromise = null;
   var legendLeaguePromises = {};
   var legendYears = [];
   var activeLegendDecade = null;
@@ -193,6 +194,20 @@
         .then(function(payload) { return payload || {}; });
     }
     return legendPeaksPromise;
+  }
+
+  function loadLegendDraftData() {
+    if (!legendDraftPromise) {
+      legendDraftPromise = Promise.all([
+        fetchLegendJson('draft_classes.json'),
+        fetchLegendJson('draft_destinations.json')
+      ]).then(function(results) {
+        window.PERFECT_PLAYER_HISTORICAL_DRAFT_CLASSES = (results[0] && results[0].classes) || {};
+        window.PERFECT_PLAYER_HISTORICAL_DRAFT_DESTINATIONS = (results[1] && results[1].destinations) || {};
+        return window.PERFECT_PLAYER_HISTORICAL_DRAFT_CLASSES;
+      });
+    }
+    return legendDraftPromise;
   }
 
   window.formatLegendSeason = function(endYear) {
@@ -291,7 +306,8 @@
       CLU: clamp(ovr + Math.min(5, Number(row.ppg) / 7), 35, 99),
       _sourceKind: 'legend-season', _sourceYear: Number(row.season) || Number(row.seasonEndYear) - 1,
       _sourceLabel: window.formatLegendSeason(row.seasonEndYear), _photoLocal: meta.photoLocal || '',
-      _poolUid: row.realId + '-' + row.team + '-' + row.seasonEndYear
+      _poolUid: row.realId + '-' + row.team + '-' + row.seasonEndYear,
+      _realId: row.realId || '', _historyKey: meta.historyKey || ''
     };
   }
 
@@ -412,7 +428,7 @@
     var button = document.getElementById('era-confirm-btn');
     var summary = document.getElementById('era-summary');
     if (button) { button.disabled = true; button.textContent = '正在载入历史联盟…'; }
-    Promise.all([window.loadLegendSeason(selectedLegendSeason), window.loadLegendLeagueSeason(selectedLegendSeason)]).then(function(reports) {
+    Promise.all([window.loadLegendSeason(selectedLegendSeason), window.loadLegendLeagueSeason(selectedLegendSeason), loadLegendDraftData()]).then(function(reports) {
       var report = reports[0];
       var leagueReport = reports[1];
       STATE.legendSeason = selectedLegendSeason;

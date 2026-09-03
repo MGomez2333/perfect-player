@@ -117,6 +117,34 @@ async function main() {
       return STATE.season.schedule.length;
     });
     assert.equal(lockoutSchedule, 50, '1998-99 缩水赛季应生成 50 场赛程');
+    const historicalDraft = await page.evaluate(async () => {
+      await window.loadLegendLeagueSeason(1997);
+      STATE.mode = 'legend';
+      STATE.legendSeason = 1997;
+      STATE.career = { seasonCount: 1 };
+      STATE._leagueChanges = { retired: [], rookies: [], teamChanges: {}, trades: [] };
+      NBA2K_TEAMS.forEach(team => { STATE._leagueChanges.teamChanges[team] = { before: NBA2K_DATA[team].length, retired: [], rookies: [] }; });
+      const handled = processHistoricalDraft();
+      return {
+        handled,
+        report: STATE._leagueChanges.historicalDraft,
+        duncanSpurs: NBA2K_DATA.SAS.some(player => player.name === 'Tim Duncan'),
+        duncanElsewhere: NBA2K_TEAMS.some(team => team !== 'SAS' && NBA2K_DATA[team].some(player => player.name === 'Tim Duncan')),
+        billupsCeltics: NBA2K_DATA.BOS.some(player => player.name === 'Chauncey Billups'),
+        mcgradyRaptors: NBA2K_DATA.TOR.some(player => player.name === 'Tracy McGrady')
+      };
+    });
+    assert.equal(historicalDraft.handled, true, '传奇模式应使用真实历史选秀班');
+    assert.equal(historicalDraft.report.year, 1997, '1996-97 赛季结束后应进入 1997 年选秀');
+    assert.equal(historicalDraft.duncanSpurs, true, '1997 邓肯必须加入马刺');
+    assert.equal(historicalDraft.duncanElsewhere, false, '1997 邓肯不应被模拟战绩分配给其他球队');
+    assert.equal(historicalDraft.billupsCeltics, true, '1997 比卢普斯必须加入凯尔特人');
+    assert.equal(historicalDraft.mcgradyRaptors, true, '1997 麦迪必须加入猛龙');
+    const fontsReady = await page.evaluate(async () => {
+      await Promise.all([document.fonts.load('700 16px Fredoka'), document.fonts.load('600 16px Nunito'), document.fonts.load('500 16px "Noto Sans SC"')]);
+      return ['Fredoka', 'Nunito', 'Noto Sans SC'].every(font => document.fonts.check('16px "' + font + '"'));
+    });
+    assert.equal(fontsReady, true, '原版字体应从本地资源正常加载');
     console.log(JSON.stringify({ report, cards: 5, magic1991, league1985, status: 'ok' }, null, 2));
   } finally {
     if (browser) await browser.close();
