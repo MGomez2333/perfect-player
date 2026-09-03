@@ -1890,10 +1890,6 @@ function getPlayerHeadshotStyle(playerName, displaySize) {
   var playerRecord = playerName && typeof playerName === 'object' ? playerName : null;
   var lookupName = _hsPlayerLookupName(playerName);
   displaySize = displaySize || 30;
-  // GitHub Pages 在大陆访问时，NBA/ESPN 头像 CDN 经常长时间阻塞。
-  // 使用内嵌首字母头像，保证游戏完全不依赖境外运行时资源。
-  return _hsInitialsAvatar(lookupName, displaySize);
-  /* istanbul ignore next */
   if (!playerRecord && typeof NBA2K_TEAMS !== 'undefined' && typeof NBA2K_DATA !== 'undefined') {
     for (var teamIndex = 0; teamIndex < NBA2K_TEAMS.length && !playerRecord; teamIndex++) {
       var roster = NBA2K_DATA[NBA2K_TEAMS[teamIndex]] || [];
@@ -1913,11 +1909,7 @@ function getPlayerHeadshotStyle(playerName, displaySize) {
   if (localPhoto) {
     return 'background-image:url(' + localPhoto + ');background-size:cover;background-position:center top;background-repeat:no-repeat;width:' + displaySize + 'px;height:' + displaySize + 'px;';
   }
-  var pid = getOfficialPlayerHeadshotId(playerRecord || lookupName);
-  if (pid) {
-    return 'background-image:url(' + _hsOfficialRemotePath(pid) + ');background-size:cover;background-position:center;background-repeat:no-repeat;width:' + displaySize + 'px;height:' + displaySize + 'px;';
-  }
-  // 兜底：无任何照片时给出首字母彩色头像，避免空白灰圈
+  // 本地没有照片时直接使用内嵌头像，不请求 NBA/ESPN 境外 CDN。
   return _hsInitialsAvatar(lookupName, displaySize);
 }
 </script>

@@ -58,8 +58,9 @@ async function main() {
     }));
     assert.ok(durantVersions.every(version => version.ovr), '杜兰特应拥有雷霆、勇士和篮网三个队内巅峰版本');
     assert.equal(new Set(durantVersions.map(version => version.label)).size, 3, '杜兰特各队版本应采用不同赛季能力');
-    const offlineHeadshot = await page.evaluate(() => getPlayerHeadshotStyle({ name: 'Kevin Durant' }, 32));
-    assert.match(offlineHeadshot, /^background-image:url\("data:image\/svg\+xml/, '球员头像不应依赖境外 CDN');
+    const localHeadshot = await page.evaluate(() => getPlayerHeadshotStyle(window.PERFECT_PLAYER_LEGEND_DATA.GSW.find(card => card.name === 'Kevin Durant'), 32));
+    assert.match(localHeadshot, /assets\/images\/Player\//, '已缓存球员应使用本地真人头像');
+    assert.doesNotMatch(localHeadshot, /https?:\/\//, '球员头像不应依赖境外 CDN');
     ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.includes(name), '勇士队史池错误混入 ' + name));
     const usedPlayerDraw = await page.evaluate(() => {
       STATE.usedPlayers = ['Stephen Curry'];

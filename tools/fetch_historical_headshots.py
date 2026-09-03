@@ -19,13 +19,16 @@ import subprocess
 import sys
 import tempfile
 import unicodedata
+from io import BytesIO
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[1]
 POOL_FILE = ROOT / "assets" / "data" / "perfect-player-pool.json"
+LEGEND_POOL_FILE = ROOT / "assets" / "data" / "perfect-player-legend-peaks.json"
 HISTORICAL_DB_FILE = ROOT / "assets" / "data" / "historical" / "players.json"
 HISTORICAL_HEADSHOT_DIR = ROOT / "assets" / "data" / "historical" / "headshots"
 HISTORICAL_CACHE_DIR = ROOT / "assets" / "images" / "Player" / "historical-nba"
@@ -61,6 +64,14 @@ def is_usable_file(path: Path | None) -> bool:
         return False
 
 
+def optimize_portrait(data: bytes) -> bytes:
+    """Keep enough detail for UI cards without shipping 1040px CDN originals."""
+    with Image.open(BytesIO(data)) as image:
+        image = image.convert("RGBA")
+        image.thumbnail((260, 190), Image.Resampling.LANCZOS)
+        output = BytesIO()
+        image.save(output, format="PNG", optimize=True)
+        return output.getvalue()
 def load_fallback_index() -> dict[str, Path]:
     """Index shipped historical portraits by normalized player token."""
     index: dict[str, Path] = {}
@@ -198,11 +209,13 @@ def main() -> None:
     args = parser.parse_args()
 
     payload = json.loads(POOL_FILE.read_text(encoding="utf-8"))
+    legend_payload = json.loads(LEGEND_POOL_FILE.read_text(encoding="utf-8"))
     players = []
     for team in payload.get("teams", {}).values():
         players.extend(team.get("players", []))
         players.extend(team.get("historicalPlayers", []))
-    players = [player for player in players if player.get("source", {}).get("kind") == "historical"]
+    players.extend(player for cards in legend_payload.get("teams", {}).values() for player in cards)
+    players = [player for player in players if player.get("nbaId") and player.get("photoLocal")]
     fallback_index = load_fallback_index()
     unique_players = {}
     players_by_target = {}
@@ -246,7 +259,7 @@ def main() -> None:
             target_value = str(player.get("photoLocal") or "")
             if status == "download" and target is not None and data is not None:
                 target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_bytes(data)
+                target.write_bytes(optimize_portrait(data))
                 source = "public-portrait" if "commons.wikimedia.org" in detail else "nba-cdn"
                 set_local_source(players_by_target.get(target_value, [player]), source, detail)
                 downloaded += 1
