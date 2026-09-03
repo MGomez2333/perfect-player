@@ -28,13 +28,13 @@ async function main() {
     await page.fill('#character-name', '传奇测试员');
     await page.click('#screen-character .btn-primary');
     await page.waitForSelector('#screen-era.active');
-    await page.locator('.era-decade').filter({ hasText: '1990s' }).click();
-    await page.locator('.era-season').filter({ hasText: '1995-96赛季' }).click();
+    await page.locator('.era-decade').filter({ hasText: '1980s' }).click();
+    await page.locator('.era-season').filter({ hasText: '1984-85赛季' }).click();
     await page.click('#era-confirm-btn');
     await page.waitForSelector('#screen-position.active', { timeout: 15000 });
     const report = await page.evaluate(() => window.PERFECT_PLAYER_LEGEND_REPORT);
-    assert.ok(report.players >= 300, '1995-96 球员池应至少包含 300 人');
-    assert.ok(report.teams >= 25, '1995-96 球员池应至少包含 25 支球队');
+    assert.ok(report.players >= 300, '队史传奇球员池应至少包含 300 人');
+    assert.ok(report.teams >= 25, '队史传奇球员池应至少包含 25 支球队');
     await page.click('.pos-card');
     await page.click('#screen-position .btn-primary');
     await page.click('#br-slot-area .slot-btn');
@@ -53,7 +53,24 @@ async function main() {
     const warriors = await page.evaluate(() => window.PERFECT_PLAYER_LEGEND_DATA.GSW.map(player => player.name));
     ['Stephen Curry', 'Klay Thompson', 'Kevin Durant', 'Draymond Green', "Wilt Chamberlain"].forEach(name => assert.ok(warriors.includes(name), '勇士队史池缺少 ' + name));
     ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.includes(name), '勇士队史池错误混入 ' + name));
-    console.log(JSON.stringify({ report, cards: 5, magic1991, status: 'ok' }, null, 2));
+    const league1985 = await page.evaluate(async () => {
+      const historicalReport = await window.loadLegendLeagueSeason(1985);
+      return {
+        report: historicalReport,
+        teams: NBA2K_TEAMS.slice(),
+        knicks: NBA2K_DATA.NYK.map(player => player.name),
+        celtics: NBA2K_DATA.BOS.map(player => player.name),
+        lakers: NBA2K_DATA.LAL.map(player => player.name)
+      };
+    });
+    assert.equal(league1985.report.season, 1985);
+    assert.equal(league1985.teams.length, 23, '1984-85 联盟应包含 23 支球队');
+    assert.ok(league1985.knicks.includes('Bernard King'), '1984-85 尼克斯应包含 Bernard King');
+    assert.ok(!league1985.knicks.includes('Jalen Brunson'), '1984-85 尼克斯不应混入现役球员');
+    assert.ok(league1985.celtics.includes('Larry Bird'), '1984-85 凯尔特人应包含 Larry Bird');
+    assert.ok(league1985.lakers.includes('Magic Johnson'), '1984-85 湖人应包含 Magic Johnson');
+    assert.ok(!league1985.teams.includes('ORL'), '1984-85 联盟不应包含尚未成立的魔术队');
+    console.log(JSON.stringify({ report, cards: 5, magic1991, league1985, status: 'ok' }, null, 2));
   } finally {
     if (browser) await browser.close();
     server.kill();

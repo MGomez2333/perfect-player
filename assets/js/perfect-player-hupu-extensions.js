@@ -134,6 +134,7 @@
   var legendManifestPromise = null;
   var legendPlayersPromise = null;
   var legendPeaksPromise = null;
+  var legendLeaguePromises = {};
   var legendYears = [];
   var activeLegendDecade = null;
   var selectedLegendSeason = null;
@@ -246,7 +247,7 @@
     var summary = document.getElementById('era-summary');
     var confirm = document.getElementById('era-confirm-btn');
     if (summary) summary.innerHTML = selectedLegendSeason
-      ? '已选择 <b style="color:var(--orange)">' + window.formatLegendSeason(selectedLegendSeason) + '</b><br>该赛季作为生涯背景；抽卡使用球队全年代传奇库'
+      ? '已选择 <b style="color:var(--orange)">' + window.formatLegendSeason(selectedLegendSeason) + '</b><br>联盟使用该赛季真实名单；抽卡使用球队全年代传奇库'
       : '请选择一个具体赛季';
     if (confirm) confirm.disabled = !selectedLegendSeason;
   }
@@ -278,7 +279,7 @@
     })[0];
     if (nearest && Math.abs((nearest.startYear || 0) - (row.season || 0)) <= 2) ovr = clamp((ovr + Number(nearest.rating || ovr)) / 2, 50, 99);
     return {
-      name: meta.nameEn || row.name || row.displayName,
+      name: row.name || row.displayName || meta.nameEn,
       cname: meta.nameCn || meta.displayName || row.displayName || row.name,
       pos: pos,
       height: POSITION_HEIGHT[mainPos],
@@ -341,15 +342,73 @@
     });
   };
 
+  window.loadLegendLeagueSeason = function(endYear) {
+    endYear = Number(endYear);
+    if (!legendLeaguePromises[endYear]) {
+      legendLeaguePromises[endYear] = Promise.all([
+        fetchLegendJson('player_seasons_' + endYear + '.json'),
+        loadLegendPlayers()
+      ]).then(function(results) {
+        var payload = results[0] || {};
+        var playerIndex = results[1] || {};
+        var grouped = {};
+        (payload.rows || []).forEach(function(row) {
+          if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
+          var team = canonicalHistoricalTeam(row.team);
+          if (!team || typeof NBA2K_DATA === 'undefined' || !Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) return;
+          if (!grouped[team]) grouped[team] = {};
+          var key = row.realId || String(row.name || row.displayName || '').toLowerCase();
+          var previous = grouped[team][key];
+          if (!previous || Number(row.gp || 0) > Number(previous.gp || 0)) grouped[team][key] = row;
+        });
+
+        if (typeof captureBaseLeagueRoster === 'function') captureBaseLeagueRoster();
+        var preferredOrder = Array.isArray(window._baseLeagueTeamSnapshot) ? window._baseLeagueTeamSnapshot : NBA2K_TEAMS.slice();
+        var activeTeams = Object.keys(grouped).filter(function(team) {
+          return Object.keys(grouped[team]).length > 0;
+        }).sort(function(a, b) {
+          var ai = preferredOrder.indexOf(a), bi = preferredOrder.indexOf(b);
+          return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi) || a.localeCompare(b);
+        });
+        var totalPlayers = 0;
+        activeTeams.forEach(function(team) {
+          NBA2K_DATA[team] = Object.keys(grouped[team]).map(function(key) {
+            var row = grouped[team][key];
+            return convertLegendSeasonPlayer(row, playerIndex[row.realId]);
+          }).sort(function(a, b) { return Number(b.ovr || 0) - Number(a.ovr || 0); });
+          totalPlayers += NBA2K_DATA[team].length;
+        });
+        NBA2K_TEAMS.splice.apply(NBA2K_TEAMS, [0, NBA2K_TEAMS.length].concat(activeTeams));
+        window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = activeTeams.slice();
+        window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = {
+          season: endYear,
+          label: window.formatLegendSeason(endYear),
+          teams: activeTeams.length,
+          players: totalPlayers
+        };
+        if (typeof clearLineupCache === 'function') clearLineupCache();
+        if (typeof attachOfficialPlayerHeadshots === 'function') attachOfficialPlayerHeadshots();
+        return window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT;
+      }).catch(function(error) {
+        delete legendLeaguePromises[endYear];
+        throw error;
+      });
+    }
+    return legendLeaguePromises[endYear];
+  };
+
   window.confirmLegendEra = function() {
     if (!selectedLegendSeason) return;
     var button = document.getElementById('era-confirm-btn');
     var summary = document.getElementById('era-summary');
-    if (button) { button.disabled = true; button.textContent = '正在载入队史传奇库…'; }
-    window.loadLegendSeason(selectedLegendSeason).then(function(report) {
+    if (button) { button.disabled = true; button.textContent = '正在载入历史联盟…'; }
+    Promise.all([window.loadLegendSeason(selectedLegendSeason), window.loadLegendLeagueSeason(selectedLegendSeason)]).then(function(reports) {
+      var report = reports[0];
+      var leagueReport = reports[1];
       STATE.legendSeason = selectedLegendSeason;
       STATE.position = null;
-      if (summary) summary.innerHTML = '已载入 <b>' + report.teams + '</b> 支球队 · 每队 <b>25</b> 张队史巅峰卡';
+      STATE.legendLeagueReport = leagueReport;
+      if (summary) summary.innerHTML = '已载入 <b>' + leagueReport.teams + '</b> 支当季球队、<b>' + leagueReport.players + '</b> 名当季球员<br>抽卡池仍为每队 <b>25</b> 张队史巅峰卡';
       if (button) button.textContent = '确认年代';
       if (typeof renderPositionSelect === 'function') renderPositionSelect();
       if (typeof showScreen === 'function') showScreen('screen-position');

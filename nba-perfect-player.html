@@ -2590,6 +2590,7 @@ function generateGameId() {
 }
 
 var _baseLeagueRosterSnapshot = null;
+var _baseLeagueTeamSnapshot = null;
 
 function cloneLeagueData(obj) {
   return JSON.parse(JSON.stringify(obj || {}));
@@ -2598,6 +2599,7 @@ function cloneLeagueData(obj) {
 function captureBaseLeagueRoster() {
   if (_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
   _baseLeagueRosterSnapshot = {};
+  _baseLeagueTeamSnapshot = NBA2K_TEAMS.slice();
   NBA2K_TEAMS.forEach(function(t) {
     _baseLeagueRosterSnapshot[t] = cloneLeagueData(NBA2K_DATA[t] || []);
   });
@@ -2606,9 +2608,12 @@ function captureBaseLeagueRoster() {
 function restoreBaseLeagueRoster() {
   captureBaseLeagueRoster();
   if (!_baseLeagueRosterSnapshot || typeof NBA2K_DATA === 'undefined' || typeof NBA2K_TEAMS === 'undefined') return;
-  NBA2K_TEAMS.forEach(function(t) {
+  NBA2K_TEAMS.splice.apply(NBA2K_TEAMS, [0, NBA2K_TEAMS.length].concat(_baseLeagueTeamSnapshot || []));
+  (_baseLeagueTeamSnapshot || NBA2K_TEAMS).forEach(function(t) {
     NBA2K_DATA[t] = cloneLeagueData(_baseLeagueRosterSnapshot[t] || []);
   });
+  window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = null;
+  window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = null;
   delete NBA2K_DATA._draftClass2026Applied;
 }
 
@@ -3160,7 +3165,7 @@ function spinSlotMachine() {
   }, 2800);
 }
 
-/** 仅用于建模阶段的候选池；正式比赛始终读取 NBA2K_DATA 现役名单。 */
+/** 建模候选池与比赛联盟名单彼此独立：传奇模式抽队史巅峰卡，比赛读取所选赛季名单。 */
 function getBuildPlayerPool(team) {
   if (STATE.mode === 'legend') {
     return (window.PERFECT_PLAYER_LEGEND_DATA && window.PERFECT_PLAYER_LEGEND_DATA[team]) || [];
@@ -3170,8 +3175,11 @@ function getBuildPlayerPool(team) {
 
 function getAvailableBuildTeams() {
   if (STATE.mode === 'legend' && window.PERFECT_PLAYER_LEGEND_DATA) {
+    var activeTeams = Array.isArray(window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS)
+      ? window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS : [];
     var teams = Object.keys(window.PERFECT_PLAYER_LEGEND_DATA).filter(function(team) {
-      return Array.isArray(window.PERFECT_PLAYER_LEGEND_DATA[team]) && window.PERFECT_PLAYER_LEGEND_DATA[team].length;
+      return (!activeTeams.length || activeTeams.indexOf(team) >= 0) &&
+        Array.isArray(window.PERFECT_PLAYER_LEGEND_DATA[team]) && window.PERFECT_PLAYER_LEGEND_DATA[team].length;
     });
     if (teams.length) return teams.sort();
   }
