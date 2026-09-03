@@ -4574,6 +4574,12 @@ function getConference(team) {
   return 'EAST';
 }
 
+function getActiveConferenceTeams(conf) {
+  var configured = conf === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST;
+  var active = Array.isArray(NBA2K_TEAMS) ? NBA2K_TEAMS : [];
+  return configured.filter(function(team) { return active.indexOf(team) >= 0; });
+}
+
 function getDivision(team) {
   for (const [div, teams] of Object.entries(SIM_CONFIG.DIVISIONS)) {
     if (teams.includes(team)) return div;
@@ -4674,7 +4680,7 @@ function toggleTeamLogos() {
 /** 获取球队在联盟中的种子排名（1-15） */
 function getConferenceSeed(team) {
   const conf = getConference(team);
-  const teams = conf === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST;
+  const teams = getActiveConferenceTeams(conf);
   const standings = STATE.season.standings;
   if (!standings) return 99;
   const sorted = teams
@@ -4690,7 +4696,7 @@ function getConferenceSeed(team) {
 
 /** 获取同分区所有球队按种子排序的列表 */
 function getConferenceSorted(conf) {
-  const teams = conf === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST;
+  const teams = getActiveConferenceTeams(conf);
   const standings = STATE.season.standings;
   if (!standings) return [];
   return teams
@@ -4810,7 +4816,7 @@ function quickSimAllGames() {
       // 分区排行榜
       var conf = getConference(STATE.careerTeam);
       var confName2 = conf === 'EAST' ? '东部' : '西部';
-      var allTeams = (conf === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST);
+      var allTeams = getActiveConferenceTeams(conf);
       var sorted = allTeams.map(function(t) { return { team: t, ...STATE.season.standings[t] }; }).sort(function(a, b) { return (b.wins - b.losses) - (a.wins - a.losses) || b.wins - a.wins; });
       var leaderW = sorted.length > 0 ? sorted[0].wins : 0, leaderL = sorted.length > 0 ? sorted[0].losses : 0;
       var tableHtml = '<div style="margin:8px 12px 12px;"><div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);padding:4px 0 6px;">🏆 ' + confName2 + ' 排行榜</div><div class="st-hdr"><span>#</span><span>球队</span><span>胜</span><span>负</span><span>胜差</span><span>近况</span></div>';
@@ -5878,6 +5884,10 @@ function initStandings() {
 // ==================== 赛程生成（真实NBA赛程）====================
 function buildRealSchedule() {
   const myTeam = STATE.careerTeam;
+  if (STATE.mode === 'legend' && Array.isArray(window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS)) {
+    buildHistoricalLeagueSchedule(myTeam);
+    return;
+  }
   const rawSchedule = NBA2K_SCHEDULE[myTeam];
   if (!rawSchedule) {
     console.error('No schedule for', myTeam);
@@ -5914,6 +5924,40 @@ function buildRealSchedule() {
   STATE.season._leagueGameLog = [];
   
   // renderGameList();  // 日历模式已注释
+}
+
+/** 为任意规模的历史联盟生成 82 场赛程；奇数队联盟每天允许一队轮休。 */
+function buildHistoricalLeagueSchedule(myTeam) {
+  var activeTeams = NBA2K_TEAMS.slice();
+  var opponents = activeTeams.filter(function(team) { return team !== myTeam; });
+  if (!opponents.length) throw new Error('历史联盟没有可用对手');
+  var schedule = [];
+  var dayMap = {};
+  for (var gameIndex = 0; gameIndex < 82; gameIndex++) {
+    var day = gameIndex + 1;
+    var opponent = opponents[gameIndex % opponents.length];
+    var home = gameIndex % 2 === 0;
+    schedule.push({ opponent: opponent, home: home, gameNum: day, day: day, simulated: false, result: null });
+
+    var remaining = activeTeams.filter(function(team) { return team !== myTeam && team !== opponent; });
+    if (remaining.length > 1) {
+      var shift = gameIndex % remaining.length;
+      remaining = remaining.slice(shift).concat(remaining.slice(0, shift));
+    }
+    dayMap[day] = [];
+    for (var pairIndex = 0; pairIndex + 1 < remaining.length; pairIndex += 2) {
+      var pairHome = remaining[pairIndex];
+      var pairAway = remaining[pairIndex + 1];
+      if ((gameIndex + pairIndex) % 2) {
+        var swap = pairHome; pairHome = pairAway; pairAway = swap;
+      }
+      dayMap[day].push({ home: pairHome, away: pairAway });
+    }
+  }
+  STATE.season.schedule = schedule;
+  STATE.season._dayMap = dayMap;
+  STATE.season._processedDays = new Set();
+  STATE.season._leagueGameLog = [];
 }
 
 /** 模拟到目前为止所有未处理的比赛日 */
@@ -7252,7 +7296,7 @@ function showStandingsModal() {
       <button onclick="switchStandingsTab('WEST')" class="${active === 'WEST' ? 'active' : ''}">西部</button>
     </div>`;
   
-  const teams = active === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST;
+  const teams = getActiveConferenceTeams(active);
   
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';

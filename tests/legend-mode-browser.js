@@ -70,6 +70,29 @@ async function main() {
     assert.ok(league1985.celtics.includes('Larry Bird'), '1984-85 凯尔特人应包含 Larry Bird');
     assert.ok(league1985.lakers.includes('Magic Johnson'), '1984-85 湖人应包含 Magic Johnson');
     assert.ok(!league1985.teams.includes('ORL'), '1984-85 联盟不应包含尚未成立的魔术队');
+    const historicalSchedule = await page.evaluate(() => {
+      STATE.mode = 'legend';
+      STATE.careerTeam = 'BOS';
+      STATE.season = { standings: {}, schedule: [] };
+      initStandings();
+      buildRealSchedule();
+      const allDayTeams = Object.values(STATE.season._dayMap).flat().flatMap(game => [game.home, game.away]);
+      simDayLeagueGames(1);
+      return {
+        games: STATE.season.schedule.length,
+        opponents: STATE.season.schedule.map(game => game.opponent),
+        dayTeams: allDayTeams,
+        standingsTeams: Object.keys(STATE.season.standings),
+        processedDays: STATE.season._processedDays.size,
+        leagueGames: STATE.season._leagueGameLog.length
+      };
+    });
+    assert.equal(historicalSchedule.games, 82, '历史联盟应生成完整 82 场赛程');
+    assert.ok(historicalSchedule.opponents.every(team => league1985.teams.includes(team)), '历史赛程不应包含当年不存在的对手');
+    assert.ok(historicalSchedule.dayTeams.every(team => league1985.teams.includes(team)), '联盟每日赛程不应包含当年不存在的球队');
+    assert.deepEqual(historicalSchedule.standingsTeams.sort(), league1985.teams.slice().sort(), '排名表应只包含当季球队');
+    assert.equal(historicalSchedule.processedDays, 1, '历史联盟首个比赛日应能正常模拟');
+    assert.ok(historicalSchedule.leagueGames > 0, '历史联盟首个比赛日应产生其他球队赛果');
     console.log(JSON.stringify({ report, cards: 5, magic1991, league1985, status: 'ok' }, null, 2));
   } finally {
     if (browser) await browser.close();
