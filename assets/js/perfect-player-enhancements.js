@@ -354,6 +354,45 @@
   ];
   PP_FX.CAREER_RECORDS = CAREER_RECORDS;
 
+  var REGULAR_SINGLE_GAME_RECORDS = [
+    {id:'pts',icon:'🔥',name:'单场得分',unit:'分',leader:'威尔特·张伯伦',record:100},
+    {id:'reb',icon:'🧱',name:'单场篮板',unit:'个',leader:'威尔特·张伯伦',record:55},
+    {id:'ast',icon:'🎯',name:'单场助攻',unit:'次',leader:'斯科特·斯凯尔斯',record:30},
+    {id:'stl',icon:'🧤',name:'单场抢断',unit:'次',leader:'拉里·凯侬 / 肯德尔·吉尔',record:11},
+    {id:'blk',icon:'🚫',name:'单场盖帽',unit:'次',leader:'埃尔莫尔·史密斯',record:17},
+    {id:'fgm',icon:'🏀',name:'单场运动战进球',unit:'球',leader:'威尔特·张伯伦',record:36},
+    {id:'threeM',icon:'🎯',name:'单场三分命中',unit:'记',leader:'克莱·汤普森',record:14},
+    {id:'ftm',icon:'🎟️',name:'单场罚球命中',unit:'球',leader:'威尔特·张伯伦 / 阿德里安·丹特利',record:28},
+    {id:'tov',icon:'💨',name:'单场失误',unit:'次',leader:'杰森·基德',record:14},
+    {id:'misses',icon:'🧊',name:'单场打铁',unit:'球',leader:'乔·福尔克斯',record:42}
+  ];
+  var PLAYOFF_SINGLE_GAME_RECORDS = [
+    {id:'pts',icon:'🔥',name:'季后赛单场得分',unit:'分',leader:'迈克尔·乔丹',record:63},
+    {id:'reb',icon:'🧱',name:'季后赛单场篮板',unit:'个',leader:'威尔特·张伯伦',record:41},
+    {id:'ast',icon:'🎯',name:'季后赛单场助攻',unit:'次',leader:'魔术师约翰逊 / 约翰·斯托克顿',record:24},
+    {id:'stl',icon:'🧤',name:'季后赛单场抢断',unit:'次',leader:'阿伦·艾弗森',record:10},
+    {id:'blk',icon:'🚫',name:'季后赛单场盖帽',unit:'次',leader:'马克·伊顿 / 奥拉朱旺 / 拜纳姆',record:10},
+    {id:'fgm',icon:'🏀',name:'季后赛单场运动战进球',unit:'球',leader:'NBA 并列纪录',record:24},
+    {id:'threeM',icon:'🎯',name:'季后赛单场三分命中',unit:'记',leader:'达米安·利拉德',record:12},
+    {id:'tov',icon:'💨',name:'季后赛单场失误',unit:'次',leader:'NBA 纪录',record:9}
+  ];
+  var PLAYOFF_CAREER_RECORDS = [
+    {id:'games',icon:'📅',name:'季后赛生涯出场',unit:'场',leader:'勒布朗·詹姆斯',record:292},
+    {id:'pts',icon:'🔥',name:'季后赛生涯得分',unit:'分',leader:'勒布朗·詹姆斯',record:8162},
+    {id:'reb',icon:'🧱',name:'季后赛生涯篮板',unit:'个',leader:'比尔·拉塞尔',record:4104},
+    {id:'ast',icon:'🎯',name:'季后赛生涯助攻',unit:'次',leader:'勒布朗·詹姆斯',record:2067},
+    {id:'stl',icon:'🧤',name:'季后赛生涯抢断',unit:'次',leader:'勒布朗·詹姆斯',record:483},
+    {id:'blk',icon:'🚫',name:'季后赛生涯盖帽',unit:'次',leader:'蒂姆·邓肯',record:568},
+    {id:'fgm',icon:'🏀',name:'季后赛运动战进球',unit:'球',leader:'勒布朗·詹姆斯',record:2928},
+    {id:'threeM',icon:'🎯',name:'季后赛三分命中',unit:'记',leader:'斯蒂芬·库里',record:501},
+    {id:'tov',icon:'💨',name:'季后赛生涯失误',unit:'次',leader:'勒布朗·詹姆斯',record:1034},
+    {id:'doubleDoubles',icon:'✌️',name:'季后赛生涯两双',unit:'次',leader:'魔术师约翰逊',record:157},
+    {id:'tripleDoubles',icon:'🎰',name:'季后赛生涯三双',unit:'次',leader:'魔术师约翰逊',record:30}
+  ];
+  PP_FX.REGULAR_SINGLE_GAME_RECORDS = REGULAR_SINGLE_GAME_RECORDS;
+  PP_FX.PLAYOFF_SINGLE_GAME_RECORDS = PLAYOFF_SINGLE_GAME_RECORDS;
+  PP_FX.PLAYOFF_CAREER_RECORDS = PLAYOFF_CAREER_RECORDS;
+
   function careerRecordTotals(s) {
     var totals = {};
     var archived = (s.career && s.career.totalStats) || {};
@@ -366,6 +405,62 @@
     totals.tripleDoubles = gameFacts.tripleDoubles;
     totals.misses = Math.max(0, totals.fga - totals.fgm);
     return totals;
+  }
+
+  function maxRecordMap(target, source) {
+    source = source || {};
+    Object.keys(source).forEach(function(k) { target[k] = Math.max(Number(target[k]) || 0, Number(source[k]) || 0); });
+    return target;
+  }
+
+  function singleGameRecordTotals(s, playoffs) {
+    var totals = {};
+    ((s.career && s.career.seasons) || []).forEach(function(season) {
+      maxRecordMap(totals, season && season[playoffs ? 'playoffSingleGameRecords' : 'regularSingleGameRecords']);
+    });
+    if (!s._careerSaved && s.season) {
+      var lines = [];
+      if (playoffs && typeof window.collectCurrentPlayoffStatLines === 'function') lines = window.collectCurrentPlayoffStatLines();
+      else lines = (s.season.games || []).map(function(g) { return g && g.stats; }).filter(Boolean);
+      if (typeof window.summarizeSingleGameRecords === 'function') maxRecordMap(totals, window.summarizeSingleGameRecords(lines));
+    }
+    return totals;
+  }
+
+  function playoffCareerRecordTotals(s) {
+    var archived = (s.career && s.career.playoffStats) || {};
+    var current = (!s._careerSaved && s.season && s.season.playoffStats) || {};
+    var totals = {};
+    ['games','pts','reb','ast','stl','blk','fgm','fga','threeM','tov','doubleDoubles','tripleDoubles'].forEach(function(k) {
+      totals[k] = (Number(archived[k]) || 0) + (Number(current[k]) || 0);
+    });
+    if (!s._careerSaved && typeof window.summarizeSingleGameRecords === 'function' && typeof window.collectCurrentPlayoffStatLines === 'function') {
+      var currentMilestones = window.summarizeSingleGameRecords(window.collectCurrentPlayoffStatLines());
+      totals.doubleDoubles += Number(currentMilestones.doubleDoubles) || 0;
+      totals.tripleDoubles += Number(currentMilestones.tripleDoubles) || 0;
+    }
+    totals.misses = Math.max(0, totals.fga - totals.fgm);
+    return totals;
+  }
+
+  function renderRecordGroup(title, records, totals) {
+    return '<div style="font-size:13px;font-weight:900;color:#6d4a22;padding:7px 2px 0">' + title + '</div>' + records.map(function(record) {
+      var value = Math.round(Number(totals[record.id]) || 0);
+      var pct = Math.min(100, Math.round(value / record.record * 1000) / 10);
+      var reached = value >= record.record;
+      return '<div class="pp-record-card' + (reached ? ' pp-record-broken' : '') + '">' +
+        '<div class="pp-record-top"><div><div class="pp-record-name">' + record.icon + ' ' + record.name + '</div><div class="pp-record-holder">现实纪录：' + record.leader + ' · ' + record.record.toLocaleString('zh-CN') + record.unit + '</div></div>' +
+        '<div class="pp-record-value">' + value.toLocaleString('zh-CN') + '<small>' + pct + '%</small></div></div>' +
+        '<div class="pp-record-track"><div class="pp-record-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="pp-record-foot"><span>' + (reached ? '已追平或打破现实纪录' : '个人当前最高') + '</span><span>' + (reached ? '历史级表现' : '还差 ' + Math.max(0, record.record-value).toLocaleString('zh-CN')) + '</span></div></div>';
+    }).join('');
+  }
+
+  function renderAllRecordCards(s) {
+    return renderCareerRecordCards(s) +
+      renderRecordGroup('🌟 常规赛单场最高', REGULAR_SINGLE_GAME_RECORDS, singleGameRecordTotals(s, false)) +
+      renderRecordGroup('🔥 季后赛单场最高', PLAYOFF_SINGLE_GAME_RECORDS, singleGameRecordTotals(s, true)) +
+      renderRecordGroup('🏆 季后赛生涯累计', PLAYOFF_CAREER_RECORDS, playoffCareerRecordTotals(s));
   }
 
   function renderCareerRecordCards(s) {
@@ -574,7 +669,7 @@
         '</div>' +
         '<div class="pp-ach-tabs"><button class="pp-ach-tab active" id="pp-ach-tab-badges">成就徽章</button><button class="pp-ach-tab" id="pp-ach-tab-records">NBA 纪录追逐</button></div>' +
         '<div class="pp-ach-grid" id="pp-ach-view-badges">' + cards + '</div>' +
-        '<div class="pp-record-grid" id="pp-ach-view-records" style="display:none">' + renderCareerRecordCards(G() || {}) + '</div>' +
+        '<div class="pp-record-grid" id="pp-ach-view-records" style="display:none">' + renderAllRecordCards(G() || {}) + '</div>' +
       '</div>';
     document.body.appendChild(overlay);
     requestAnimationFrame(function () { overlay.classList.add('show'); });

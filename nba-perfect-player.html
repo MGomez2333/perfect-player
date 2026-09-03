@@ -2411,7 +2411,7 @@ function $$(sel) { return document.querySelectorAll(sel); }
 function getSeasonLabel(seasonNum) {
   var n = Math.max(1, parseInt(seasonNum) || 1);
   var baseEnd = STATE.mode === 'legend' && STATE.legendSeason ? Number(STATE.legendSeason) : 2026;
-  var start = baseEnd - 1 + n;
+  var start = baseEnd - 1 + (n - 1);
   return start + '-' + String((start + 1) % 100) + '赛季';
 }
 
@@ -4572,12 +4572,16 @@ function highlightSlotItem(reelId, middleIndex) {
 }
 
 function getConference(team) {
+  if (STATE.mode === 'legend' && window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM && window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM[team]) return window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM[team];
   if (SIM_CONFIG.CONFERENCE.EAST.includes(team)) return 'EAST';
   if (SIM_CONFIG.CONFERENCE.WEST.includes(team)) return 'WEST';
   return 'EAST';
 }
 
 function getActiveConferenceTeams(conf) {
+  if (STATE.mode === 'legend' && window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM) {
+    return (Array.isArray(NBA2K_TEAMS) ? NBA2K_TEAMS : []).filter(function(team) { return window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM[team] === conf; });
+  }
   var configured = conf === 'EAST' ? SIM_CONFIG.CONFERENCE.EAST : SIM_CONFIG.CONFERENCE.WEST;
   var active = Array.isArray(NBA2K_TEAMS) ? NBA2K_TEAMS : [];
   return configured.filter(function(team) { return active.indexOf(team) >= 0; });
@@ -4590,7 +4594,10 @@ function getDivision(team) {
   return null;
 }
 
-function getTeamName(team) { return SIM_CONFIG.TEAM_NAMES[team] || team; }
+function getTeamName(team) {
+  if (STATE.mode === 'legend' && window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS && window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS[team]) return window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS[team];
+  return SIM_CONFIG.TEAM_NAMES[team] || team;
+}
 
 /** 查找球员所属球队缩写 */
 function getPlayerTeam(player) {
@@ -4775,7 +4782,7 @@ function startSeason() {
 function quickSimAllGames() {
   var schedule = STATE.season.schedule;
   // 历史联盟需要同步模拟更多球队；缩短逐场展示间隔，避免大量计时器造成“卡死”错觉。
-  var simDelay = STATE.mode === 'legend' ? 24 : 80;
+  var simDelay = 120;
   if (!schedule || schedule.length === 0) { console.error('[Sim] 赛程为空'); renderDotGrid(); return; }
   var games = schedule.filter(function(g) { return !g.simulated; });
   if (games.length === 0) { renderDotGrid(); return; }
@@ -5938,7 +5945,8 @@ function buildHistoricalLeagueSchedule(myTeam) {
   if (!opponents.length) throw new Error('历史联盟没有可用对手');
   var schedule = [];
   var dayMap = {};
-  var seasonGames = Math.max(1, Number(window.PERFECT_PLAYER_LEGEND_SEASON_GAMES || 82));
+  var gamesByTeam = window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM || {};
+  var seasonGames = Math.max(1, Math.min(82, Number(gamesByTeam[myTeam] || window.PERFECT_PLAYER_LEGEND_SEASON_GAMES || 82)));
   for (var gameIndex = 0; gameIndex < seasonGames; gameIndex++) {
     var day = gameIndex + 1;
     var opponent = opponents[gameIndex % opponents.length];
@@ -9532,6 +9540,38 @@ function renderOffseasonHistoryTab() {
   return h;
 }
 
+function summarizeSingleGameRecords(statLines) {
+  var result = { pts:0, reb:0, ast:0, stl:0, blk:0, fgm:0, threeM:0, ftm:0, tov:0, misses:0, twoM:0, doubleDoubles:0, tripleDoubles:0 };
+  (statLines || []).forEach(function(stats) {
+    if (!stats) return;
+    ['pts','reb','ast','stl','blk','fgm','threeM','ftm','tov'].forEach(function(k) {
+      result[k] = Math.max(result[k], Number(stats[k]) || 0);
+    });
+    result.misses = Math.max(result.misses, Math.max(0, (Number(stats.fga) || 0) - (Number(stats.fgm) || 0)));
+    result.twoM = Math.max(result.twoM, Math.max(0, (Number(stats.fgm) || 0) - (Number(stats.threeM) || 0)));
+    var categories = 0;
+    ['pts','reb','ast','stl','blk'].forEach(function(k) { if ((Number(stats[k]) || 0) >= 10) categories++; });
+    if (categories >= 2) result.doubleDoubles++;
+    if (categories >= 3) result.tripleDoubles++;
+  });
+  return result;
+}
+
+function collectCurrentPlayoffStatLines() {
+  var bracket = STATE.season && STATE.season.playoffBracket;
+  var lines = [];
+  var seen = {};
+  ((bracket && bracket.results) || []).forEach(function(result, resultIdx) {
+    if (!result || !result.isMySeries) return;
+    (result.seriesGames || []).forEach(function(game, gameIdx) {
+      if (!game || !game.myStats) return;
+      var key = [result.round, result.seriesIdx, resultIdx, gameIdx].join(':');
+      if (!seen[key]) { seen[key] = true; lines.push(game.myStats); }
+    });
+  });
+  return lines;
+}
+
 function saveCurrentSeasonToCareer() {
   var c = STATE.career;
   if (!STATE.season || !STATE.season.playerStats) return;
@@ -9593,17 +9633,9 @@ function saveCurrentSeasonToCareer() {
     playerStats: JSON.parse(JSON.stringify(sp)),
     playoffResult: playoffResult || (STATE.season.playoffBracket ? '季后赛' : '未晋级'),
     awards: honorList,
-    gameMilestones: (function() {
-      var result = { doubleDoubles: 0, tripleDoubles: 0 };
-      (STATE.season.games || []).forEach(function(game) {
-        if (!game || !game.stats) return;
-        var n = 0;
-        ['pts','reb','ast','stl','blk'].forEach(function(k) { if ((Number(game.stats[k]) || 0) >= 10) n++; });
-        if (n >= 2) result.doubleDoubles++;
-        if (n >= 3) result.tripleDoubles++;
-      });
-      return result;
-    })(),
+    gameMilestones: summarizeSingleGameRecords((STATE.season.games || []).map(function(game) { return game && game.stats; }).filter(Boolean)),
+    regularSingleGameRecords: summarizeSingleGameRecords((STATE.season.games || []).map(function(game) { return game && game.stats; }).filter(Boolean)),
+    playoffSingleGameRecords: summarizeSingleGameRecords(collectCurrentPlayoffStatLines()),
     eventTimeline: JSON.parse(JSON.stringify((STATE.season.events && STATE.season.events.storyTimeline) || [])),
   };
   c.seasons.push(seasonRecord);
@@ -9621,6 +9653,8 @@ function saveCurrentSeasonToCareer() {
     cpo[f] = (cpo[f] || 0) + (po[f] || 0);
   });
   cpo.games = (cpo.games || 0) + (po.games || 0);
+  cpo.doubleDoubles = (cpo.doubleDoubles || 0) + (seasonRecord.playoffSingleGameRecords.doubleDoubles || 0);
+  cpo.tripleDoubles = (cpo.tripleDoubles || 0) + (seasonRecord.playoffSingleGameRecords.tripleDoubles || 0);
 
   honorList.forEach(function(h) { c.honors.push(h); });
   STATE._careerSaved = true;
@@ -16121,6 +16155,11 @@ function confirmTraining() {
   STATE.career.currentAge++;
   STATE._tpPending = {};
 
+  if (STATE.career.contract === 1 && STATE.career.contractPlayerOption) {
+    showPlayerOptionDecision();
+    return;
+  }
+
   if (shouldOfferPlayerRetirement()) {
     STATE._retirementOfferPhase = 'post-training';
     showPlayerRetirementChoice();
@@ -16130,14 +16169,36 @@ function confirmTraining() {
   continueCareerAfterTraining();
 }
 
+function showPlayerOptionDecision() {
+  var old = document.getElementById('player-option-modal'); if (old) old.remove();
+  document.body.insertAdjacentHTML('beforeend', '<div class="team-picker-overlay" id="player-option-modal"><div class="team-picker-modal" style="max-width:390px;"><div class="team-picker-header"><span>最后一年 · 球员选项</span></div><div style="padding:14px;"><div style="font-size:13px;color:var(--text-dim);line-height:1.65;margin-bottom:12px;">你可以执行最后一年合同留队，也可以跳出合同进入自由市场。</div><button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="resolvePlayerOption(true)">执行选项，留队一年</button><button class="btn btn-secondary btn-sm" style="width:100%;" onclick="resolvePlayerOption(false)">跳出合同，进入自由市场</button></div></div></div>');
+}
+
+function resolvePlayerOption(exercise) {
+  var modal = document.getElementById('player-option-modal'); if (modal) modal.remove();
+  STATE.career.contractPlayerOption = false;
+  if (!exercise) STATE.career.contract = 0;
+  if (shouldOfferPlayerRetirement()) { STATE._retirementOfferPhase = 'post-training'; showPlayerRetirementChoice(); return; }
+  continueCareerAfterTraining();
+}
+
 function continueCareerAfterTraining() {
   if (STATE.career && STATE.career.retired) return;
   evolveLeague();
   saveStandings();
-  processDraft();
-  assignFreeAgents();
-  processTrades();
-  maybeMoveUserInOffseason(finishOffseasonPipeline);
+  var finishLeagueEvolution = function() {
+    processDraft();
+    assignFreeAgents();
+    processTrades();
+    maybeMoveUserInOffseason(finishOffseasonPipeline);
+  };
+  if (STATE.mode === 'legend' && typeof window.prepareLegendNextSeason === 'function') {
+    var nextEndYear = (Number(STATE.legendSeason) || 2025) + Number(STATE.career && STATE.career.seasonCount || 1);
+    window.prepareLegendNextSeason(nextEndYear).then(finishLeagueEvolution).catch(function(error) {
+      console.error('[Legend] 下一历史赛季加载失败:', error);
+      finishLeagueEvolution();
+    });
+  } else finishLeagueEvolution();
 }
 
 function finishOffseasonPipeline() {
@@ -18422,6 +18483,7 @@ function showContractOffers() {
   var myOvr = STATE.finalOVR;
   var myAge = STATE.career.currentAge;
   var offers = generateContractOffers();
+  STATE._currentContractOffers = offers;
   var profileEffects = typeof getCareerProfileEffects === 'function' ? getCareerProfileEffects() : { contractOfferBonus:0 };
   var currTeam = getTeamName ? getTeamName(STATE.careerTeam) : STATE.careerTeam;
   var choice = STATE.career.flags && STATE.career.flags.freeAgentChoice;
@@ -18455,7 +18517,7 @@ function showContractOffers() {
 
   // 续约母队选项
   if (canRenew) {
-    html += '<div class="team-pick-card" style="cursor:pointer;margin-bottom:6px;border-color:' + (choice === 'stay' ? '#ffd700' : 'var(--orange)') + ';" onclick="selectContractOption(\'' + STATE.careerTeam + '\', -1)">';
+    html += '<div class="team-pick-card" style="cursor:pointer;margin-bottom:6px;border-color:' + (choice === 'stay' ? '#ffd700' : 'var(--orange)') + ';" onclick="openContractNegotiation(\'' + STATE.careerTeam + '\', ' + stayYears + ')">';
     html += '<div style="font-size:14px;font-weight:700;color:var(--orange);">📝 续约 ' + currTeam + '</div>';
     html += '<div style="font-size:11px;color:var(--text-dim);">继续留在 ' + currTeam + ' · ' + stayYears + ' 年</div>';
     html += '</div>';
@@ -18475,7 +18537,7 @@ function showContractOffers() {
     var tp2Name = tp2 ? (tp2.cname || tp2.name) : '—';
     var tp2Ovr = tp2 ? (tp2.ovr || '—') : '—';
 
-    html += '<div class="team-pick-card" style="cursor:pointer;margin-bottom:6px;text-align:left;padding:10px;" onclick="selectContractOption(\'' + o.team + '\', ' + o.years + ')">';
+    html += '<div class="team-pick-card" style="cursor:pointer;margin-bottom:6px;text-align:left;padding:10px;" onclick="openContractNegotiation(\'' + o.team + '\', ' + o.years + ')">';
     html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">';
     html += getTeamLogo(o.team, 28);
     html += '<span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);">' + tn + '</span>';
@@ -18613,7 +18675,34 @@ function showFreeAgencyTeamChangeModal(oldTeam, newTeam, done) {
   };
 }
 
-function selectContractOption(team, years) {
+function openContractNegotiation(team, offeredYears) {
+  var modal = document.getElementById('contract-modal'); if (modal) modal.remove();
+  var roster = (NBA2K_DATA[team] || []).slice().sort(function(a,b) { return Number(b.ovr||0)-Number(a.ovr||0); }).slice(0,8);
+  var maxYears = clampCareerContractYears(Math.max(1, Number(offeredYears)||2), STATE.career.currentAge);
+  var rotation = roster.map(function(p,i) { return '<div style="display:flex;gap:6px;padding:5px;border-bottom:1px solid var(--border-light);font-size:12px;"><span style="width:20px;color:var(--text-muted);">'+(i+1)+'</span><span style="width:58px;color:var(--text-dim);">'+(p.pos||'—')+'</span><span style="flex:1;">'+(p.cname||p.name)+'</span><b>'+Math.round(p.ovr||0)+'</b></div>'; }).join('');
+  var buttons = '';
+  for (var y=1; y<=maxYears; y++) buttons += '<button type="button" class="btn btn-secondary btn-sm contract-year-btn" data-years="'+y+'" onclick="selectNegotiatedYears('+y+')" style="width:auto;min-width:54px;">'+y+'年</button>';
+  var content = '<div class="team-picker-overlay" id="contract-negotiation-modal"><div class="team-picker-modal" style="max-width:430px;"><div class="team-picker-header"><span>🤝 与'+getTeamName(team)+'谈合同</span><button class="btn btn-secondary btn-sm" onclick="closeContractNegotiation()">返回</button></div><div style="padding:10px 12px;max-height:66vh;overflow:auto;"><div style="font-size:12px;color:var(--orange);font-weight:700;margin-bottom:5px;">主要轮换阵容</div>'+rotation+'<div style="font-size:12px;color:var(--orange);font-weight:700;margin:12px 0 7px;">合同年限</div><div style="display:flex;gap:6px;flex-wrap:wrap;">'+buttons+'</div><label style="display:flex;align-items:center;gap:8px;margin:13px 0;font-size:13px;"><input id="contract-player-option" type="checkbox"> 最后一年设为球员选项</label><button class="btn btn-primary btn-sm" style="width:100%;" onclick="confirmContractNegotiation()">确认签约</button></div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', content);
+  STATE._contractNegotiation = { team:team, years:maxYears };
+  selectNegotiatedYears(maxYears);
+}
+
+function selectNegotiatedYears(years) {
+  if (!STATE._contractNegotiation) return;
+  STATE._contractNegotiation.years = Number(years)||1;
+  document.querySelectorAll('.contract-year-btn').forEach(function(button) { button.classList.toggle('btn-primary', Number(button.dataset.years) === STATE._contractNegotiation.years); });
+}
+
+function closeContractNegotiation() { var modal=document.getElementById('contract-negotiation-modal'); if(modal) modal.remove(); showContractOffers(); }
+function confirmContractNegotiation() {
+  var negotiation=STATE._contractNegotiation; if(!negotiation) return;
+  var playerOption=!!(document.getElementById('contract-player-option')||{}).checked;
+  var modal=document.getElementById('contract-negotiation-modal'); if(modal) modal.remove();
+  selectContractOption(negotiation.team, negotiation.years, playerOption);
+}
+
+function selectContractOption(team, years, playerOption) {
   var modal = document.getElementById('contract-modal');
   if (modal) modal.remove();
 
@@ -18676,7 +18765,27 @@ function isHiddenRetiredPlayerName(n) {
 }
 
 function showOffSeasonModals() {
-  showRosterReview();
+  var seasonKey = Number(STATE.career && STATE.career.seasonCount || 0);
+  if (STATE._shownLeagueChangesSeason === seasonKey) { showRosterReview(); return; }
+  STATE._shownLeagueChangesSeason = seasonKey;
+  showLeagueChangesSummary(showRosterReview);
+}
+
+function showLeagueChangesSummary(done) {
+  var changes = STATE._leagueChanges || {};
+  var sections = [];
+  function addSection(title, items) { if (items && items.length) sections.push({title:title,items:items}); }
+  addSection('🏙️ 联盟结构变化', (changes.franchiseChanges||[]).map(function(x){return x.type+'：'+(x.from?x.from+' → ':'')+x.to+(x.players!=null?'（初始名单 '+x.players+' 人）':'');}));
+  addSection('🎓 真实选秀加盟', (changes.rookies||[]).map(function(x){return (x.pick?'第'+x.pick+'顺位 · ':'')+x.name+' → '+getTeamName(x.team);}));
+  addSection('📢 退役', (changes.retired||[]).filter(function(x){return !isHiddenRetiredPlayer(x);}).map(function(x){return x.name+' · '+getTeamName(x.team)+' · '+x.age+'岁';}));
+  addSection('🖊️ 自由球员签约', (changes.freeSignings||[]).map(function(x){return x.name+'：'+getTeamName(x.from)+' → '+getTeamName(x.to)+'（OVR '+x.ovr+'）';}));
+  addSection('🔄 联盟交易', (changes.trades||[]).map(function(x){return getTeamName(x.from)+' ⇄ '+getTeamName(x.to)+'：'+x.playerA+' / '+x.playerB;}));
+  if (changes.userContract) addSection('⭐ 你的合同', [getTeamName(changes.userContract.to)+' · '+changes.userContract.years+'年'+(changes.userContract.playerOption?' · 最后一年球员选项':'')]);
+  var body = sections.map(function(section){return '<div style="margin-bottom:12px;"><div style="font-family:var(--font-display);font-weight:700;color:var(--orange);margin-bottom:5px;">'+section.title+'（'+section.items.length+'）</div>'+section.items.map(function(item){return '<div style="font-size:12px;color:var(--text-dim);padding:4px 2px;border-bottom:1px solid var(--border-light);">'+item+'</div>';}).join('')+'</div>';}).join('');
+  if (!body) body='<div style="text-align:center;color:var(--text-muted);padding:24px;">本休赛期没有记录到球员变动</div>';
+  var html='<div class="team-picker-overlay" id="league-changes-summary"><div class="team-picker-modal" style="max-width:460px;"><div class="team-picker-header"><span>📋 '+getCurrentSeasonLabel()+' 休赛期变动</span></div><div style="padding:10px 12px;max-height:66vh;overflow-y:auto;">'+body+'</div><div style="padding:10px 12px 14px;border-top:1px solid var(--border-light);"><button class="btn btn-primary btn-sm" id="leagueChangesContinue" style="width:100%;">查看新赛季阵容</button></div></div></div>';
+  document.body.insertAdjacentHTML('beforeend',html);
+  document.getElementById('leagueChangesContinue').onclick=function(){var modal=document.getElementById('league-changes-summary');if(modal)modal.remove();if(done)done();};
 }
 
 function showRetirementModal(callback) {
@@ -19126,6 +19235,7 @@ function historicalRookieToLeaguePlayer(item, draftYear, destination) {
     PDEF: ovr + (perimeter ? 2 : 0), IDEF: ovr + (big ? 5 : -3), BLK: ovr + (big ? 7 : -8),
     REB: ovr + (big ? 7 : -6), ATH: ovr + 2, STR: ovr + (big ? 6 : -2), CLU: ovr
   };
+  var historicalBounds = (window.PERFECT_PLAYER_HISTORICAL_CAREER_BOUNDS || {})[item.realId] || (window.PERFECT_PLAYER_HISTORICAL_CAREER_BOUNDS || {})[item.historyKey] || {};
   Object.keys(attrs).forEach(function(key) { attrs[key] = Math.max(30, Math.min(99, Math.round(attrs[key]))); });
   return Object.assign({
     name: item.nameEn || item.name || ('Draft_' + draftYear + '_' + item.pick),
@@ -19134,6 +19244,7 @@ function historicalRookieToLeaguePlayer(item, draftYear, destination) {
     height: ({PG:"6'2\"",SG:"6'5\"",SF:"6'7\"",PF:"6'9\"",C:"6'11\""})[pos],
     type: draftYear + '年真实新秀', ovr: ovr, _age: Number(item.age) || 20, _enterYear: draftYear,
     _realId: item.realId || '', _historyKey: item.historyKey || '', _historicalDraftPick: Number(item.pick) || 0,
+    _historicalFirstSeasonEnd: Number(historicalBounds.first || 0), _historicalLastSeasonEnd: Number(historicalBounds.last || 0),
     _historicalDraftTeam: destination, contract: Number(item.pick) <= 14 ? 4 : (Number(item.pick) <= 30 ? 3 : 2),
     photoLocal: item.photoLocal || '', _photoLocal: item.photoLocal || '', photoStatus: item.photoStatus || '',
     _awardStreak: {}
@@ -19480,7 +19591,17 @@ function getLeaguePlayerLongevityScore(player) {
 
 function getLeagueRetirementChance(player, age) {
   age = Number(age) || 22;
-  if (age >= LEBRON_JAMES_SPECIAL_RULE.maxRetirementAge) return 100;
+  if (age >= 43) return 100;
+  if (STATE.mode === 'legend' && player && Number(player._historicalLastSeasonEnd) > 0) {
+    var completedEndYear = (Number(STATE.legendSeason) || 2025) + Math.max(0, Number(STATE.career && STATE.career.seasonCount || 1) - 1);
+    var yearsPastReality = completedEndYear - Number(player._historicalLastSeasonEnd);
+    if (yearsPastReality >= 2) return 100;
+    if (yearsPastReality === 1) return Math.max(88, age >= 40 ? 96 : 88);
+    if (yearsPastReality === 0) return Math.max(58, age >= 38 ? 78 : 58);
+  }
+  STATE.career.contractPlayerOption = !!playerOption && STATE.career.contract > 1;
+  STATE._leagueChanges = STATE._leagueChanges || {};
+  STATE._leagueChanges.userContract = { from:oldTeam, to:team, years:STATE.career.contract, playerOption:STATE.career.contractPlayerOption };
   if (age < 34) return 0;
   var baseByAge = { 34:2, 35:4, 36:8, 37:14, 38:23, 39:34, 40:48, 41:68 };
   var base = baseByAge[age] == null ? 0 : baseByAge[age];

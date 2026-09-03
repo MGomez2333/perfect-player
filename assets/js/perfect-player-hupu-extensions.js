@@ -152,6 +152,42 @@
     return HISTORICAL_TEAM_ALIASES[key] || key;
   }
 
+  function historicalConferenceMap(activeTeams, endYear) {
+    var east = ['ATL','BOS','BKN','CHA','CHI','CLE','DET','IND','MIA','MIL','NYK','ORL','PHI','TOR','WAS'];
+    var map = {};
+    activeTeams.forEach(function(team) { map[team] = east.indexOf(team) >= 0 ? 'EAST' : 'WEST'; });
+    if (Number(endYear) === 1989 && map.MIA) map.MIA = 'WEST';
+    if ((Number(endYear) === 2003 || Number(endYear) === 2004) && map.NOP) map.NOP = 'EAST';
+    return map;
+  }
+
+  function historicalTeamLabel(rawTeam, endYear) {
+    var labels = {
+      SEA:'西雅图超音速', NJN:'新泽西篮网', NOH:'新奥尔良黄蜂', NOK:'新奥尔良/俄城黄蜂',
+      CHH:'夏洛特黄蜂', CHO:'夏洛特黄蜂', VAN:'温哥华灰熊', WSB:'华盛顿子弹',
+      KCK:'堪萨斯城国王', KCO:'堪萨斯城-奥马哈国王', SDC:'圣迭戈快船', BUF:'布法罗勇敢者',
+      NOJ:'新奥尔良爵士', PHW:'费城勇士', SFW:'旧金山勇士', SYR:'锡拉丘兹民族', STL:'圣路易斯老鹰'
+    };
+    if (labels[rawTeam]) return labels[rawTeam];
+    if (rawTeam === 'WAS' && Number(endYear) <= 1997) return '华盛顿子弹';
+    return '';
+  }
+
+  var PANDEMIC_2020_GAMES = {ATL:67,BOS:72,BKN:72,CHA:65,CHI:65,CLE:65,DAL:75,DEN:73,DET:66,GSW:65,HOU:72,IND:73,LAC:72,LAL:71,MEM:73,MIA:73,MIL:73,MIN:64,NOP:72,NYK:66,OKC:72,ORL:73,PHI:73,PHX:73,POR:74,SAC:72,SAS:71,TOR:72,UTA:72,WAS:72};
+  function historicalScheduledGames(endYear, team) {
+    endYear = Number(endYear);
+    if (endYear === 1999) return 50;
+    if (endYear === 2012) return 66;
+    if (endYear === 2020) return PANDEMIC_2020_GAMES[team] || 72;
+    if (endYear === 2021) return 72;
+    if (endYear <= 1959) return 72;
+    if (endYear === 1960) return 75;
+    if (endYear === 1961) return 79;
+    if (endYear >= 1962 && endYear <= 1966) return 80;
+    if (endYear === 1967) return 81;
+    return 82;
+  }
+
   function fetchLegendJson(file) {
     return fetch(LEGEND_DATA_ROOT + file, { cache:'no-store' }).then(function(response) {
       if (!response.ok) throw new Error('历史数据库加载失败：' + response.status);
@@ -200,10 +236,12 @@
     if (!legendDraftPromise) {
       legendDraftPromise = Promise.all([
         fetchLegendJson('draft_classes.json'),
-        fetchLegendJson('draft_destinations.json')
+        fetchLegendJson('draft_destinations.json'),
+        fetchLegendJson('career_bounds.json')
       ]).then(function(results) {
         window.PERFECT_PLAYER_HISTORICAL_DRAFT_CLASSES = (results[0] && results[0].classes) || {};
         window.PERFECT_PLAYER_HISTORICAL_DRAFT_DESTINATIONS = (results[1] && results[1].destinations) || {};
+        window.PERFECT_PLAYER_HISTORICAL_CAREER_BOUNDS = (results[2] && results[2].players) || {};
         return window.PERFECT_PLAYER_HISTORICAL_DRAFT_CLASSES;
       });
     }
@@ -292,7 +330,14 @@
     var nearest = snapshots.slice().sort(function(a, b) {
       return Math.abs((a.startYear || 0) - (row.season || 0)) - Math.abs((b.startYear || 0) - (row.season || 0));
     })[0];
-    if (nearest && Math.abs((nearest.startYear || 0) - (row.season || 0)) <= 2) ovr = clamp((ovr + Number(nearest.rating || ovr)) / 2, 50, 99);
+    var historicalAge = 0;
+    if (nearest) {
+      var yearDistance = Math.abs((nearest.startYear || 0) - (row.season || 0));
+      var snapshotRating = clamp(Number(nearest.rating || ovr) - Math.min(8, yearDistance * .5), 50, 99);
+      ovr = clamp(ovr * .35 + snapshotRating * .65, 50, 99);
+      historicalAge = Number(nearest.age || 0) + (Number(row.season || 0) - Number(nearest.startYear || 0));
+    }
+    var careerBounds = (window.PERFECT_PLAYER_HISTORICAL_CAREER_BOUNDS || {})[row.realId] || {};
     return {
       name: row.name || row.displayName || meta.nameEn,
       cname: meta.nameCn || meta.displayName || row.displayName || row.name,
@@ -307,7 +352,10 @@
       _sourceKind: 'legend-season', _sourceYear: Number(row.season) || Number(row.seasonEndYear) - 1,
       _sourceLabel: window.formatLegendSeason(row.seasonEndYear), _photoLocal: meta.photoLocal || '',
       _poolUid: row.realId + '-' + row.team + '-' + row.seasonEndYear,
-      _realId: row.realId || '', _historyKey: meta.historyKey || ''
+      _realId: row.realId || '', _historyKey: meta.historyKey || '',
+      _age: historicalAge > 0 ? historicalAge : undefined,
+      _historicalFirstSeasonEnd: Number(careerBounds.first || 0),
+      _historicalLastSeasonEnd: Number(careerBounds.last || 0)
     };
   }
 
@@ -365,20 +413,24 @@
     if (!legendLeaguePromises[endYear]) {
       legendLeaguePromises[endYear] = Promise.all([
         fetchLegendJson('player_seasons_' + endYear + '.json'),
-        loadLegendPlayers()
+        loadLegendPlayers(),
+        loadLegendDraftData()
       ]).then(function(results) {
         var payload = results[0] || {};
         var playerIndex = results[1] || {};
         var grouped = {};
+        var rawTeamByCanonical = {};
         var teamGameCounts = {};
         var seasonGameCount = 0;
         (payload.rows || []).forEach(function(row) {
           if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
-          seasonGameCount = Math.max(seasonGameCount, Number(row.gp || 0));
+          // 跨队球员的汇总行可能显示 83 场甚至更多，不能拿它当球队赛程长度。
+          if (row.teamAggregate !== 'TOT') seasonGameCount = Math.max(seasonGameCount, Number(row.gp || 0));
           var team = canonicalHistoricalTeam(row.team);
           if (!team || typeof NBA2K_DATA === 'undefined' || !Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) return;
           if (!grouped[team]) grouped[team] = {};
-          teamGameCounts[team] = Math.max(Number(teamGameCounts[team] || 0), Number(row.gp || 0));
+          rawTeamByCanonical[team] = row.team;
+          if (row.teamAggregate !== 'TOT') teamGameCounts[team] = Math.max(Number(teamGameCounts[team] || 0), Number(row.gp || 0));
           var key = row.realId || String(row.name || row.displayName || '').toLowerCase();
           var previous = grouped[team][key];
           if (!previous || Number(row.gp || 0) > Number(previous.gp || 0)) grouped[team][key] = row;
@@ -402,14 +454,18 @@
         });
         NBA2K_TEAMS.splice.apply(NBA2K_TEAMS, [0, NBA2K_TEAMS.length].concat(activeTeams));
         window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = activeTeams.slice();
+        window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM = historicalConferenceMap(activeTeams, endYear);
+        window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS = {};
+        activeTeams.forEach(function(team) { var label=historicalTeamLabel(rawTeamByCanonical[team],endYear); if(label) window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS[team]=label; });
         window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = teamGameCounts;
-        window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = seasonGameCount || 82;
+        activeTeams.forEach(function(team) { teamGameCounts[team] = historicalScheduledGames(endYear, team); });
+        window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = Math.min(82, seasonGameCount || 82);
         window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = {
           season: endYear,
           label: window.formatLegendSeason(endYear),
           teams: activeTeams.length,
           players: totalPlayers,
-          seasonGames: seasonGameCount || 82,
+          seasonGames: Math.min(82, seasonGameCount || 82),
           gamesByTeam: Object.assign({}, teamGameCounts)
         };
         if (typeof clearLineupCache === 'function') clearLineupCache();
@@ -421,6 +477,70 @@
       });
     }
     return legendLeaguePromises[endYear];
+  };
+
+  window.prepareLegendNextSeason = function(endYear) {
+    endYear = Number(endYear);
+    return Promise.all([fetchLegendJson('player_seasons_' + endYear + '.json'), loadLegendPlayers(), loadLegendDraftData()]).then(function(results) {
+      var rows = (results[0] && results[0].rows) || [];
+      var playerIndex = results[1] || {};
+      var grouped = {}, byIdentity = {}, rawByTeam = {}, gamesByTeam = {};
+      rows.forEach(function(row) {
+        if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
+        var team = canonicalHistoricalTeam(row.team);
+        if (!Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) return;
+        grouped[team] = grouped[team] || {};
+        rawByTeam[team] = row.team;
+        if (row.teamAggregate !== 'TOT') gamesByTeam[team] = Math.max(Number(gamesByTeam[team] || 0), Number(row.gp || 0));
+        var key = row.realId || String(row.name || '').toLowerCase();
+        if (!grouped[team][key] || Number(row.gp || 0) > Number(grouped[team][key].gp || 0)) grouped[team][key] = row;
+        if (row.realId && (!byIdentity[row.realId] || Number(row.gp || 0) > Number(byIdentity[row.realId].gp || 0))) byIdentity[row.realId] = row;
+        var meta = playerIndex[row.realId] || {};
+        if (meta.historyKey) byIdentity[meta.historyKey] = row;
+      });
+      var nextTeams = Object.keys(grouped).filter(function(team) { return Object.keys(grouped[team]).length; });
+      var changes = STATE._leagueChanges = STATE._leagueChanges || { retired:[], rookies:[], teamChanges:{}, trades:[] };
+      changes.franchiseChanges = changes.franchiseChanges || [];
+      if (NBA2K_TEAMS.indexOf('CHA') >= 0 && nextTeams.indexOf('CHA') < 0 && nextTeams.indexOf('NOP') >= 0 && NBA2K_TEAMS.indexOf('NOP') < 0) {
+        NBA2K_DATA.NOP = NBA2K_DATA.CHA || [];
+        NBA2K_DATA.CHA = [];
+        if (STATE.careerTeam === 'CHA') STATE.careerTeam = 'NOP';
+        changes.franchiseChanges.push({ type:'迁队', from:'夏洛特黄蜂', to:'新奥尔良黄蜂' });
+      }
+      var activeIdentity = {};
+      NBA2K_TEAMS.forEach(function(team) {(NBA2K_DATA[team] || []).forEach(function(p) { if (p._realId) activeIdentity[p._realId]=true; if (p._historyKey) activeIdentity[p._historyKey]=true; });});
+      nextTeams.forEach(function(team) {
+        if (NBA2K_TEAMS.indexOf(team) >= 0) return;
+        var roster = Object.keys(grouped[team]).map(function(key) {
+          var row=grouped[team][key], meta=playerIndex[row.realId]||{};
+          if (activeIdentity[row.realId] || (meta.historyKey && activeIdentity[meta.historyKey])) return null;
+          return convertLegendSeasonPlayer(row, meta);
+        }).filter(Boolean);
+        NBA2K_DATA[team] = roster;
+        changes.franchiseChanges.push({ type:'扩军', from:'', to:historicalTeamLabel(rawByTeam[team], endYear) || team, players:roster.length });
+      });
+      NBA2K_TEAMS.splice.apply(NBA2K_TEAMS,[0,NBA2K_TEAMS.length].concat(nextTeams));
+      NBA2K_TEAMS.forEach(function(team) {
+        (NBA2K_DATA[team] || []).forEach(function(player) {
+          var row = byIdentity[player._realId] || byIdentity[player._historyKey];
+          if (!row) return;
+          var updated = convertLegendSeasonPlayer(row, playerIndex[row.realId] || {});
+          ['ovr','threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU','_age','_historicalFirstSeasonEnd','_historicalLastSeasonEnd'].forEach(function(k) { if (updated[k] != null) player[k]=updated[k]; });
+        });
+      });
+      var labels = {};
+      nextTeams.forEach(function(team) { var label=historicalTeamLabel(rawByTeam[team],endYear); if(label) labels[team]=label; });
+      window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS = labels;
+      window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM = historicalConferenceMap(nextTeams,endYear);
+      window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = nextTeams.slice();
+      window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = gamesByTeam;
+      nextTeams.forEach(function(team) { gamesByTeam[team] = historicalScheduledGames(endYear, team); });
+      var observedGames = Object.keys(gamesByTeam).map(function(t){return gamesByTeam[t];});
+      window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = Math.min(82, observedGames.length ? Math.max.apply(null, observedGames) : 82);
+      window.PERFECT_PLAYER_LEGEND_CURRENT_END_YEAR = endYear;
+      if (typeof clearLineupCache === 'function') clearLineupCache();
+      return { season:endYear, teams:nextTeams.length, franchiseChanges:changes.franchiseChanges };
+    });
   };
 
   window.confirmLegendEra = function() {
