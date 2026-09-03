@@ -46,10 +46,9 @@ const warriors = new Set(peaks.teams.GSW.map(card => card.nameEn));
 ['Stephen Curry', 'Klay Thompson', 'Draymond Green', 'Wilt Chamberlain'].forEach(name => assert.ok(warriors.has(name), `勇士队史池缺少 ${name}`));
 ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.has(name), `勇士队史池错误混入 ${name}`));
 assert.ok(peaks.teams.OKC.some(card => card.nameEn === 'Russell Westbrook'), '雷霆应包含巅峰 Russell Westbrook');
-['LAL', 'HOU', 'WAS', 'LAC'].forEach(team => assert.ok(
-  !peaks.teams[team].some(card => card.nameEn === 'Russell Westbrook'),
-  `${team} 不应出现其他球队时期的巅峰 Russell Westbrook`
-));
+const durantVersions = ['OKC', 'GSW', 'BKN'].map(team => peaks.teams[team].find(card => card.nameEn === 'Kevin Durant'));
+assert.ok(durantVersions.every(Boolean), '杜兰特应拥有雷霆、勇士和篮网各自的队内巅峰版本');
+assert.equal(new Set(durantVersions.map(card => card.source.label)).size, 3, '杜兰特的三支球队版本应来自不同赛季');
 
 const extension = read('assets', 'js', 'perfect-player-hupu-extensions.js');
 assert.match(extension, /showLegendEraSelect/);

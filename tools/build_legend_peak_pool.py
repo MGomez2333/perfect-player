@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import copy
 from collections import defaultdict
 from datetime import datetime, timezone
 
@@ -66,6 +67,7 @@ def main() -> None:
     affiliations = load_real_franchise_affiliations()
     peak_teams = load_real_peak_teams()
     peaks: dict[str, dict] = {}
+    team_peaks: dict[str, dict[int, dict]] = defaultdict(dict)
 
     for source in pool.SEASONS:
         for index, row in enumerate(pool.load_csv(pool.DATA_DIR / source["file"]), start=1):
@@ -84,6 +86,18 @@ def main() -> None:
             ) if previous else None
             if previous is None or score > previous_score:
                 peaks[identity] = record
+            # rosters19 is a fantasy all-time compilation. Other snapshots are
+            # real season/team combinations and can provide a true team peak.
+            if source["code"] != 19 and record.get("teamId") in TEAM_ABBRS:
+                team_id = int(record["teamId"])
+                team_previous = team_peaks[identity].get(team_id)
+                team_score = (record["rating"], record["starScore"], -source["year"])
+                old_team_score = (
+                    team_previous["rating"], team_previous["starScore"],
+                    -int((team_previous.get("source") or {}).get("year") or 0)
+                ) if team_previous else None
+                if team_previous is None or team_score > old_team_score:
+                    team_peaks[identity][team_id] = record
 
     candidates: dict[int, dict[int, dict[str, dict]]] = defaultdict(lambda: defaultdict(dict))
     for identity, record in peaks.items():
@@ -93,18 +107,30 @@ def main() -> None:
         if not teams:
             teams.update(record.get("historicalTeams") or [record.get("teamId")])
         record["historicalTeams"] = sorted(teams)
-        peak_team_id = 0
+        career_peak_team_id = 0
         for key in (identity, pool.norm(record.get("nameEn")), pool.norm(record.get("name"))):
             if str(key) in peak_teams:
-                peak_team_id = peak_teams[str(key)]
+                career_peak_team_id = peak_teams[str(key)]
                 break
-        if peak_team_id not in TEAM_ABBRS:
-            peak_team_id = int(record.get("teamId") or 0)
-        if peak_team_id not in TEAM_ABBRS:
-            continue
-        record["peakTeamId"] = peak_team_id
-        position = max(1, min(5, int(record.get("pos") or 3)))
-        candidates[peak_team_id][position][identity] = record
+        if career_peak_team_id not in TEAM_ABBRS:
+            career_peak_team_id = int(record.get("teamId") or 0)
+        for team_id in teams:
+            team_id = int(team_id or 0)
+            if team_id not in TEAM_ABBRS:
+                continue
+            team_record = team_peaks.get(identity, {}).get(team_id)
+            # Older players may only exist in the all-time compilation. Keep
+            # that card solely with the franchise of their best real season.
+            if team_record is None and team_id == career_peak_team_id:
+                team_record = copy.deepcopy(record)
+            elif team_record is not None:
+                team_record = copy.deepcopy(team_record)
+            else:
+                continue
+            team_record["peakTeamId"] = team_id
+            team_record["franchisePeak"] = True
+            position = max(1, min(5, int(team_record.get("pos") or 3)))
+            candidates[team_id][position][identity] = team_record
 
     teams_payload: dict[str, list[dict]] = {}
     position_counts: dict[str, dict[str, int]] = {}
@@ -130,7 +156,7 @@ def main() -> None:
     payload = {
         "version": 1,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "rule": "one-franchise peak pool: each career-peak card belongs only to the franchise of the player's best statistical season",
+        "rule": "franchise-specific peak pool: each team receives the player's best available card while with that team",
         "players": peaks,
         "teams": teams_payload,
         "positionCounts": position_counts,
