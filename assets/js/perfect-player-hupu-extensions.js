@@ -112,7 +112,11 @@
     }
     var profile = { name: name.slice(0, 12), avatar: selectedAvatar };
     applyProfile(profile);
-    if (typeof showScreen === 'function') showScreen('screen-position');
+    if (typeof STATE !== 'undefined' && STATE.mode === 'legend') {
+      if (typeof window.showLegendEraSelect === 'function') window.showLegendEraSelect();
+    } else if (typeof showScreen === 'function') {
+      showScreen('screen-position');
+    }
   };
 
   var TEAM_TO_ABBR = {
@@ -125,6 +129,235 @@
   };
   var POSITIONS = { 1:'PG', 2:'SG', 3:'SF', 4:'PF', 5:'C' };
   var POSITION_HEIGHT = { PG:"6'2'", SG:"6'5'", SF:"6'7'", PF:"6'9'", C:"6'11'" };
+
+  var LEGEND_DATA_ROOT = 'assets/data/historical/';
+  var legendManifestPromise = null;
+  var legendPlayersPromise = null;
+  var legendPeaksPromise = null;
+  var legendYears = [];
+  var activeLegendDecade = null;
+  var selectedLegendSeason = null;
+
+  var HISTORICAL_TEAM_ALIASES = {
+    SEA:'OKC', NJN:'BKN', NYN:'BKN', BRK:'BKN', NOH:'NOP', NOK:'NOP', CHH:'CHA', CHO:'CHA', CHA:'CHA',
+    VAN:'MEM', WSB:'WAS', BAL:'WAS', KCK:'SAC', KCO:'SAC', CIN:'SAC', ROC:'SAC',
+    SDC:'LAC', BUF:'LAC', NOJ:'UTA', PHW:'GSW', SFW:'GSW', SYR:'PHI', STL:'ATL',
+    PHO:'PHX', MNL:'LAL', SDR:'HOU', MLH:'ATL', TRI:'ATL', FTW:'DET'
+  };
+
+  function canonicalHistoricalTeam(team) {
+    var key = String(team || '').trim().toUpperCase();
+    return HISTORICAL_TEAM_ALIASES[key] || key;
+  }
+
+  function fetchLegendJson(file) {
+    return fetch(LEGEND_DATA_ROOT + file, { cache:'no-store' }).then(function(response) {
+      if (!response.ok) throw new Error('历史数据库加载失败：' + response.status);
+      return response.json();
+    });
+  }
+
+  function loadLegendManifest() {
+    if (!legendManifestPromise) {
+      legendManifestPromise = fetchLegendJson('manifest.json').then(function(payload) {
+        var files = payload && payload.files && payload.files.playerSeasons || [];
+        legendYears = files.map(function(file) {
+          var match = String(file).match(/player_seasons_(\d{4})\.json$/);
+          return match ? Number(match[1]) : 0;
+        }).filter(Boolean).sort(function(a, b) { return b - a; });
+        return legendYears;
+      });
+    }
+    return legendManifestPromise;
+  }
+
+  function loadLegendPlayers() {
+    if (!legendPlayersPromise) {
+      legendPlayersPromise = fetchLegendJson('players.json').then(function(payload) {
+        var index = {};
+        (payload.players || []).forEach(function(player) { index[player.realId] = player; });
+        return index;
+      });
+    }
+    return legendPlayersPromise;
+  }
+
+  function loadLegendPeaks() {
+    if (!legendPeaksPromise) {
+      legendPeaksPromise = fetch('assets/data/perfect-player-legend-peaks.json', { cache:'no-store' })
+        .then(function(response) {
+          if (!response.ok) throw new Error('传奇巅峰能力库加载失败：' + response.status);
+          return response.json();
+        })
+        .then(function(payload) { return payload || {}; });
+    }
+    return legendPeaksPromise;
+  }
+
+  window.formatLegendSeason = function(endYear) {
+    endYear = Number(endYear) || 2025;
+    return (endYear - 1) + '-' + String(endYear % 100).padStart(2, '0') + '赛季';
+  };
+
+  window.showLegendEraSelect = function() {
+    if (typeof showScreen === 'function') showScreen('screen-era');
+    var summary = document.getElementById('era-summary');
+    if (summary) summary.textContent = '正在读取历史球员数据库…';
+    loadLegendManifest().then(function(years) {
+      if (!years.length) throw new Error('没有可用的历史赛季');
+      activeLegendDecade = selectedLegendSeason ? Math.floor(selectedLegendSeason / 10) * 10 : 1990;
+      renderLegendEraPicker();
+    }).catch(function(error) {
+      if (summary) summary.textContent = error.message || String(error);
+    });
+  };
+
+  function renderLegendEraPicker() {
+    var decades = [];
+    legendYears.forEach(function(year) {
+      var decade = Math.floor((year - 1) / 10) * 10;
+      if (decades.indexOf(decade) < 0) decades.push(decade);
+    });
+    decades.sort(function(a, b) { return b - a; });
+    var decadeGrid = document.getElementById('era-decade-grid');
+    var seasonGrid = document.getElementById('era-season-grid');
+    if (!decadeGrid || !seasonGrid) return;
+    decadeGrid.innerHTML = decades.map(function(decade) {
+      return '<button type="button" class="era-decade' + (decade === activeLegendDecade ? ' active' : '') + '" onclick="selectLegendDecade(' + decade + ')">' + decade + 's</button>';
+    }).join('');
+    var years = legendYears.filter(function(year) { return Math.floor((year - 1) / 10) * 10 === activeLegendDecade; });
+    seasonGrid.innerHTML = years.map(function(year) {
+      return '<button type="button" class="era-season' + (year === selectedLegendSeason ? ' selected' : '') + '" onclick="selectLegendSeason(' + year + ')">' + window.formatLegendSeason(year) + '</button>';
+    }).join('');
+    updateLegendEraSummary();
+  }
+
+  window.selectLegendDecade = function(decade) {
+    activeLegendDecade = Number(decade);
+    renderLegendEraPicker();
+  };
+
+  window.selectLegendSeason = function(year) {
+    selectedLegendSeason = Number(year);
+    renderLegendEraPicker();
+  };
+
+  function updateLegendEraSummary() {
+    var summary = document.getElementById('era-summary');
+    var confirm = document.getElementById('era-confirm-btn');
+    if (summary) summary.innerHTML = selectedLegendSeason
+      ? '已选择 <b style="color:var(--orange)">' + window.formatLegendSeason(selectedLegendSeason) + '</b><br>该赛季作为生涯背景；抽卡使用球队全年代传奇库'
+      : '请选择一个具体赛季';
+    if (confirm) confirm.disabled = !selectedLegendSeason;
+  }
+
+  function statRating(value, scale, base) {
+    return clamp(base + (Number(value) || 0) * scale, 35, 99);
+  }
+
+  function convertLegendSeasonPlayer(row, meta) {
+    meta = meta || {};
+    var primary = meta.position && meta.position.primary || 3;
+    var secondary = meta.position && meta.position.secondary || 0;
+    var mainPos = POSITIONS[primary] || 'SF';
+    var secondPos = POSITIONS[secondary];
+    var pos = mainPos + (secondPos && secondPos !== mainPos ? ' / ' + secondPos : '');
+    var three = Number(row.tpPct) > 0 ? statRating(row.tpPct, 1.28, 35) : 35;
+    var mid = statRating(row.fgPct, 1.05, 30);
+    var finish = clamp(mid + Math.min(14, Number(row.ppg) * .45), 35, 99);
+    var pass = statRating(row.apg, 5.8, 42);
+    var rebound = statRating(row.rpg, 5.0, 40);
+    var steal = statRating(row.spg, 23, 43);
+    var block = statRating(row.bpg, 25, 40);
+    var athletic = clamp(45 + (Number(row.mins) || 0) * .75 + (Number(row.ppg) || 0) * .45, 40, 97);
+    var strength = clamp(42 + (primary >= 4 ? 17 : primary === 3 ? 10 : 4) + (Number(row.rpg) || 0) * 2.2, 40, 98);
+    var ovr = clamp(52 + (Number(row.ppg) || 0) * .85 + (Number(row.rpg) || 0) * .55 + (Number(row.apg) || 0) * .8 + (Number(row.spg) || 0) * 2.2 + (Number(row.bpg) || 0) * 2.2, 50, 98);
+    var snapshots = meta.rosterSnapshots || [];
+    var nearest = snapshots.slice().sort(function(a, b) {
+      return Math.abs((a.startYear || 0) - (row.season || 0)) - Math.abs((b.startYear || 0) - (row.season || 0));
+    })[0];
+    if (nearest && Math.abs((nearest.startYear || 0) - (row.season || 0)) <= 2) ovr = clamp((ovr + Number(nearest.rating || ovr)) / 2, 50, 99);
+    return {
+      name: meta.nameEn || row.name || row.displayName,
+      cname: meta.nameCn || meta.displayName || row.displayName || row.name,
+      pos: pos,
+      height: POSITION_HEIGHT[mainPos],
+      type: window.formatLegendSeason(row.seasonEndYear) + '球员',
+      ovr: ovr, threePT: three, MID: mid, FIN: finish,
+      DNK: clamp((finish + athletic) / 2, 35, 99), HAN: clamp((pass + athletic) / 2, 35, 99), PAS: pass,
+      PDEF: clamp((steal + athletic) / 2, 35, 99), IDEF: clamp((block + rebound) / 2, 35, 99),
+      BLK: block, REB: rebound, ATH: athletic, STR: strength,
+      CLU: clamp(ovr + Math.min(5, Number(row.ppg) / 7), 35, 99),
+      _sourceKind: 'legend-season', _sourceYear: Number(row.season) || Number(row.seasonEndYear) - 1,
+      _sourceLabel: window.formatLegendSeason(row.seasonEndYear), _photoLocal: meta.photoLocal || '',
+      _poolUid: row.realId + '-' + row.team + '-' + row.seasonEndYear
+    };
+  }
+
+  function convertLegendPeakPlayer(row, meta, peaks, selectedEndYear, supplemental) {
+    var peak = peaks[row.realId];
+    var player = peak ? convertPlayer(peak) : convertLegendSeasonPlayer(row, meta);
+    player._sourceKind = 'legend-season';
+    player._sourceYear = Number(selectedEndYear) - 1;
+    player._sourceLabel = window.formatLegendSeason(selectedEndYear);
+    player._legendPeak = !!peak;
+    player._legendPeakLabel = peak && peak.source ? peak.source.label : '';
+    player._legendRosterSupplement = !!supplemental;
+    player.type = window.formatLegendSeason(selectedEndYear) + (supplemental ? '相邻赛季名单补录 · 生涯巅峰卡' : '名单 · 生涯巅峰卡');
+    player._poolUid = row.realId + '-' + row.team + '-' + selectedEndYear + (supplemental ? '-supplement' : '');
+    return player;
+  }
+
+  window.loadLegendSeason = function(endYear) {
+    endYear = Number(endYear);
+    return loadLegendPeaks().then(function(payload) {
+      var teams = {};
+      Object.keys(payload.teams || {}).forEach(function(team) {
+        teams[team] = (payload.teams[team] || []).map(function(card) {
+          var player = convertPlayer(card);
+          player._sourceKind = 'legend-season';
+          player._sourceYear = Number(endYear) - 1;
+          player._sourceLabel = window.formatLegendSeason(endYear);
+          player._legendPeak = true;
+          player._legendPeakLabel = card.source ? card.source.label : '';
+          player._legendRosterSupplement = false;
+          player.type = '队史传奇 · 生涯巅峰卡';
+          return player;
+        });
+        teams[team].forEach(function(player) {
+          window.PERFECT_PLAYER_PHOTO_BY_NAME[player.name] = player._photoLocal || '';
+          window.PERFECT_PLAYER_DISPLAY_BY_NAME[player.name] = player.cname || player.name;
+        });
+      });
+      window.PERFECT_PLAYER_LEGEND_DATA = teams;
+      window.PERFECT_PLAYER_LEGEND_REPORT = {
+        season: endYear, teams: Object.keys(teams).length,
+        players: Object.keys(teams).reduce(function(total, team) { return total + teams[team].length; }, 0),
+        peakCards: Object.keys(teams).reduce(function(total, team) { return total + teams[team].length; }, 0),
+        cardsPerTeam: 25,
+        cardsPerPosition: 5
+      };
+      return window.PERFECT_PLAYER_LEGEND_REPORT;
+    });
+  };
+
+  window.confirmLegendEra = function() {
+    if (!selectedLegendSeason) return;
+    var button = document.getElementById('era-confirm-btn');
+    var summary = document.getElementById('era-summary');
+    if (button) { button.disabled = true; button.textContent = '正在载入队史传奇库…'; }
+    window.loadLegendSeason(selectedLegendSeason).then(function(report) {
+      STATE.legendSeason = selectedLegendSeason;
+      STATE.position = null;
+      if (summary) summary.innerHTML = '已载入 <b>' + report.teams + '</b> 支球队 · 每队 <b>25</b> 张队史巅峰卡';
+      if (button) button.textContent = '确认年代';
+      if (typeof renderPositionSelect === 'function') renderPositionSelect();
+      if (typeof showScreen === 'function') showScreen('screen-position');
+    }).catch(function(error) {
+      if (summary) summary.textContent = error.message || String(error);
+      if (button) { button.disabled = false; button.textContent = '重试载入'; }
+    });
+  };
 
   function clamp(value, low, high) {
     value = Math.round(Number(value) || low);

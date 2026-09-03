@@ -46,6 +46,7 @@
 '.pp-ach-progress-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#ff6b35,#f7a600);',
 '  transition:width .6s cubic-bezier(.2,.8,.3,1)}',
 '.pp-ach-progress-txt{margin-top:6px;font-size:12px;color:#8a7a66;font-weight:600;font-family:var(--font-display,sans-serif)}',
+'.pp-ach-tabs{display:flex;gap:8px;padding:0 18px 12px}.pp-ach-tab{flex:1;border:1px solid #ead8c0;background:#fffaf2;color:#8a7a66;border-radius:10px;padding:8px;font-weight:800;cursor:pointer}.pp-ach-tab.active{background:#2d1f0e;color:#fff;border-color:#2d1f0e}',
 '.pp-ach-grid{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 14px 18px;display:flex;flex-direction:column;gap:8px}',
 '.pp-ach-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;',
 '  background:var(--bg-card,#fffaf2);border:1.5px solid var(--border,#f0e0cc);transition:transform .12s}',
@@ -60,11 +61,13 @@
 '.pp-ach-name{font-family:var(--font-display,sans-serif);font-size:14.5px;font-weight:800;color:#2d1f0e;',
 '  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
 '.pp-ach-desc{font-size:11.5px;color:#8a7a66;line-height:1.35;margin-top:1px}',
+'.pp-ach-count{font-size:11px;color:#d06a2e;line-height:1.35;margin-top:4px;font-weight:800}',
 '.pp-ach-rarity{font-size:10px;font-weight:800;font-family:var(--font-display,sans-serif);padding:3px 8px;border-radius:20px;',
 '  background:rgba(45,31,14,.06);color:#8a7a66;flex:0 0 auto}',
 '.pp-ach-item.got.rarity-legend .pp-ach-rarity{background:rgba(247,166,0,.16);color:#c48a00}',
 '.pp-ach-item.got.rarity-epic .pp-ach-rarity{background:rgba(183,164,232,.2);color:#7d5fd0}',
 '.pp-ach-item.got.rarity-rare .pp-ach-rarity{background:rgba(46,196,182,.16);color:#1f9e91}',
+'.pp-record-grid{overflow-y:auto;padding:4px 14px 18px;display:flex;flex-direction:column;gap:10px}.pp-record-card{padding:13px;border-radius:15px;background:#fffaf2;border:1px solid #ead8c0}.pp-record-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.pp-record-name{font-size:14px;font-weight:900;color:#2d1f0e}.pp-record-holder{font-size:10.5px;color:#8a7a66;margin-top:2px}.pp-record-value{text-align:right;font-size:17px;font-weight:900;color:#ff6b35}.pp-record-value small{display:block;font-size:9px;color:#9a8a76}.pp-record-track{height:7px;background:#eee1cf;border-radius:8px;overflow:hidden;margin:10px 0 6px}.pp-record-fill{height:100%;background:linear-gradient(90deg,#ff6b35,#f7a600);border-radius:8px}.pp-record-foot{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:#8a7a66}.pp-record-broken{border-color:#f7a600;background:linear-gradient(120deg,#fff8e8,#ffedbd)}',
 '@media(prefers-reduced-motion:reduce){.pp-ring-arc,.pp-ach-fab::after{animation:none!important}}',
 // —— 传承祭坛 ——
 '.pp-lg-open-btn{border:none;cursor:pointer;background:linear-gradient(135deg,#b7a4e8,#ff6b35);color:#fff;',
@@ -291,16 +294,31 @@
     { id: 'sixth_man', icon: '🛋️', name: '超级第六人', desc: '当选最佳第六人', rarity: 'rare' },
     { id: 'mvp', icon: '🏆', name: '联盟 MVP', desc: '荣膺常规赛最有价值球员', rarity: 'legend' },
     { id: 'fmvp', icon: '👑', name: '总决赛 MVP', desc: '荣膺总决赛最有价值球员', rarity: 'legend' },
+    { id: 'mvp_x2', icon: '🏆', name: '双冠王者', desc: '同一生涯累计 2 座常规赛 MVP', rarity: 'epic' },
     { id: 'mvp_x3', icon: '🐐', name: 'MVP 王朝', desc: '同一生涯累计 3 座常规赛 MVP', rarity: 'legend' },
+    { id: 'mvp_x5', icon: '🐐', name: '时代门面', desc: '同一生涯累计 5 座常规赛 MVP', rarity: 'legend' },
     // — 球队战绩 —
     { id: 'playoffs', icon: '🎟️', name: '季后赛门票', desc: '首次带队打进季后赛', rarity: 'common' },
     { id: 'win_60', icon: '🎊', name: '60 胜赛季', desc: '单赛季常规赛拿下 60 胜', rarity: 'epic' },
     { id: 'champion', icon: '🏆', name: '总冠军', desc: '夺得总冠军', rarity: 'legend' },
+    { id: 'champion_x2', icon: '💍', name: '双冠加冕', desc: '同一生涯累计 2 座总冠军', rarity: 'epic' },
     { id: 'champion_x3', icon: '💍', name: '三连话题', desc: '同一生涯累计 3 座总冠军', rarity: 'legend' },
+    { id: 'champion_x5', icon: '👑', name: '冠军王朝', desc: '同一生涯累计 5 座总冠军', rarity: 'legend' },
+    { id: 'champion_x7', icon: '🏛️', name: '指环之王', desc: '同一生涯累计 7 座总冠军', rarity: 'legend' },
+    { id: 'dpoy_x2', icon: '🛡️', name: '禁飞区', desc: '同一生涯累计 2 座 DPOY', rarity: 'epic' },
+    { id: 'dpoy_x3', icon: '🔐', name: '防守王朝', desc: '同一生涯累计 3 座 DPOY', rarity: 'legend' },
+    { id: 'dpoy_x5', icon: '⛓️', name: '铜墙铁壁', desc: '同一生涯累计 5 座 DPOY', rarity: 'legend' },
     // — 数据里程碑（单场） —
     { id: 'game_40', icon: '🔥', name: '40 分之夜', desc: '单场砍下 40+ 得分', rarity: 'rare' },
     { id: 'game_50', icon: '💥', name: '50 分神迹', desc: '单场砍下 50+ 得分', rarity: 'epic' },
+    { id: 'double_double', icon: '✌️', name: '两双初体验', desc: '生涯首次砍下两双', rarity: 'common' },
+    { id: 'double_double_x10', icon: '🔟', name: '两双常客', desc: '同一生涯累计 10 次两双', rarity: 'rare' },
+    { id: 'double_double_x50', icon: '📚', name: '稳定输出', desc: '同一生涯累计 50 次两双', rarity: 'epic' },
+    { id: 'double_double_x100', icon: '🏛️', name: '两双机器', desc: '同一生涯累计 100 次两双', rarity: 'legend' },
     { id: 'triple_double', icon: '🎰', name: '三双', desc: '单场砍下三双', rarity: 'rare' },
+    { id: 'triple_double_x10', icon: '🎲', name: '三双达人', desc: '同一生涯累计 10 次三双', rarity: 'epic' },
+    { id: 'triple_double_x30', icon: '📐', name: '全能核心', desc: '同一生涯累计 30 次三双', rarity: 'legend' },
+    { id: 'triple_double_x50', icon: '♾️', name: '全能传说', desc: '同一生涯累计 50 次三双', rarity: 'legend' },
     // — 数据里程碑（赛季场均） —
     { id: 'avg_30', icon: '📊', name: '得分机器', desc: '赛季场均 30+ 得分', rarity: 'epic' },
     { id: 'season_25_10', icon: '🧱', name: '两双基石', desc: '赛季场均 25 分 10 板', rarity: 'epic' },
@@ -317,6 +335,80 @@
   ACHIEVEMENTS.forEach(function (a) { ACH_MAP[a.id] = a; });
 
   var RARITY_CN = { common: '普通', rare: '稀有', epic: '史诗', legend: '传奇' };
+
+  // 常规赛历史纪录。数值按 NBA 官方历史榜（2025-26 赛季结束）固定，
+  // 让传奇模式中的未来赛季仍有一把稳定的现实标尺。
+  var CAREER_RECORDS = [
+    { id:'pts', icon:'🔥', name:'历史总得分', unit:'分', leader:'勒布朗·詹姆斯', record:43440, milestones:[1000,5000,10000,15000,20000,25000,30000,35000,40000] },
+    { id:'reb', icon:'🧱', name:'历史总篮板', unit:'个', leader:'威尔特·张伯伦', record:23924, milestones:[1000,5000,10000,15000,20000] },
+    { id:'ast', icon:'🎯', name:'历史总助攻', unit:'次', leader:'约翰·斯托克顿', record:15806, milestones:[1000,5000,10000,15000] },
+    { id:'stl', icon:'🧤', name:'历史总抢断', unit:'次', leader:'约翰·斯托克顿', record:3265, milestones:[100,500,1000,1500,2000,2500,3000] },
+    { id:'blk', icon:'🚫', name:'历史总盖帽', unit:'次', leader:'哈基姆·奥拉朱旺', record:3830, milestones:[100,500,1000,1500,2000,2500,3000,3500] },
+    { id:'fgm', icon:'🏀', name:'运动战进球', unit:'球', leader:'勒布朗·詹姆斯', record:15961, milestones:[1000,3000,5000,7500,10000,12500,15000] },
+    { id:'threeM', icon:'🎯', name:'三分命中', unit:'记', leader:'斯蒂芬·库里', record:4248, milestones:[100,500,1000,2000,3000,4000] },
+    { id:'doubleDoubles', icon:'✌️', name:'生涯两双', unit:'次', leader:'威尔特·张伯伦', record:968, milestones:[10,50,100,250,500,750,900] },
+    { id:'tripleDoubles', icon:'🎰', name:'生涯三双', unit:'次', leader:'拉塞尔·威斯布鲁克', record:209, milestones:[10,25,50,75,100,150,181,200] },
+    { id:'misses', icon:'🧊', name:'历史打铁', unit:'球', leader:'勒布朗·詹姆斯', record:15541, milestones:[1000,3000,5000,7500,10000,12500,15000] },
+    { id:'tov', icon:'💨', name:'历史总失误', unit:'次', leader:'勒布朗·詹姆斯', record:5650, milestones:[500,1000,2000,3000,4000,5000] },
+    { id:'games', icon:'📅', name:'历史出场数', unit:'场', leader:'勒布朗·詹姆斯', record:1622, milestones:[100,250,500,750,1000,1250,1500] }
+  ];
+  PP_FX.CAREER_RECORDS = CAREER_RECORDS;
+
+  function careerRecordTotals(s) {
+    var totals = {};
+    var archived = (s.career && s.career.totalStats) || {};
+    var current = (!s._careerSaved && s.season && s.season.playerStats) || {};
+    ['pts','reb','ast','stl','blk','fgm','fga','threeM','tov','games'].forEach(function(k) {
+      totals[k] = (Number(archived[k]) || 0) + (Number(current[k]) || 0);
+    });
+    var gameFacts = collectGameMilestoneFacts(s);
+    totals.doubleDoubles = gameFacts.doubleDoubles;
+    totals.tripleDoubles = gameFacts.tripleDoubles;
+    totals.misses = Math.max(0, totals.fga - totals.fgm);
+    return totals;
+  }
+
+  function renderCareerRecordCards(s) {
+    var totals = careerRecordTotals(s);
+    return CAREER_RECORDS.map(function(record) {
+      var value = Math.round(Number(totals[record.id]) || 0);
+      var broken = value > record.record;
+      var next = record.milestones.filter(function(n) { return n > value; })[0];
+      if (!next || next > record.record) next = record.record;
+      var pct = Math.min(100, Math.round(value / record.record * 1000) / 10);
+      var targetText = broken ? '你已成为新的 NBA 历史第一' : (value >= record.record ? '追平 NBA 历史纪录' : '下一目标 ' + next.toLocaleString('zh-CN') + record.unit);
+      var remaining = broken ? '领先原纪录 ' + (value - record.record).toLocaleString('zh-CN') : '距第一还差 ' + Math.max(0, record.record - value).toLocaleString('zh-CN');
+      return '<div class="pp-record-card' + (value >= record.record ? ' pp-record-broken' : '') + '">' +
+        '<div class="pp-record-top"><div><div class="pp-record-name">' + record.icon + ' ' + record.name + '</div><div class="pp-record-holder">现实纪录：' + record.leader + ' · ' + record.record.toLocaleString('zh-CN') + record.unit + '</div></div>' +
+        '<div class="pp-record-value">' + value.toLocaleString('zh-CN') + '<small>' + pct + '%</small></div></div>' +
+        '<div class="pp-record-track"><div class="pp-record-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="pp-record-foot"><span>' + targetText + '</span><span>' + remaining + '</span></div></div>';
+    }).join('');
+  }
+
+  function syncCareerRecordProgress(s) {
+    if (!s || !s.career) return {};
+    var totals = careerRecordTotals(s);
+    var isNewTracker = !s.career.recordChase;
+    var tracker = s.career.recordChase = s.career.recordChase || { reached:{} };
+    tracker.reached = tracker.reached || {};
+    CAREER_RECORDS.forEach(function(record) {
+      var value = Math.round(Number(totals[record.id]) || 0);
+      record.milestones.concat([record.record]).forEach(function(target) {
+        if (value < target) return;
+        var key = record.id + ':' + target;
+        if (!tracker.reached[key] && !isNewTracker && !PP_FX._suppressAchievementPopups) {
+          var isRecord = target === record.record;
+          PP_FX.toast((isRecord ? 'NBA 历史纪录！' : '生涯里程碑！') + record.name + '达到 ' + target.toLocaleString('zh-CN') + record.unit, { gold:isRecord, icon:isRecord?'👑':record.icon, duration:isRecord?5000:3200 });
+        }
+        tracker.reached[key] = true;
+      });
+    });
+    tracker.totals = totals;
+    PP_FX._recordFacts = totals;
+    return totals;
+  }
+  PP_FX.syncCareerRecords = function () { return syncCareerRecordProgress(G()); };
 
   function loadUnlocked() {
     try {
@@ -441,8 +533,18 @@
     var total = ACHIEVEMENTS.length;
     var got = unlockedCount();
     var pct = Math.round(got / total * 100);
+    var progressRules = {
+      mvp:{fact:'mvp',threshold:1}, mvp_x2:{fact:'mvp',threshold:2}, mvp_x3:{fact:'mvp',threshold:3}, mvp_x5:{fact:'mvp',threshold:5},
+      champion:{fact:'champion',threshold:1}, champion_x2:{fact:'champion',threshold:2}, champion_x3:{fact:'champion',threshold:3}, champion_x5:{fact:'champion',threshold:5}, champion_x7:{fact:'champion',threshold:7},
+      dpoy:{fact:'dpoy',threshold:1}, dpoy_x2:{fact:'dpoy',threshold:2}, dpoy_x3:{fact:'dpoy',threshold:3}, dpoy_x5:{fact:'dpoy',threshold:5},
+      double_double:{fact:'doubleDoubles',threshold:1}, double_double_x10:{fact:'doubleDoubles',threshold:10}, double_double_x50:{fact:'doubleDoubles',threshold:50}, double_double_x100:{fact:'doubleDoubles',threshold:100},
+      triple_double:{fact:'tripleDoubles',threshold:1}, triple_double_x10:{fact:'tripleDoubles',threshold:10}, triple_double_x30:{fact:'tripleDoubles',threshold:30}, triple_double_x50:{fact:'tripleDoubles',threshold:50}
+    };
+    var liveFacts = PP_FX._achievementFacts || {};
     var cards = ACHIEVEMENTS.map(function (a) {
       var has = !!unlocked[a.id];
+      var rule = progressRules[a.id];
+      var progress = rule ? '<div class="pp-ach-count">本生涯 ' + (Number(liveFacts[rule.fact]) || 0) + ' / ' + rule.threshold + '</div>' : '';
       return '<div class="pp-ach-item rarity-' + a.rarity + (has ? ' got' : ' locked') + '">' +
         '<div class="pp-ach-badge">' +
           '<div class="pp-ach-badge-ring">' + achRingSVG(a.rarity) + '</div>' +
@@ -451,6 +553,7 @@
         '<div class="pp-ach-meta">' +
           '<div class="pp-ach-name">' + (has ? a.name : '？？？') + '</div>' +
           '<div class="pp-ach-desc">' + a.desc + '</div>' +
+          progress +
         '</div>' +
         '<div class="pp-ach-rarity">' + (RARITY_CN[a.rarity] || '') + '</div>' +
       '</div>';
@@ -469,7 +572,9 @@
           '<div class="pp-ach-progress-bar"><div class="pp-ach-progress-fill" style="width:' + pct + '%"></div></div>' +
           '<div class="pp-ach-progress-txt">已解锁 ' + got + ' / ' + total + '（' + pct + '%）</div>' +
         '</div>' +
-        '<div class="pp-ach-grid">' + cards + '</div>' +
+        '<div class="pp-ach-tabs"><button class="pp-ach-tab active" id="pp-ach-tab-badges">成就徽章</button><button class="pp-ach-tab" id="pp-ach-tab-records">NBA 纪录追逐</button></div>' +
+        '<div class="pp-ach-grid" id="pp-ach-view-badges">' + cards + '</div>' +
+        '<div class="pp-record-grid" id="pp-ach-view-records" style="display:none">' + renderCareerRecordCards(G() || {}) + '</div>' +
       '</div>';
     document.body.appendChild(overlay);
     requestAnimationFrame(function () { overlay.classList.add('show'); });
@@ -477,6 +582,9 @@
     $('pp-ach-close').onclick = close;
     var toLg = $('pp-ach-to-legacy');
     if (toLg) toLg.onclick = function () { close(); setTimeout(PP_FX.openLegacyPanel, 260); };
+    var badgeTab = $('pp-ach-tab-badges'), recordTab = $('pp-ach-tab-records');
+    badgeTab.onclick = function () { badgeTab.classList.add('active'); recordTab.classList.remove('active'); $('pp-ach-view-badges').style.display = ''; $('pp-ach-view-records').style.display = 'none'; };
+    recordTab.onclick = function () { recordTab.classList.add('active'); badgeTab.classList.remove('active'); $('pp-ach-view-records').style.display = ''; $('pp-ach-view-badges').style.display = 'none'; };
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
   };
 
@@ -745,9 +853,23 @@
   // 只有这两项是“同一生涯内多次达成”的累计成就。成就解锁后仍永久保留，
   // 但首次解锁必须附带当前 gameId 和当前生涯计数，杜绝跨存档拼次数。
   var SINGLE_CAREER_CUMULATIVE = {
+    mvp_x2: { fact: 'mvp', threshold: 2 },
     mvp_x3: { fact: 'mvp', threshold: 3 },
+    mvp_x5: { fact: 'mvp', threshold: 5 },
+    dpoy_x2: { fact: 'dpoy', threshold: 2 },
+    dpoy_x3: { fact: 'dpoy', threshold: 3 },
+    dpoy_x5: { fact: 'dpoy', threshold: 5 },
+    champion_x2: { fact: 'champion', threshold: 2, proofVersion: 2 },
     // v2 凭证表示冠军数经过“已归档赛季 / 当前赛季”去重校验。
-    champion_x3: { fact: 'champion', threshold: 3, proofVersion: 2 }
+    champion_x3: { fact: 'champion', threshold: 3, proofVersion: 2 },
+    champion_x5: { fact: 'champion', threshold: 5, proofVersion: 2 },
+    champion_x7: { fact: 'champion', threshold: 7, proofVersion: 2 },
+    double_double_x10: { fact: 'doubleDoubles', threshold: 10, proofVersion: 2 },
+    double_double_x50: { fact: 'doubleDoubles', threshold: 50, proofVersion: 2 },
+    double_double_x100: { fact: 'doubleDoubles', threshold: 100, proofVersion: 2 },
+    triple_double_x10: { fact: 'tripleDoubles', threshold: 10, proofVersion: 2 },
+    triple_double_x30: { fact: 'tripleDoubles', threshold: 30, proofVersion: 2 },
+    triple_double_x50: { fact: 'tripleDoubles', threshold: 50, proofVersion: 2 }
   };
 
   function singleCareerEvidence(s, count, version) {
@@ -937,7 +1059,48 @@
     ['pts', 'reb', 'ast', 'stl', 'blk'].forEach(function(k) {
       if ((Number(stats[k]) || 0) >= 10) doubleDigits++;
     });
+    if (doubleDigits >= 2) PP_FX.unlock('double_double');
     if (doubleDigits >= 3) PP_FX.unlock('triple_double');
+  }
+
+  function countGameMilestones(games) {
+    var result = { doubleDoubles: 0, tripleDoubles: 0 };
+    (games || []).forEach(function(game) {
+      var stats = game && game.stats;
+      if (!stats) return;
+      var n = 0;
+      ['pts', 'reb', 'ast', 'stl', 'blk'].forEach(function(k) {
+        if ((Number(stats[k]) || 0) >= 10) n++;
+      });
+      if (n >= 2) result.doubleDoubles++;
+      if (n >= 3) result.tripleDoubles++;
+    });
+    return result;
+  }
+
+  function collectGameMilestoneFacts(s) {
+    var totals = { doubleDoubles: 0, tripleDoubles: 0 };
+    ((s.career && s.career.seasons) || []).forEach(function(season) {
+      var saved = season && season.gameMilestones;
+      totals.doubleDoubles += Number(saved && saved.doubleDoubles) || 0;
+      totals.tripleDoubles += Number(saved && saved.tripleDoubles) || 0;
+    });
+    if (!s._careerSaved) {
+      var current = countGameMilestones(s.season && s.season.games);
+      totals.doubleDoubles += current.doubleDoubles;
+      totals.tripleDoubles += current.tripleDoubles;
+    }
+    return totals;
+  }
+
+  function unlockCountSeries(s, facts) {
+    if (facts.doubleDoubles > 0) unlockWithFactEvidence('double_double', s, 'doubleDoubles', facts.doubleDoubles);
+    if (facts.tripleDoubles > 0) unlockWithFactEvidence('triple_double', s, 'tripleDoubles', facts.tripleDoubles);
+    Object.keys(SINGLE_CAREER_CUMULATIVE).forEach(function(id) {
+      var rule = SINGLE_CAREER_CUMULATIVE[id];
+      var count = Number(facts[rule.fact]) || 0;
+      if (count >= rule.threshold) PP_FX.unlock(id, singleCareerEvidence(s, count, rule.proofVersion));
+    });
   }
 
   function syncStateMilestones(s) {
@@ -982,7 +1145,7 @@
     var s = G(); if (!s) return {};
     var me = displayName();
     var facts = {
-      mvp:0, fmvp:0, dpoy:false, roty:false, sixthman:false,
+      mvp:0, fmvp:0, dpoy:0, roty:false, sixthman:false,
       allStar:false, allNBA:false, allRookie:false, allDefense:false,
       champion:0, falsePositiveTargets:{}
     };
@@ -1011,7 +1174,7 @@
       collectLegacyFalsePositiveTargets(kind, label, facts.falsePositiveTargets);
       if (kind === 'fmvp') facts.fmvp++;
       else if (kind === 'mvp') facts.mvp++;
-      if (kind === 'dpoy') facts.dpoy = true;
+      if (kind === 'dpoy') facts.dpoy++;
       if (kind === 'roty') facts.roty = true;
       if (kind === 'sixthman') facts.sixthman = true;
       if (kind === 'allStar' || kind === 'allStarMvp') facts.allStar = true;
@@ -1039,14 +1202,16 @@
       if (draftRound === 1 && draftPick === 1) PP_FX.unlock('first_pick');
     }
     syncStateMilestones(s);
+    var gameFacts = collectGameMilestoneFacts(s);
+    facts.doubleDoubles = gameFacts.doubleDoubles;
+    facts.tripleDoubles = gameFacts.tripleDoubles;
     // 先修复旧版模糊文字匹配与跨生涯累计造成的误解锁，再按本次
     // 生涯的精确事实判定成就。
     repairAmbiguousAwardAchievements(s, facts);
     repairCumulativeAchievements(s, facts);
     if (facts.mvp > 0) unlockWithFactEvidence('mvp', s, 'mvp', facts.mvp);
     if (facts.fmvp > 0) unlockWithFactEvidence('fmvp', s, 'fmvp', facts.fmvp);
-    if (facts.mvp >= 3) PP_FX.unlock('mvp_x3', singleCareerEvidence(s, facts.mvp));
-    if (facts.dpoy) unlockWithFactEvidence('dpoy', s, 'dpoy');
+    if (facts.dpoy > 0) unlockWithFactEvidence('dpoy', s, 'dpoy', facts.dpoy);
     if (facts.roty) unlockWithFactEvidence('roty', s, 'roty');
     if (facts.sixthman) unlockWithFactEvidence('sixth_man', s, 'sixthman');
     if (facts.allStar) unlockWithFactEvidence('all_star', s, 'allStar');
@@ -1055,7 +1220,8 @@
       unlockWithFactEvidence('champion', s, 'champion', facts.champion);
       PP_FX.unlock('playoffs');
     }
-    if (facts.champion >= 3) PP_FX.unlock('champion_x3', singleCareerEvidence(s, facts.champion, 2));
+    unlockCountSeries(s, facts);
+    syncCareerRecordProgress(s);
     PP_FX._achievementFacts = facts;
     return facts;
   }
@@ -1107,6 +1273,7 @@
     if (gameKey === _lastCheckedGameKey) return;
     _lastCheckedGameKey = gameKey;
     unlockGameStatMilestones(game.stats); // 禁赛场次 stats 为 null
+    syncAchievementState();
   }
   PP_FX.checkLatestGameMilestones = checkLatestGameMilestones;
 

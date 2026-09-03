@@ -1240,15 +1240,30 @@ async function main() {
         run('sixth_man', () => { STATE.season.awards = [award('sixthman', '最佳第六人')]; });
         run('mvp', () => { STATE.season.awards = [award('mvp', 'MVP')]; });
         run('fmvp', () => { STATE.season.awards = [award('fmvp', '总决赛MVP')]; });
+        run('mvp_x2', () => { STATE.career.honors = [1,2].map(n => award('mvp', 'MVP', n)); });
         run('mvp_x3', () => { STATE.career.honors = [1,2,3].map(n => award('mvp', 'MVP', n)); });
+        run('mvp_x5', () => { STATE.career.honors = [1,2,3,4,5].map(n => award('mvp', 'MVP', n)); });
         run('playoffs', () => { STATE.career.seasonCount = 1; STATE.career.seasons = [{ seasonNum:1, playoffResult:'首轮', awards:[] }]; });
         run('win_60', () => { STATE.career.seasonCount = 1; STATE.career.seasons = [{ seasonNum:1, wins:60, playoffResult:'未晋级', awards:[] }]; });
         run('champion', () => { STATE.season.awards = [award('champion', '总冠军')]; });
+        run('champion_x2', () => { STATE.career.honors = [1,2].map(n => award('champion', '总冠军', n)); });
         run('champion_x3', () => { STATE.career.honors = [1,2,3].map(n => award('champion', '总冠军', n)); });
+        run('champion_x5', () => { STATE.career.honors = [1,2,3,4,5].map(n => award('champion', '总冠军', n)); });
+        run('champion_x7', () => { STATE.career.honors = [1,2,3,4,5,6,7].map(n => award('champion', '总冠军', n)); });
+        run('dpoy_x2', () => { STATE.career.honors = [1,2].map(n => award('dpoy', 'DPOY', n)); });
+        run('dpoy_x3', () => { STATE.career.honors = [1,2,3].map(n => award('dpoy', 'DPOY', n)); });
+        run('dpoy_x5', () => { STATE.career.honors = [1,2,3,4,5].map(n => award('dpoy', 'DPOY', n)); });
         run('game_40', () => { STATE.season.games = [{ stats:{ pts:40, reb:2, ast:2 } }]; });
         run('game_50', () => { STATE.season.games = [{ stats:{ pts:50, reb:2, ast:2 } }]; });
         results.game_50_also_40 = !!PP_FX.getUnlocked().game_40;
+        run('double_double', () => { STATE.season.games = [{ stats:{ pts:20, reb:10, ast:2 } }]; });
+        run('double_double_x10', () => { STATE.season.games = Array.from({length:10}, () => ({ stats:{ pts:20, reb:10 } })); });
+        run('double_double_x50', () => { STATE.season.games = Array.from({length:50}, () => ({ stats:{ pts:20, reb:10 } })); });
+        run('double_double_x100', () => { STATE.season.games = Array.from({length:100}, () => ({ stats:{ pts:20, reb:10 } })); });
         run('triple_double', () => { STATE.season.games = [{ stats:{ pts:20, reb:10, ast:10 } }]; });
+        run('triple_double_x10', () => { STATE.season.games = Array.from({length:10}, () => ({ stats:{ pts:20, reb:10, ast:10 } })); });
+        run('triple_double_x30', () => { STATE.season.games = Array.from({length:30}, () => ({ stats:{ pts:20, reb:10, ast:10 } })); });
+        run('triple_double_x50', () => { STATE.season.games = Array.from({length:50}, () => ({ stats:{ pts:20, reb:10, ast:10 } })); });
         run('avg_30', () => { STATE.career.seasonCount = 1; STATE.career.seasons = [{ seasonNum:1, playerStats:{ games:40, pts:1200, reb:200 }, awards:[] }]; });
         run('season_25_10', () => { STATE.career.seasonCount = 1; STATE.career.seasons = [{ seasonNum:1, playerStats:{ games:40, pts:1000, reb:400 }, awards:[] }]; });
         run('season_5', () => { STATE.career.seasonCount = 5; });
@@ -1293,7 +1308,7 @@ async function main() {
     });
     assert.ok(Object.values(achievementRuleAudit.results).every(Boolean), '全部成就正例必须可达成：' + JSON.stringify(achievementRuleAudit.results));
     assert.ok(achievementRuleAudit.firstGameOfNewCareerChecked, '新生涯第一场必须使用独立检查游标');
-    assert.deepEqual(achievementRuleAudit.tested, achievementRuleAudit.definitions, '29 项成就必须全部有判定正例覆盖');
+    assert.deepEqual(achievementRuleAudit.tested, achievementRuleAudit.definitions, '44 项成就必须全部有判定正例覆盖');
 
     const achievementFalsePositiveAudit = await page.evaluate(() => {
       const saved = {

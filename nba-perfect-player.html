@@ -76,6 +76,15 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .section-title h1{font-family:var(--font-display);font-size:clamp(18px,5vw,24px);font-weight:700;color:var(--text);display:inline-block;padding-bottom:8px;border-bottom:3px solid var(--orange)}
 .section-title .sub{font-size:clamp(12px,3vw,14px);color:var(--text-dim);margin-top:4px}
 #screen-position{text-align:center;padding:0 12px 20px}
+#screen-era{text-align:center;padding:0 12px 24px}
+.era-picker{max-width:440px;margin:0 auto;padding:8px 4px 20px}
+.era-decade-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.era-decade{border:2px solid var(--border);background:var(--bg-card);color:var(--text);border-radius:11px;padding:10px 4px;font-family:var(--font-display);font-weight:700;cursor:pointer}
+.era-decade.active{border-color:var(--orange);background:var(--orange-bg);color:var(--orange)}
+.era-season-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:42vh;overflow-y:auto;padding:2px}
+.era-season{border:2px solid var(--border);background:var(--bg-card);border-radius:10px;padding:10px 4px;font-family:var(--font-display);font-size:12px;font-weight:700;cursor:pointer}
+.era-season.selected{border-color:var(--gold);background:rgba(247,166,0,.10);color:#b97800;box-shadow:0 0 0 1px var(--gold)}
+.era-summary{margin:14px 0;padding:12px;border-radius:12px;background:var(--bg-card);border:2px solid var(--border);font-size:13px;color:var(--text-dim);line-height:1.55}
 .pos-grid{display:grid;grid-template-columns:1fr;gap:8px;padding:8px 16px 16px;max-width:360px;margin:0 auto}
 .pos-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);padding:18px 12px;text-align:center;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .pos-card:active{transform:scale(0.95)}
@@ -1521,11 +1530,25 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     </div>
   </div>
 
+  <!-- ====== 传奇年代选择 ====== -->
+  <div class="screen" id="screen-era">
+    <div class="section-title">
+      <h1>选择传奇年代</h1>
+      <div class="sub">先选年代，再选择一个真实 NBA 赛季</div>
+    </div>
+    <div class="era-picker">
+      <div class="era-decade-grid" id="era-decade-grid"></div>
+      <div class="era-season-grid" id="era-season-grid"></div>
+      <div class="era-summary" id="era-summary">请选择赛季</div>
+      <button class="btn btn-primary" id="era-confirm-btn" onclick="confirmLegendEra()" disabled>确认年代</button>
+    </div>
+  </div>
+
   <!-- ====== 位置选择 ====== -->
   <div class="screen" id="screen-position">
     <div class="section-title">
       <h1>选择我的位置</h1>
-      <div class="sub">现役模式 · 自选位置</div>
+      <div class="sub" id="position-mode-label">现役模式 · 自选位置</div>
     </div>
     <div class="pos-grid" id="pos-grid"></div>
     <button class="btn btn-primary" onclick="trackEvent({act:'click',blk:'BMC098',pos:'TC2',label:'确认位置'});confirmPosition()">确认位置</button>
@@ -2312,6 +2335,7 @@ var Storage = {
 // ==================== 游戏状态 ====================
 const STATE = {
   mode: null,           // 'current' | 'legend'
+  legendSeason: null,   // 传奇模式所选赛季结束年份
   position: null,       // 'PG' | 'SG' | 'SF' | 'PF' | 'C'
   
   // 建球员
@@ -2390,7 +2414,8 @@ function $$(sel) { return document.querySelectorAll(sel); }
 
 function getSeasonLabel(seasonNum) {
   var n = Math.max(1, parseInt(seasonNum) || 1);
-  var start = 2025 + n;
+  var baseEnd = STATE.mode === 'legend' && STATE.legendSeason ? Number(STATE.legendSeason) : 2026;
+  var start = baseEnd - 1 + n;
   return start + '-' + String((start + 1) % 100) + '赛季';
 }
 
@@ -2618,7 +2643,7 @@ function initGame() {
   _rookieNameSeq = 0;
   // 重置状态（保留 gameId 持久不变，直到下一次显式重置）
   Object.assign(STATE, {
-    mode: null, position: null,
+    mode: null, legendSeason: null, position: null,
     attrs: {}, attrSlots: {}, lockedCount: 0,
     usedPlayers: [], _mustLockAfterSpin: false,
     buildStep: 'select', noPlayerSelected: true,
@@ -2725,7 +2750,6 @@ function renderModeSelect() {
   const container = html('feature-grid');
   container.innerHTML = '';
   
-  // 保留虎扑原模式卡布局，只移除未实现的传奇占位模式。
   const cards = [
     {
       tag: 'Current',
@@ -2734,6 +2758,14 @@ function renderModeSelect() {
       sub: '从现役球员中夺取属性，组建我的球员',
       btnLabel: '🎮 进入活动',
       mode: 'current',
+    },
+    {
+      tag: 'Legend',
+      tagClass: 'new',
+      title: '传奇模式',
+      sub: '自由选择生涯年代，从每支球队全年代最强球员中夺取属性',
+      btnLabel: '🏆 选择传奇年代',
+      mode: 'legend',
     },
   ];
   
@@ -2781,17 +2813,17 @@ function renderModeSelect() {
 
 async function startGame() {
   if (window.PERFECT_PLAYER_DATA_READY) await window.PERFECT_PLAYER_DATA_READY;
-  if (STATE.mode === 'current') {
-    showCharacterCreate();
-  } else {
-    alert('该模式开发中');
-  }
+  showCharacterCreate();
 }
 
 // ==================== 2. 位置选择 ====================
 function renderPositionSelect() {
   const grid = html('pos-grid');
   grid.innerHTML = '';
+  var modeLabel = document.getElementById('position-mode-label');
+  if (modeLabel) modeLabel.textContent = STATE.mode === 'legend'
+    ? ('传奇模式 · ' + formatLegendSeason(STATE.legendSeason) + ' · 自选位置')
+    : '现役模式 · 自选位置';
   
   const icons = { PG: '🎯', SG: '🔥', SF: '🏃', PF: '💪', C: '🧱' };
   SIM_CONFIG.POS_LIST.forEach(pos => {
@@ -2825,7 +2857,7 @@ function confirmPosition() {
 
 function renderBuildUI() {
   var pi = document.getElementById('build-pos-indicator');
-  if (pi) pi.textContent = '我选择的位置：' + (SIM_CONFIG.POSITIONS[STATE.position] || STATE.position) + '（' + STATE.position + '）';
+  if (pi) pi.textContent = (STATE.mode === 'legend' ? formatLegendSeason(STATE.legendSeason) + ' · ' : '') + '我选择的位置：' + (SIM_CONFIG.POSITIONS[STATE.position] || STATE.position) + '（' + STATE.position + '）';
   renderLeftAttrs();
   renderProgress();
 }
@@ -2935,7 +2967,7 @@ function renderTeamPicker() {
   const slotArea = document.getElementById('br-slot-area');
   if (!slotArea) return;
   
-  const sorted = [...NBA2K_TEAMS].sort();
+  const sorted = getAvailableBuildTeams();
   const copies = 5;
   const allItems = [];
   for (let c = 0; c < copies; c++) {
@@ -3057,7 +3089,7 @@ function spinSlotMachine() {
   const reel = document.getElementById('slot-reel');
   if (!reel) { _slotSpinning = false; return; }
   
-  const sorted = [...NBA2K_TEAMS].sort();
+  const sorted = getAvailableBuildTeams();
   const teamCount = sorted.length;
   const itemH = 38;
   const copyLen = teamCount * itemH; // 一个完整复制的高度
@@ -3130,7 +3162,20 @@ function spinSlotMachine() {
 
 /** 仅用于建模阶段的候选池；正式比赛始终读取 NBA2K_DATA 现役名单。 */
 function getBuildPlayerPool(team) {
+  if (STATE.mode === 'legend') {
+    return (window.PERFECT_PLAYER_LEGEND_DATA && window.PERFECT_PLAYER_LEGEND_DATA[team]) || [];
+  }
   return (window.PERFECT_PLAYER_BUILD_DATA && window.PERFECT_PLAYER_BUILD_DATA[team]) || NBA2K_DATA[team] || [];
+}
+
+function getAvailableBuildTeams() {
+  if (STATE.mode === 'legend' && window.PERFECT_PLAYER_LEGEND_DATA) {
+    var teams = Object.keys(window.PERFECT_PLAYER_LEGEND_DATA).filter(function(team) {
+      return Array.isArray(window.PERFECT_PLAYER_LEGEND_DATA[team]) && window.PERFECT_PLAYER_LEGEND_DATA[team].length;
+    });
+    if (teams.length) return teams.sort();
+  }
+  return [...NBA2K_TEAMS].sort();
 }
 
 function getBuildHistoricalSurprisePool(team) {
@@ -3145,7 +3190,7 @@ function drawBuildPlayers(pool, count, team) {
   const source = Array.isArray(pool) ? pool.filter(Boolean) : [];
   const targetCount = Math.min(count || 5, source.length);
   const shuffled = shuffleArr(source.slice());
-  const historical = shuffleArr(getBuildHistoricalSurprisePool(team).filter(Boolean));
+  const historical = STATE.mode === 'legend' ? [] : shuffleArr(getBuildHistoricalSurprisePool(team).filter(Boolean));
   if (historical.length && targetCount >= 1 && Math.random() < HISTORICAL_SURPRISE_DRAW_CHANCE) {
     const currentCards = shuffled.slice(0, Math.max(0, targetCount - 1));
     const historicalCard = historical[0];
@@ -3182,13 +3227,14 @@ function renderRosterPlayers(team, shown, allPool) {
   const rosterArea = document.getElementById('br-roster-area');
   if (!rosterArea) return;
   
+  const legendMode = STATE.mode === 'legend';
   const hasHallOfFame = shown.some(p => p._sourceKind === 'historical' && p._historicalTier === 'hall-of-fame');
   const arrivalHtml = hasHallOfFame
     ? '<div class="hall-of-fame-arrival"><span>✦</span><b>名人堂球星降临</b><span>✦</span></div>'
     : '';
   let listHtml = `<div style="display:flex;align-items:center;gap:6px;padding-bottom:4px;flex-wrap:wrap;">
     <span style="font-size:13px;font-weight:700;font-family:var(--font-display);letter-spacing:1px;">${getTeamName(team)}</span>
-    <span style="font-size:11px;color:var(--text-dim);">本轮抽取 ${shown.length} 人 · 同轮不重复 · 名人堂惊喜低概率出现</span>
+    <span style="font-size:11px;color:var(--text-dim);">${legendMode ? `队史传奇库 · 五位置各前五 · 本轮${shown.length}人` : `本轮抽取 ${shown.length} 人 · 同轮不重复 · 名人堂惊喜低概率出现`}</span>
   </div>${arrivalHtml}<div class="br-roster-list" style="max-height:none;">`;
   
   shown.forEach((p, drawIndex) => {
@@ -3204,7 +3250,7 @@ function renderRosterPlayers(team, shown, allPool) {
         <div class="bp-headshot" style="${hsStyle}"></div>
         <div>
           <div class="bp-name">${p.cname || p.name}</div>
-          <div class="bp-detail">${playerPos}${p._sourceKind === 'historical' ? ' · ' + (p._historicalTier === 'hall-of-fame' ? '名人堂惊喜' : '近代全明星惊喜') + (p._historicalPeak ? ' · 巅峰' : '') : ''}</div>
+          <div class="bp-detail">${playerPos}${p._sourceKind === 'historical' ? ' · ' + (p._historicalTier === 'hall-of-fame' ? '名人堂惊喜' : '近代全明星惊喜') + (p._historicalPeak ? ' · 巅峰' : '') : (p._sourceKind === 'legend-season' ? ' · 生涯巅峰' + (p._legendRosterSupplement ? ' · 名单补录' : '') : '')}</div>
         </div>
       </div>
       <div class="bp-meta">
@@ -9489,6 +9535,17 @@ function saveCurrentSeasonToCareer() {
     playerStats: JSON.parse(JSON.stringify(sp)),
     playoffResult: playoffResult || (STATE.season.playoffBracket ? '季后赛' : '未晋级'),
     awards: honorList,
+    gameMilestones: (function() {
+      var result = { doubleDoubles: 0, tripleDoubles: 0 };
+      (STATE.season.games || []).forEach(function(game) {
+        if (!game || !game.stats) return;
+        var n = 0;
+        ['pts','reb','ast','stl','blk'].forEach(function(k) { if ((Number(game.stats[k]) || 0) >= 10) n++; });
+        if (n >= 2) result.doubleDoubles++;
+        if (n >= 3) result.tripleDoubles++;
+      });
+      return result;
+    })(),
     eventTimeline: JSON.parse(JSON.stringify((STATE.season.events && STATE.season.events.storyTimeline) || [])),
   };
   c.seasons.push(seasonRecord);
