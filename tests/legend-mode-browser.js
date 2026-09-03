@@ -51,8 +51,14 @@ async function main() {
     assert.equal(magic1991.length, 25, '魔术队应固定包含 25 张队史巅峰卡');
     assert.ok(magic1991.every(player => player.peak), '1990-91 魔术队应全部使用生涯巅峰能力卡');
     const warriors = await page.evaluate(() => window.PERFECT_PLAYER_LEGEND_DATA.GSW.map(player => player.name));
-    ['Stephen Curry', 'Klay Thompson', 'Kevin Durant', 'Draymond Green', "Wilt Chamberlain"].forEach(name => assert.ok(warriors.includes(name), '勇士队史池缺少 ' + name));
+    ['Stephen Curry', 'Klay Thompson', 'Draymond Green', "Wilt Chamberlain"].forEach(name => assert.ok(warriors.includes(name), '勇士队史池缺少 ' + name));
+    assert.ok(!warriors.includes('Kevin Durant'), '勇士不应出现雷霆时期的巅峰 Kevin Durant');
     ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.includes(name), '勇士队史池错误混入 ' + name));
+    const usedPlayerDraw = await page.evaluate(() => {
+      STATE.usedPlayers = ['Stephen Curry'];
+      return Array.from({ length: 30 }, () => drawBuildPlayers(window.PERFECT_PLAYER_LEGEND_DATA.GSW, 5, 'GSW').map(player => player.name)).flat();
+    });
+    assert.ok(!usedPlayerDraw.includes('Stephen Curry'), '已经锁定过能力的球员不应再次出现');
     const league1985 = await page.evaluate(async () => {
       const historicalReport = await window.loadLegendLeagueSeason(1985);
       return {

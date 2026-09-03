@@ -37,14 +37,19 @@ const teamIds = {
   GSW:21,LAC:22,LAL:23,PHX:24,SAC:25,DAL:26,HOU:27,MEM:28,NOP:29,SAS:30
 };
 Object.entries(peaks.teams || {}).forEach(([team, cards]) => {
-  cards.forEach(card => assert.ok(
-    (card.historicalTeams || [card.teamId]).includes(teamIds[team]),
-    `${team} 球员泄漏：${card.nameEn || card.name}`
+  cards.forEach(card => assert.equal(
+    card.peakTeamId, teamIds[team],
+    `${team} 混入了其他球队时期的巅峰卡：${card.nameEn || card.name}`
   ));
 });
 const warriors = new Set(peaks.teams.GSW.map(card => card.nameEn));
 ['Stephen Curry', 'Klay Thompson', 'Draymond Green', 'Wilt Chamberlain'].forEach(name => assert.ok(warriors.has(name), `勇士队史池缺少 ${name}`));
 ['Nikola Jokic', 'Jamal Murray', 'Aaron Gordon', 'Carmelo Anthony'].forEach(name => assert.ok(!warriors.has(name), `勇士队史池错误混入 ${name}`));
+assert.ok(peaks.teams.OKC.some(card => card.nameEn === 'Russell Westbrook'), '雷霆应包含巅峰 Russell Westbrook');
+['LAL', 'HOU', 'WAS', 'LAC'].forEach(team => assert.ok(
+  !peaks.teams[team].some(card => card.nameEn === 'Russell Westbrook'),
+  `${team} 不应出现其他球队时期的巅峰 Russell Westbrook`
+));
 
 const extension = read('assets', 'js', 'perfect-player-hupu-extensions.js');
 assert.match(extension, /showLegendEraSelect/);

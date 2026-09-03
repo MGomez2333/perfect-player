@@ -35,10 +35,36 @@ def load_real_franchise_affiliations() -> dict[str, set[int]]:
     return affiliations
 
 
+def load_real_peak_teams() -> dict[str, int]:
+    """Choose the franchise of each player's strongest real statistical season."""
+    best: dict[str, tuple[tuple[float, float, int], int]] = {}
+    for path in sorted(pool.HIST_DIR.glob("player_seasons_*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for row in payload.get("rows", []):
+            if row.get("type") != "regular" or row.get("team") == "TOT":
+                continue
+            team_id = int(row.get("teamId") or 0)
+            if team_id not in TEAM_ABBRS:
+                continue
+            impact = (
+                float(row.get("ppg") or 0)
+                + float(row.get("rpg") or 0) * .55
+                + float(row.get("apg") or 0) * .75
+                + float(row.get("spg") or 0) * 2.2
+                + float(row.get("bpg") or 0) * 2.2
+            )
+            score = (impact, float(row.get("mins") or 0), int(row.get("gp") or 0))
+            for key in (row.get("realId"), pool.norm(row.get("name")), pool.norm(row.get("displayName"))):
+                if key and (str(key) not in best or score > best[str(key)][0]):
+                    best[str(key)] = (score, team_id)
+    return {key: value[1] for key, value in best.items()}
+
+
 def main() -> None:
     history_index = pool.load_history_index()
     nba_ids = pool.load_nba_ids()
     affiliations = load_real_franchise_affiliations()
+    peak_teams = load_real_peak_teams()
     peaks: dict[str, dict] = {}
 
     for source in pool.SEASONS:
@@ -67,14 +93,18 @@ def main() -> None:
         if not teams:
             teams.update(record.get("historicalTeams") or [record.get("teamId")])
         record["historicalTeams"] = sorted(teams)
+        peak_team_id = 0
+        for key in (identity, pool.norm(record.get("nameEn")), pool.norm(record.get("name"))):
+            if str(key) in peak_teams:
+                peak_team_id = peak_teams[str(key)]
+                break
+        if peak_team_id not in TEAM_ABBRS:
+            peak_team_id = int(record.get("teamId") or 0)
+        if peak_team_id not in TEAM_ABBRS:
+            continue
+        record["peakTeamId"] = peak_team_id
         position = max(1, min(5, int(record.get("pos") or 3)))
-        for team_id in teams:
-            team_id = int(team_id or 0)
-            if team_id not in TEAM_ABBRS:
-                continue
-            previous = candidates[team_id][position].get(identity)
-            if previous is None or record["rating"] > previous["rating"]:
-                candidates[team_id][position][identity] = record
+        candidates[peak_team_id][position][identity] = record
 
     teams_payload: dict[str, list[dict]] = {}
     position_counts: dict[str, dict[str, int]] = {}
@@ -91,16 +121,16 @@ def main() -> None:
         teams_payload[abbr] = roster
         position_counts[abbr] = counts
 
-    # 队伍归属是传奇池的硬约束，不能只检查“每队 25 人”。
+    # 巅峰卡只能出现在其巅峰归属球队，不能复制到其他曾效力球队。
     for team_id, abbr in TEAM_ABBRS.items():
         for card in teams_payload[abbr]:
-            if team_id not in (card.get("historicalTeams") or [card.get("teamId")]):
-                raise ValueError(f"franchise leak: {abbr} contains {card.get('nameEn') or card.get('name')}")
+            if team_id != card.get("peakTeamId"):
+                raise ValueError(f"peak-team leak: {abbr} contains {card.get('nameEn') or card.get('name')}")
 
     payload = {
         "version": 1,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "rule": "all-time franchise pool: top five career-peak cards at each position",
+        "rule": "one-franchise peak pool: each career-peak card belongs only to the franchise of the player's best statistical season",
         "players": peaks,
         "teams": teams_payload,
         "positionCounts": position_counts,

@@ -3197,10 +3197,15 @@ const HISTORICAL_SURPRISE_DRAW_CHANCE = 0.20;
 
 /** 从12名现役池抽一轮固定5张卡；最多插入1张巅峰惊喜卡。巅峰版与现役版视为不同卡。 */
 function drawBuildPlayers(pool, count, team) {
-  const source = Array.isArray(pool) ? pool.filter(Boolean) : [];
+  const used = new Set((STATE.usedPlayers || []).map(function(name) { return String(name || '').trim().toLowerCase(); }));
+  const source = Array.isArray(pool) ? pool.filter(function(player) {
+    return player && !used.has(String(player.name || '').trim().toLowerCase());
+  }) : [];
   const targetCount = Math.min(count || 5, source.length);
   const shuffled = shuffleArr(source.slice());
-  const historical = STATE.mode === 'legend' ? [] : shuffleArr(getBuildHistoricalSurprisePool(team).filter(Boolean));
+  const historical = STATE.mode === 'legend' ? [] : shuffleArr(getBuildHistoricalSurprisePool(team).filter(function(player) {
+    return player && !used.has(String(player.name || '').trim().toLowerCase());
+  }));
   if (historical.length && targetCount >= 1 && Math.random() < HISTORICAL_SURPRISE_DRAW_CHANCE) {
     const currentCards = shuffled.slice(0, Math.max(0, targetCount - 1));
     const historicalCard = historical[0];
