@@ -221,7 +221,7 @@
         legendYears = files.map(function(file) {
           var match = String(file).match(/player_seasons_(\d{4})\.json$/);
           return match ? Number(match[1]) : 0;
-        }).filter(Boolean).sort(function(a, b) { return b - a; });
+        }).filter(function(year) { return year >= 1977; }).sort(function(a, b) { return b - a; });
         return legendYears;
       });
     }

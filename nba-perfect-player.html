@@ -2696,7 +2696,7 @@ var _helpPage = 0;
 var _helpPages = [
   { title: '建球员', content: '选择我的位置后进入抽签选队，随机抽取球队后从该队球员列表中选一人，点击左侧属性槽锁定一项属性。锁定后自动进入下一轮，可继续抽新球队选人锁属性。每局限换三次球员，用完只能重新随机球队。跨位置选人会触发属性衰减，集满十三项属性后自动揭晓总评、模板风格和相似球员。' },
   { title: '赛季', content: '抽签决定我的生涯球队后进入赛季。系统根据我与队内同位置球员的总评比较判定首发或替补。每场比赛可点单场推进，也可点击日历日期批量模拟到当天。比赛数据根据属性和位置动态生成，方差较大，有爆发也有低迷。赛季中可随时点我的数据查看场均表现。' },
-  { title: '季后赛', content: '常规赛结束后根据排名决定季后赛或附加赛资格。附加赛在七到十名之间进行，逐场淘汰。季后赛每轮七场四胜，我的系列赛会一场一场模拟，每场生成简报。点击简报可展开查看详细比分、我的数据和全队数据。一路赢下去直到总冠军。' },
+  { title: '季后赛', content: '传奇模式按历史年份采用对应赛制：1977至1983年东西部各6队、前2名首轮轮空且首轮三场两胜；1984至2002年东西部各8队且首轮五场三胜；之后首轮改为七场四胜，附加赛只在现代年份启用。我的系列赛会逐场生成简报。' },
   { title: '球员状态', content: '赛季与生涯中的压力、体力、士气、媒体关系、教练信任、球迷支持等状态会直接显示在页面上；事件选择会改变这些数值，并继续沿用原有比赛和生涯判定。' },
 ];
 
@@ -3199,11 +3199,8 @@ function getBuildPlayerPool(team) {
 
 function getAvailableBuildTeams() {
   if (STATE.mode === 'legend' && window.PERFECT_PLAYER_LEGEND_DATA) {
-    var activeTeams = Array.isArray(window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS)
-      ? window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS : [];
     var teams = Object.keys(window.PERFECT_PLAYER_LEGEND_DATA).filter(function(team) {
-      return (!activeTeams.length || activeTeams.indexOf(team) >= 0) &&
-        Array.isArray(window.PERFECT_PLAYER_LEGEND_DATA[team]) && window.PERFECT_PLAYER_LEGEND_DATA[team].length;
+      return Array.isArray(window.PERFECT_PLAYER_LEGEND_DATA[team]) && window.PERFECT_PLAYER_LEGEND_DATA[team].length;
     });
     if (teams.length) return teams.sort();
   }
@@ -5859,8 +5856,8 @@ function showAwardsScreen() {
   }
 
   var actionBtns = '';
-  if (seed <= 6) actionBtns = '<button class="btn btn-gold" onclick="renderPlayoffs()">🏀 进入季后赛（' + seed + '号种子）</button>';
-  else if (seed <= 10) actionBtns = '<button class="btn btn-gold" onclick="renderPlayoffs()">🔥 附加赛（' + seed + '号种子）</button>';
+  if (isDirectPlayoffSeed(seed)) actionBtns = '<button class="btn btn-gold" onclick="renderPlayoffs()">🏀 进入季后赛（' + seed + '号种子）</button>';
+  else if (isPlayInSeed(seed)) actionBtns = '<button class="btn btn-gold" onclick="renderPlayoffs()">🔥 附加赛（' + seed + '号种子）</button>';
   else actionBtns = '<button class="btn btn-secondary" onclick="showSeasonResults()">📊 查看赛季总结</button>';
 
   html('awards-content').innerHTML =
@@ -5883,8 +5880,8 @@ function renderDotGrid() {
   var confName = getConference(STATE.careerTeam) === 'EAST' ? '东部' : '西部';
 
   var actionBtn = '';
-  if (seed <= 6) actionBtn = '<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="margin-top:6px;">🏀 进入季后赛（' + seed + '号种子）</button>';
-  else if (seed <= 10) actionBtn = '<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="margin-top:6px;">🔥 附加赛（' + seed + '号种子）</button>';
+  if (isDirectPlayoffSeed(seed)) actionBtn = '<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="margin-top:6px;">🏀 进入季后赛（' + seed + '号种子）</button>';
+  else if (isPlayInSeed(seed)) actionBtn = '<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="margin-top:6px;">🔥 附加赛（' + seed + '号种子）</button>';
   else actionBtn = '<button class="btn btn-secondary btn-sm" onclick="showSeasonResults()" style="margin-top:6px;">📊 查看赛季总结</button>';
 
   var dotsHtml = '';
@@ -6924,10 +6921,10 @@ function showEndOfSeason() {
   
   let actionBtn = '';
   let emoji = '';
-  if (seed <= 6) {
+  if (isDirectPlayoffSeed(seed)) {
     emoji = '🏀';
     actionBtn = `<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="flex:1;">🏀 进入季后赛（${seed}号种子）</button>`;
-  } else if (seed <= 10) {
+  } else if (isPlayInSeed(seed)) {
     emoji = '🔥';
     actionBtn = `<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="flex:1;">🔥 附加赛（${seed}号种子）</button>`;
   } else {
@@ -7063,7 +7060,7 @@ function renderSeasonUI() {
   const seed = getConferenceSeed(STATE.careerTeam);
   let nextBtn = '';
   if (allDone) {
-    if (seed <= 10) {
+    if (isDirectPlayoffSeed(seed) || isPlayInSeed(seed)) {
       nextBtn = `<button class="btn btn-gold btn-sm" onclick="renderPlayoffs()" style="flex:1;">🏀 进入季后赛</button>`;
     } else {
       nextBtn = `<button class="btn btn-secondary btn-sm" onclick="showSeasonResults()" style="flex:1;">📊 查看赛季总结</button>`;
@@ -7775,10 +7772,52 @@ function endSeason() {
 }
 
 // ==================== 季后赛系统（真实排名版）====================
+function getCareerSeasonEndYear() {
+  if (STATE.mode !== 'legend') return 2026 + Math.max(0, Number(STATE.career && STATE.career.seasonCount || 1) - 1);
+  return Number(STATE.legendSeason || 1977) + Math.max(0, Number(STATE.career && STATE.career.seasonCount || 1) - 1);
+}
+
+function getPlayoffFormat() {
+  var year = getCareerSeasonEndYear();
+  if (year <= 1983) return { year:year, teamsPerConference:6, playIn:false, firstRoundWins:2, label:'东西部各6队 · 前2名轮空 · 首轮三场两胜' };
+  if (year <= 2002) return { year:year, teamsPerConference:8, playIn:false, firstRoundWins:3, label:'东西部各8队 · 首轮五场三胜' };
+  if (year <= 2020) return { year:year, teamsPerConference:8, playIn:false, firstRoundWins:4, label:'东西部各8队 · 全部七场四胜' };
+  return { year:year, teamsPerConference:8, playIn:true, firstRoundWins:4, label:'附加赛 + 东西部各8队 · 全部七场四胜' };
+}
+
+function getPlayoffSeriesWins(round) {
+  return round === 0 ? getPlayoffFormat().firstRoundWins : 4;
+}
+
+function isDirectPlayoffSeed(seed) { return Number(seed) <= getPlayoffFormat().teamsPerConference; }
+function isPlayInSeed(seed) { return getPlayoffFormat().playIn && Number(seed) >= 7 && Number(seed) <= 10; }
+
+function advancePlayoffWinner(bracket, round, seriesIdx, winner) {
+  if (round === 2) { bracket.confChampion = winner; return; }
+  if (round >= 2) return;
+  var nextRound = bracket.rounds[round + 1];
+  if (!nextRound) return;
+  var nextIdx, isHigh;
+  if (round === 0 && bracket.format && bracket.format.teamsPerConference === 6) {
+    nextIdx = seriesIdx === 0 ? 1 : 0;
+    isHigh = false;
+  } else if (round === 0) {
+    nextIdx = (seriesIdx === 0 || seriesIdx === 3) ? 0 : 1;
+    isHigh = (seriesIdx === 0 || seriesIdx === 1);
+  } else {
+    nextIdx = 0;
+    isHigh = seriesIdx === 0;
+  }
+  if (!nextRound[nextIdx]) nextRound[nextIdx] = { high:null, low:null, winner:null };
+  if (isHigh) nextRound[nextIdx].high = { team:winner };
+  else nextRound[nextIdx].low = { team:winner };
+}
+
 /** 为指定分区构建季后赛对阵数据结构 */
 function buildPlayoffBracket(conf, playInState) {
   const sorted = getConferenceSorted(conf);
-  const teams = sorted.slice(0, 8);
+  const format = getPlayoffFormat();
+  const teams = sorted.slice(0, format.teamsPerConference);
   
   // ★ 附加赛结果替换7/8号种子
   if (playInState && !playInState.isEliminated) {
@@ -7791,20 +7830,30 @@ function buildPlayoffBracket(conf, playInState) {
       teams[7] = { team: playInState.gameCResult.winner, ovr: calcTeamPowerWithPlayer(playInState.gameCResult.winner) };
     }
   }
+  var rounds = format.teamsPerConference === 6 ? [
+    [
+      { high:teams[2], low:teams[5], winner:null },
+      { high:teams[3], low:teams[4], winner:null }
+    ],
+    [
+      { high:teams[0], low:null, winner:null },
+      { high:teams[1], low:null, winner:null }
+    ],
+    [null], [null]
+  ] : [
+    [
+      { high: teams[0], low: teams[7], winner: null },
+      { high: teams[1], low: teams[6], winner: null },
+      { high: teams[2], low: teams[5], winner: null },
+      { high: teams[3], low: teams[4], winner: null },
+    ],
+    [null, null], [null], [null]
+  ];
   return {
     conf: conf,
+    format: format,
     teams: teams,
-    rounds: [
-      [
-        { high: teams[0], low: teams[7], winner: null },
-        { high: teams[1], low: teams[6], winner: null },
-        { high: teams[2], low: teams[5], winner: null },
-        { high: teams[3], low: teams[4], winner: null },
-      ],
-      [null, null],
-      [null],
-      [null],  // 总决赛 (第3轮)
-    ],
+    rounds: rounds,
     currentRound: 0,
     results: [],
     confChampion: null,
@@ -7814,6 +7863,28 @@ function buildPlayoffBracket(conf, playInState) {
 /** 自动模拟整个分区的季后赛（用于另一分区） */
 function autoSimConferenceBracket(confBracket) {
   if (!confBracket) return;
+  if (confBracket.format && confBracket.format.teamsPerConference === 6) {
+    for (let r6 = 0; r6 < 3; r6++) {
+      const round6 = confBracket.rounds[r6] || [];
+      round6.forEach(function(series, idx) {
+        if (!series || series.winner || !series.high || !series.low) return;
+        const tA = series.high.team, tB = series.low.team;
+        const target = getPlayoffSeriesWins(r6);
+        let wA = 0, wB = 0, sGames = [];
+        for (let g = 0; g < target * 2 - 1 && wA < target && wB < target; g++) {
+          const gr = simulateGameNew(tA, tB, 0);
+          if (gr.won) wA++; else wB++;
+          sGames.push({ myScore:gr.scoreA, oppScore:gr.scoreB, won:gr.won, home:g < target, qScoresA:gr.qScoresA, qScoresB:gr.qScoresB, boxScore:gr.boxScore });
+        }
+        const winner = wA >= target ? tA : tB;
+        series.winner = winner;
+        confBracket.results.push({ round:r6, seriesIdx:idx, roundName:['首轮','分区半决赛','分区决赛'][r6], teamA:tA, teamB:tB, winner:winner, winnerWins:Math.max(wA,wB), loserWins:Math.min(wA,wB), aWon:wA >= target, seriesGames:sGames, isMySeries:false });
+        advancePlayoffWinner(confBracket, r6, idx, winner);
+      });
+    }
+    confBracket.currentRound = 3;
+    return;
+  }
   const bracketOrder = [0, 7, 1, 6, 2, 5, 3, 4];
   let roundTeams = bracketOrder.map(i => confBracket.teams[i]?.team).filter(Boolean);
   
@@ -7839,12 +7910,13 @@ function autoSimConferenceBracket(confBracket) {
         sb = 0.4 * gapSeed;
         sb = seedIdxA < seedIdxB ? sb : -sb;
       }
-      for (let g = 0; g < 7 && wA < 4 && wB < 4; g++) {
+      const targetWins = getPlayoffSeriesWins(r);
+      for (let g = 0; g < targetWins * 2 - 1 && wA < targetWins && wB < targetWins; g++) {
         const gr = simulateGameNew(tA, tB, sb);
         if (gr.won) wA++; else wB++;
         sGames.push({ myScore: gr.scoreA, oppScore: gr.scoreB, won: gr.won, home: g < 4, qScoresA: gr.qScoresA, qScoresB: gr.qScoresB, boxScore: gr.boxScore });
       }
-      const sWinner = wA >= 4 ? tA : tB;
+      const sWinner = wA >= targetWins ? tA : tB;
       winners.push(sWinner);
       
       // 存储结果
@@ -7870,9 +7942,9 @@ function autoSimConferenceBracket(confBracket) {
         roundName: ['首轮', '分区半决赛', '分区决赛'][r],
         teamA: tA, teamB: tB,
         winner: sWinner,
-        winnerWins: wA >= 4 ? wA : wB,
-        loserWins: wA >= 4 ? wB : wA,
-        aWon: wA >= 4,
+        winnerWins: wA >= targetWins ? wA : wB,
+        loserWins: wA >= targetWins ? wB : wA,
+        aWon: wA >= targetWins,
         seriesGames: sGames,
         isMySeries: false,
       });
@@ -7901,6 +7973,24 @@ function autoSimConferenceBracket(confBracket) {
   confBracket.currentRound = 3;
 }
 
+function resolveSixTeamByeFirstRound(bracket) {
+  if (!bracket || !bracket.format || bracket.format.teamsPerConference !== 6) return;
+  (bracket.rounds[0] || []).forEach(function(series, idx) {
+    if (!series || series.winner) return;
+    var tA = series.high.team, tB = series.low.team, wA = 0, wB = 0, games = [];
+    while (wA < 2 && wB < 2) {
+      var gr = simulateGameNew(tA, tB, 0);
+      if (gr.won) wA++; else wB++;
+      games.push({ myScore:gr.scoreA, oppScore:gr.scoreB, won:gr.won, boxScore:gr.boxScore });
+    }
+    var winner = wA >= 2 ? tA : tB;
+    series.winner = winner;
+    bracket.results.push({ round:0, seriesIdx:idx, roundName:'首轮', teamA:tA, teamB:tB, winner:winner, winnerWins:2, loserWins:Math.min(wA,wB), winsA:wA, winsB:wB, aWon:wA >= 2, seriesGames:games, isMySeries:false });
+    advancePlayoffWinner(bracket, 0, idx, winner);
+  });
+  bracket.currentRound = 1;
+}
+
 function renderPlayoffs() {
   STATE.season.isPlayoffs = true;
   trackEvent({act:"click",blk:"BMC098",pos:"TC10",label:"进入季后赛"});
@@ -7915,7 +8005,7 @@ function renderPlayoffs() {
   // ★ 附加赛检测：种子7-10且附加赛未完成 → 初始化附加赛
   const seed = getConferenceSeed(STATE.careerTeam);
   let pi = STATE.season.playInState;
-  const playInNeeded = seed >= 7 && seed <= 10;
+  const playInNeeded = isPlayInSeed(seed);
   const playInComplete = pi?.playoffSeed != null && !pi?.isEliminated;
   const playInEliminated = pi?.isEliminated;
   
@@ -7949,6 +8039,7 @@ function renderPlayoffs() {
   const bracket = buildPlayoffBracket(conf, pi2);
   const otherConf = conf === 'EAST' ? 'WEST' : 'EAST';
   const otherBracket = buildPlayoffBracket(otherConf);
+  if (bracket.format.teamsPerConference === 6 && mySeed <= 2) resolveSixTeamByeFirstRound(bracket);
   
   // 自动模拟另一分区的季后赛（用户不能操作）
   autoSimConferenceBracket(otherBracket);
@@ -8089,6 +8180,7 @@ function renderPlayoffBracketUI() {
     <button class="bv-conf-tab ${!isViewingOther ? 'bv-conf-tab-active' : ''}" onclick="switchPlayoffConf('${bracket.conf}')">🏀 ${myConfName}</button>
     <button class="bv-conf-tab ${isViewingOther ? 'bv-conf-tab-active' : ''}" onclick="switchPlayoffConf('${bracket.conf === 'EAST' ? 'WEST' : 'EAST'}')">🏀 ${otherConfName}</button>
   </div>`;
+  h += `<div style="font-size:10px;color:var(--text-dim);text-align:center;margin:-2px 0 8px;">${activeBracket.format ? activeBracket.format.label : ''}</div>`;
   
   // ===== 轮次导航 =====
   h += `<div class="bv-round-nav">
@@ -8318,7 +8410,9 @@ function clearPlayoffGamecast() {
 
 /** 单场模拟并更新简报（递归，一场一场模拟） */
 function simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum, winsA, winsB, seriesGames, userGameStats, roundName, onDone) {
-  if (winsA >= 4 || winsB >= 4 || gameNum >= 7) {
+  var winsNeeded = getPlayoffSeriesWins(round);
+  var maxSeriesGames = winsNeeded * 2 - 1;
+  if (winsA >= winsNeeded || winsB >= winsNeeded || gameNum >= maxSeriesGames) {
     onDone(winsA, winsB, seriesGames, userGameStats);
     return;
   }
@@ -8367,7 +8461,7 @@ function simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum, 
         skipReason: skipReason,
       };
       if (isMySeries) {
-        renderPlayoffGameBrief(skipEntry, teamA, teamB, true, roundName, gameNum + 1, 7, round, seriesIdx);
+        renderPlayoffGameBrief(skipEntry, teamA, teamB, true, roundName, gameNum + 1, maxSeriesGames, round, seriesIdx);
       }
       seriesGames.push(skipEntry);
       setTimeout(function() {
@@ -8401,7 +8495,7 @@ function simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum, 
         injuryReason: skipEv.injuryReason || '伤病',
       };
       seriesGames.push(hurtEntry);
-      renderPlayoffGameBrief(hurtEntry, teamA, teamB, true, roundName, gameNum + 1, 7, round, seriesIdx);
+      renderPlayoffGameBrief(hurtEntry, teamA, teamB, true, roundName, gameNum + 1, maxSeriesGames, round, seriesIdx);
       maybeWorsenInjuryAfterPlaying(skipEv, severity);
       setTimeout(function() {
         simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum + 1, hurtNewWinsA, hurtNewWinsB, seriesGames, userGameStats, roundName, onDone);
@@ -8448,7 +8542,7 @@ function simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum, 
     po.games++;
     
     // 🎯 一场一场弹：显示本场简报
-    renderPlayoffGameBrief(gameEntry, teamA, teamB, true, roundName, gameNum + 1, 7, round, seriesIdx);
+    renderPlayoffGameBrief(gameEntry, teamA, teamB, true, roundName, gameNum + 1, maxSeriesGames, round, seriesIdx);
   }
   
   seriesGames.push(gameEntry);
@@ -8517,7 +8611,8 @@ function simPlayoffSeries(round, seriesIdx) {
   // 用递归一场一场模拟
   simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, 0, 0, 0, [], [], roundName, (winsA, winsB, seriesGames, userGameStats) => {
     // ===== 系列赛结束 =====
-    const aWon = winsA >= 4;
+    const seriesWinsNeeded = getPlayoffSeriesWins(round);
+    const aWon = winsA >= seriesWinsNeeded;
     const winner = aWon ? teamA : teamB;
     const winnerWins = aWon ? winsA : winsB;
     const loserWins = aWon ? winsB : winsA;
@@ -8530,25 +8625,7 @@ function simPlayoffSeries(round, seriesIdx) {
     };
     bracket.results.push(result);
     
-    // 更新下一轮对阵（NBA标准：1v8胜者vs4v5胜者，2v7胜者vs3v6胜者）
-    if (round < 2) {
-      const nextRound = bracket.rounds[round + 1];
-      if (nextRound) {
-        var nextIdx, isHigh;
-        if (round === 0) {
-          nextIdx = (seriesIdx === 0 || seriesIdx === 3) ? 0 : 1;
-          isHigh = (seriesIdx === 0 || seriesIdx === 1);
-        } else {
-          nextIdx = 0;
-          isHigh = seriesIdx === 0;
-        }
-        if (nextRound[nextIdx] === null) nextRound[nextIdx] = { high: null, low: null, winner: null };
-        if (isHigh) nextRound[nextIdx].high = { team: winner };
-        else nextRound[nextIdx].low = { team: winner };
-      }
-    } else if (round === 2) {
-      bracket.confChampion = winner;
-    }
+    advancePlayoffWinner(bracket, round, seriesIdx, winner);
     
     // ★ 自动模拟同轮其他系列赛（使用完整引擎，快速）
     const mySeriesIdx = seriesIdx;
@@ -8575,35 +8652,21 @@ function simPlayoffSeries(round, seriesIdx) {
       
       let sWA = 0, sWB = 0;
       const sGames = [];
-      for (let g = 0; g < 7 && sWA < 4 && sWB < 4; g++) {
+      const otherWinsNeeded = getPlayoffSeriesWins(round);
+      for (let g = 0; g < otherWinsNeeded * 2 - 1 && sWA < otherWinsNeeded && sWB < otherWinsNeeded; g++) {
         const gr = simulateGameNew(sTeamA, sTeamB, sb);
         if (gr.won) sWA++; else sWB++;
         sGames.push({ myScore: gr.scoreA, oppScore: gr.scoreB, won: gr.won, home: g < 4, qScoresA: gr.qScoresA, qScoresB: gr.qScoresB, boxScore: gr.boxScore });
       }
-      const sWinner = sWA >= 4 ? sTeamA : sTeamB;
+      const sWinner = sWA >= otherWinsNeeded ? sTeamA : sTeamB;
       s.winner = sWinner;
       bracket.results.push({
         round, seriesIdx: idx, roundName,
         teamA: sTeamA, teamB: sTeamB, winner: sWinner,
-        winnerWins: sWA >= 4 ? sWA : sWB, loserWins: sWA >= 4 ? sWB : sWA,
-        winsA: sWA, winsB: sWB, aWon: sWA >= 4, seriesGames: sGames, isMySeries: false,
+        winnerWins: sWA >= otherWinsNeeded ? sWA : sWB, loserWins: sWA >= otherWinsNeeded ? sWB : sWA,
+        winsA: sWA, winsB: sWB, aWon: sWA >= otherWinsNeeded, seriesGames: sGames, isMySeries: false,
       });
-      if (round < 2) {
-        const nr = bracket.rounds[round + 1];
-        if (nr) {
-          var ni2, isHigh2;
-          if (round === 0) {
-            ni2 = (idx === 0 || idx === 3) ? 0 : 1;
-            isHigh2 = (idx === 0 || idx === 1);
-          } else {
-            ni2 = 0;
-            isHigh2 = idx === 0;
-          }
-          if (nr[ni2] === null) nr[ni2] = { high: null, low: null, winner: null };
-          if (isHigh2) nr[ni2].high = { team: sWinner };
-          else nr[ni2].low = { team: sWinner };
-        }
-      } else if (round === 2) bracket.confChampion = sWinner;
+      advancePlayoffWinner(bracket, round, idx, sWinner);
     }
     
     // 检查是否所有同轮系列赛都完成了
@@ -8665,36 +8728,9 @@ function simPlayoffSeries(round, seriesIdx) {
 }
 /** 模拟另一分区的季后赛，返回冠军球队（使用NBA标准对阵：1v8/4v5/2v7/3v6） */
 function simOtherConference(conf) {
-  const sorted = getConferenceSorted(conf);
-  const teams = sorted.slice(0, 8).map(t => t.team);
-  if (teams.length < 8) return teams[0] || '';
-  
-  // NBA标准对阵：1v8, 2v7, 3v6, 4v5（种子顺序）
-  const bracketOrder = [0, 7, 1, 6, 2, 5, 3, 4];
-  let roundTeams = bracketOrder.map(i => teams[i]);
-  
-  // 3轮7场4胜
-  const simSeries = (tA, tB) => {
-    const pA = calcTeamPowerWithPlayer(tA);
-    const pB = calcTeamPowerWithPlayer(tB);
-    let wA = 0, wB = 0;
-    for (let g = 0; g < 7 && wA < 4 && wB < 4; g++) {
-      const sA = Math.round(pA.offense * (0.5 + Math.random() * 0.5) + pA.defense * 0.3);
-      const sB = Math.round(pB.offense * (0.5 + Math.random() * 0.5) + pB.defense * 0.3);
-      if ((g < 4 ? sA + 3 : sA) >= (g < 4 ? sB : sB + 3)) wA++; else wB++;
-    }
-    return wA >= 4 ? tA : tB;
-  };
-  
-  for (let r = 0; r < 3; r++) {
-    const winners = [];
-    for (let i = 0; i < roundTeams.length; i += 2) {
-      if (i + 1 >= roundTeams.length) { winners.push(roundTeams[i]); break; }
-      winners.push(simSeries(roundTeams[i], roundTeams[i + 1]));
-    }
-    roundTeams = winners;
-  }
-  return roundTeams[0];
+  const fallbackBracket = buildPlayoffBracket(conf);
+  autoSimConferenceBracket(fallbackBracket);
+  return fallbackBracket.confChampion || fallbackBracket.teams[0]?.team || '';
 }
 
 function getPlayoffExitRoundLabel(round) {
@@ -9114,7 +9150,7 @@ function showSeasonResults() {
     } else {
       playoffResult = `🏀 第${seed}种子 · 季后赛`;
     }
-  } else if (seed <= 10) {
+  } else if (isPlayInSeed(seed)) {
     const pi = STATE.season.playInState;
     if (pi?.isEliminated) playoffResult = '🔥 附加赛 · 淘汰';
     else if (pi?.playoffSeed) playoffResult = `🔥 附加赛晋级（${pi.playoffSeed}号种子）`;
@@ -9307,9 +9343,9 @@ function renderMyCard(isFinal) {
       const bracket = STATE.season.playoffBracket;
       const lastResult = bracket?.results?.slice(-1)?.[0];
       const roundNames = ['首轮', '分区半决赛', '分区决赛', '总决赛'];
-      const playoffSeed = STATE.season.playoffSeed || (seed <= 6 ? seed : null);
+      const playoffSeed = STATE.season.playoffSeed || (isDirectPlayoffSeed(seed) ? seed : null);
       
-      if (seed <= 6) {
+      if (isDirectPlayoffSeed(seed)) {
         // 直接晋级季后赛
         if (lastResult) {
           const rn = roundNames[lastResult.round] || '季后赛';
@@ -9323,7 +9359,7 @@ function renderMyCard(isFinal) {
         } else {
           playoffInfo = `<div class="mc-chip">🏀 季后赛（${playoffSeed}号种子）</div>`;
         }
-      } else if (seed <= 10) {
+      } else if (isPlayInSeed(seed)) {
         // 附加赛
         if (pi?.isEliminated) {
           playoffInfo = '<div class="mc-chip" style="color:var(--text-dim);">🔥 附加赛 · 淘汰</div>';

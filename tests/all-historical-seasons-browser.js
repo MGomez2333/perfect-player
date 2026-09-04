@@ -17,6 +17,49 @@ const browserPath = ['C:/Program Files/Google/Chrome/Application/chrome.exe','C:
     await page.locator('#screen-build .build-edit-btn').click();
     await page.waitForSelector('#screen-position.active');
     assert.equal(await page.evaluate(() => STATE.position), null, '确认位置后应能返回并重新选择');
+    const historicalPlayoffs = await page.evaluate(async () => {
+      await window.loadLegendSeason(1977);
+      await window.loadLegendLeagueSeason(1977);
+      STATE.mode = 'legend'; STATE.legendSeason = 1977; STATE.career = { seasonCount:1 };
+      STATE.season = { standings:{} };
+      NBA2K_TEAMS.forEach((team, i) => { STATE.season.standings[team] = { wins:80-i, losses:i }; });
+      const east = buildPlayoffBracket('EAST');
+      const eastAuto = buildPlayoffBracket('EAST');
+      autoSimConferenceBracket(eastAuto);
+      const eastBye = buildPlayoffBracket('EAST');
+      resolveSixTeamByeFirstRound(eastBye);
+      const poolTeams = getAvailableBuildTeams();
+      const format1977 = getPlayoffFormat();
+      STATE.legendSeason = 1984;
+      const format1984 = getPlayoffFormat();
+      STATE.legendSeason = 2003;
+      const format2003 = getPlayoffFormat();
+      return {
+        poolTeams:poolTeams.length,
+        leagueTeams:NBA2K_TEAMS.length,
+        format1977, format1984, format2003,
+        autoChampion:eastAuto.confChampion,
+        autoFirstRoundWins:eastAuto.results.filter(r => r.round === 0).map(r => r.winnerWins),
+        byeRoundReady:eastBye.rounds[1].every(s => s.high && s.low),
+        firstRoundSeeds:east.rounds[0].map(s => [east.teams.indexOf(s.high)+1, east.teams.indexOf(s.low)+1]),
+        byeSeeds:east.rounds[1].map(s => east.teams.indexOf(s.high)+1)
+      };
+    });
+    assert.ok(historicalPlayoffs.poolTeams > historicalPlayoffs.leagueTeams, '建球员抽卡池不应受当年联盟球队限制');
+    assert.equal(historicalPlayoffs.format1977.teamsPerConference, 6);
+    assert.equal(historicalPlayoffs.format1977.firstRoundWins, 2);
+    assert.deepEqual(historicalPlayoffs.firstRoundSeeds, [[3,6],[4,5]]);
+    assert.deepEqual(historicalPlayoffs.byeSeeds, [1,2]);
+    assert.ok(historicalPlayoffs.autoChampion);
+    assert.ok(historicalPlayoffs.autoFirstRoundWins.every(wins => wins === 2));
+    assert.equal(historicalPlayoffs.byeRoundReady, true);
+    assert.equal(historicalPlayoffs.format1984.firstRoundWins, 3);
+    assert.equal(historicalPlayoffs.format2003.firstRoundWins, 4);
+    await page.evaluate(() => { STATE.mode = 'legend'; window.showLegendEraSelect(); });
+    await page.waitForSelector('#screen-era.active .era-decade');
+    const eraLabels = await page.locator('.era-decade').allTextContents();
+    assert.ok(eraLabels.includes('1970s'));
+    assert.ok(!eraLabels.includes('1960s'), '历史模式不应再提供1977年以前的赛季');
     const results = await page.evaluate(async () => {
       const manifest = await fetch('assets/data/historical/manifest.json').then(r => r.json());
       const years = manifest.files.playerSeasons.map(f => Number(f.match(/(\d{4})/)[1])).sort((a,b) => a-b);
