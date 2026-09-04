@@ -21,14 +21,15 @@ import urllib3
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets" / "data" / "historical" / "season_team_games.json"
-START_YEAR = 1957
+START_YEAR = 1947
 END_YEAR = 2025
-URL = "https://www.basketball-reference.com/leagues/NBA_{year}_standings.html"
+URL = "https://www.basketball-reference.com/leagues/{league}_{year}_standings.html"
 
 
 def fetch(year: int, session: requests.Session) -> dict[str, int]:
     for attempt in range(6):
-        response = session.get(URL.format(year=year), timeout=30, verify=False)
+        league = "BAA" if year <= 1949 else "NBA"
+        response = session.get(URL.format(league=league, year=year), timeout=30, verify=False)
         if response.status_code != 429:
             response.raise_for_status()
             break
@@ -44,8 +45,10 @@ def fetch(year: int, session: requests.Session) -> dict[str, int]:
         if not team_link or not wins or not losses:
             continue
         match = re.search(r"/teams/([A-Z0-9]+)/", team_link.get("href", ""))
-        if match:
-            result[match.group(1)] = int(wins.get_text(strip=True)) + int(losses.get_text(strip=True))
+        wins_text = wins.get_text(strip=True)
+        losses_text = losses.get_text(strip=True)
+        if match and wins_text.isdigit() and losses_text.isdigit():
+            result[match.group(1)] = int(wins_text) + int(losses_text)
     if not result:
         raise RuntimeError(f"No standings rows found for {year}")
     return result

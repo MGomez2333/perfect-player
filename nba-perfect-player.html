@@ -1540,7 +1540,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div class="era-decade-grid" id="era-decade-grid"></div>
       <div class="era-season-grid" id="era-season-grid"></div>
       <div class="era-summary" id="era-summary">请选择赛季</div>
-      <button class="btn btn-primary" id="era-confirm-btn" onclick="confirmLegendEra()" disabled>确认年代</button>
+      <div style="display:flex;gap:10px;"><button class="btn btn-secondary" style="flex:1" onclick="backFromLegendEra()">返回修改球员</button><button class="btn btn-primary" style="flex:1" id="era-confirm-btn" onclick="confirmLegendEra()" disabled>确认年代</button></div>
     </div>
   </div>
 
@@ -1551,7 +1551,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div class="sub" id="position-mode-label">现役模式 · 自选位置</div>
     </div>
     <div class="pos-grid" id="pos-grid"></div>
-    <button class="btn btn-primary" onclick="trackEvent({act:'click',blk:'BMC098',pos:'TC2',label:'确认位置'});confirmPosition()">确认位置</button>
+    <div style="display:flex;gap:10px;"><button class="btn btn-secondary" style="flex:1" onclick="backFromPositionSelect()">返回上一步</button><button class="btn btn-primary" style="flex:1" onclick="trackEvent({act:'click',blk:'BMC098',pos:'TC2',label:'确认位置'});confirmPosition()">确认位置</button></div>
   </div>
 
   <!-- ====== 建球员 ====== -->
@@ -3645,7 +3645,7 @@ function revealPlayer() {
       <div style="font-family:var(--font-display);font-size:12px;color:var(--orange);margin-bottom:6px;letter-spacing:1px;">🔍 球员模板</div>`;
     tiered.forEach((item, i) => {
       const p = item.player;
-      const hsStyle = getPlayerHeadshotStyle(p.name, 28);
+      const hsStyle = getPlayerHeadshotStyle(p, 28);
       top3Html += `<div class="rv-item" style="animation-delay:${1.4 + i * 0.12}s;display:flex;align-items:center;gap:6px;padding:4px 0;${i < tiered.length-1 ? 'border-bottom:1px solid var(--border-light);' : ''}">
         <div class="bp-headshot" style="${hsStyle};border-radius:50%;border:2px solid var(--border);"></div>
         <div style="flex:1;text-align:center;font-family:var(--font-display);font-size:12px;font-weight:600;">${p.cname || p.name}</div>
@@ -4428,7 +4428,7 @@ function selectCareerTeam(team) {
     if (isUser) {
       imgHtml = '<img class="bp-headshot" style="border-radius:50%;border:2px solid var(--border);width:28px;height:28px;object-fit:cover;" src="' + avatarUrl + '" onerror="this.onerror=null;this.src=\'' + defaultAvatar + '\'">';
     } else {
-      var hs = getPlayerHeadshotStyle(p.name, 28);
+      var hs = getPlayerHeadshotStyle(p, 28);
       imgHtml = hs ? '<div class="bp-headshot" style="' + hs + ';border-radius:50%;border:2px solid var(--border);width:28px;height:28px;"></div>' : '<div style="width:28px;height:28px;border-radius:50%;background:var(--border);"></div>';
     }
     var starBadge = isUser ? '<span style="font-size:10px;margin-left:2px;">⭐</span>' : '';
@@ -6157,6 +6157,7 @@ function calcTeamLineup(team) {
 
 function clearLineupCache() {
   STATE._lineupCache = {};
+  STATE._teamPowerCache = {};
   STATE._simPowerBaseline = null;
 }
 
@@ -6172,6 +6173,8 @@ function syncUserStarterStatus() {
 
 /** 按真实轮换分钟计算球队实力（首发5人 + 5名替补，共240分钟）。 */
 function calcTeamPowerWithPlayer(team) {
+  STATE._teamPowerCache = STATE._teamPowerCache || {};
+  if (STATE._teamPowerCache[team]) return STATE._teamPowerCache[team];
   const lineup = calcTeamLineup(team);
   const cfg = SIM_CONFIG.TEAM_POWER;
   
@@ -6206,13 +6209,15 @@ function calcTeamPowerWithPlayer(team) {
   const overall = weightedRoster.reduce((s, { player, weight }) => 
     s + (parseInt(player.ovr) || 50) * weight, 0);
   
-  return {
+  var result = {
     offense: calcDim(cfg.offense),
     defense: calcDim(cfg.defense),
     athletic: calcDim(cfg.athletic),
     clutch: calcDim(cfg.clutch),
     depth: overall,
   };
+  STATE._teamPowerCache[team] = result;
+  return result;
 }
 
 /** Box-Muller 正态扰动，沿用 82 胜模式的“回合数 + 效率”思路。 */
@@ -16148,6 +16153,10 @@ function resetTraining() {
 }
 
 function confirmTraining() {
+  if (STATE._offseasonTransitioning) return;
+  STATE._offseasonTransitioning = true;
+  var confirmButton = document.getElementById('tp-confirm-btn');
+  if (confirmButton) { confirmButton.disabled = true; confirmButton.textContent = '正在进入下一赛季…'; }
   var pending = STATE._tpPending || {};
   for (var k in pending) {
     if (pending.hasOwnProperty(k)) STATE.attrs[k] = (STATE.attrs[k] || 50) + pending[k];
@@ -16192,6 +16201,8 @@ function resolvePlayerOption(exercise) {
 
 function continueCareerAfterTraining() {
   if (STATE.career && STATE.career.retired) return;
+  if (STATE._leagueEvolutionStarted) return;
+  STATE._leagueEvolutionStarted = true;
   evolveLeague();
   saveStandings();
   var finishLeagueEvolution = function() {
@@ -16215,6 +16226,8 @@ function finishOffseasonPipeline() {
     return;
   }
   resetForNewSeason();
+  STATE._offseasonTransitioning = false;
+  STATE._leagueEvolutionStarted = false;
 
   // 跳转到阵容预览
   html('gamecast-area').innerHTML = '';

@@ -146,6 +146,8 @@
     VAN:'MEM', WSB:'WAS', BAL:'WAS', KCK:'SAC', KCO:'SAC', CIN:'SAC', ROC:'SAC',
     SDC:'LAC', BUF:'LAC', NOJ:'UTA', PHW:'GSW', SFW:'GSW', SYR:'PHI', STL:'ATL',
     PHO:'PHX', MNL:'LAL', SDR:'HOU', MLH:'ATL', TRI:'ATL', FTW:'DET'
+    ,CHS:'CHI', CLR:'CLE', DTF:'DET', PIT:'POR', PRO:'TOR', STB:'MIL', TRH:'HOU', WSC:'WAS'
+    ,BLB:'DAL', INJ:'IND', INO:'IND', AND:'ORL', DNN:'DEN', SHE:'PHX', WAT:'MIA', CHP:'WAS', CHZ:'WAS', CAP:'WAS'
   };
 
   function canonicalHistoricalTeam(team) {
@@ -283,6 +285,15 @@
     });
   };
 
+  window.backFromLegendEra = function() {
+    if (typeof window.showCharacterCreate === 'function') window.showCharacterCreate();
+  };
+
+  window.backFromPositionSelect = function() {
+    if (typeof STATE !== 'undefined' && STATE.mode === 'legend' && typeof window.showLegendEraSelect === 'function') window.showLegendEraSelect();
+    else if (typeof window.showCharacterCreate === 'function') window.showCharacterCreate();
+  };
+
   function renderLegendEraPicker() {
     var decades = [];
     legendYears.forEach(function(year) {
@@ -375,7 +386,7 @@
 
   function convertLegendSeasonPlayer(row, meta) {
     meta = meta || {};
-    var primary = meta.position && meta.position.primary || 3;
+    var primary = meta.position && meta.position.primary || Number(row.position) || 3;
     var secondary = meta.position && meta.position.secondary || 0;
     var mainPos = POSITIONS[primary] || 'SF';
     var secondPos = POSITIONS[secondary];
@@ -496,7 +507,7 @@
         var teamGameCounts = {};
         var seasonGameCount = 0;
         (payload.rows || []).forEach(function(row) {
-          if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
+          if (row.type !== 'regular' || !row.team || row.team === 'TOT' || /TM$/.test(row.team)) return;
           // 跨队球员的汇总行可能显示 83 场甚至更多，不能拿它当球队赛程长度。
           if (row.teamAggregate !== 'TOT') seasonGameCount = Math.max(seasonGameCount, Number(row.gp || 0));
           var team = canonicalHistoricalTeam(row.team);
@@ -511,8 +522,15 @@
 
         if (typeof captureBaseLeagueRoster === 'function') captureBaseLeagueRoster();
         var preferredOrder = Array.isArray(window._baseLeagueTeamSnapshot) ? window._baseLeagueTeamSnapshot : NBA2K_TEAMS.slice();
-        var activeTeams = Object.keys(grouped).filter(function(team) {
-          return Object.keys(grouped[team]).length > 0;
+        var realSeasonTeams = Object.keys((results[3] && results[3][String(endYear)]) || {}).map(function(rawTeam) {
+          var team = canonicalHistoricalTeam(rawTeam);
+          if (team && Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) rawTeamByCanonical[team] = rawTeam;
+          return team;
+        });
+        var activeTeams = realSeasonTeams.filter(function(team, index, all) {
+          return team && Object.prototype.hasOwnProperty.call(NBA2K_DATA, team) && all.indexOf(team) === index;
+        }).filter(function(team) {
+          return Object.keys(grouped[team] || {}).length > 0;
         }).sort(function(a, b) {
           var ai = preferredOrder.indexOf(a), bi = preferredOrder.indexOf(b);
           return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi) || a.localeCompare(b);
@@ -562,7 +580,7 @@
       var playerIndex = results[1] || {};
       var grouped = {}, byIdentity = {}, rawByTeam = {}, gamesByTeam = {};
       rows.forEach(function(row) {
-        if (row.type !== 'regular' || !row.team || row.team === 'TOT') return;
+        if (row.type !== 'regular' || !row.team || row.team === 'TOT' || /TM$/.test(row.team)) return;
         var team = canonicalHistoricalTeam(row.team);
         if (!Object.prototype.hasOwnProperty.call(NBA2K_DATA, team)) return;
         grouped[team] = grouped[team] || {};
@@ -571,6 +589,7 @@
         var key = row.realId || String(row.name || '').toLowerCase();
         if (!grouped[team][key] || Number(row.gp || 0) > Number(grouped[team][key].gp || 0)) grouped[team][key] = row;
         if (row.realId && (!byIdentity[row.realId] || Number(row.gp || 0) > Number(byIdentity[row.realId].gp || 0))) byIdentity[row.realId] = row;
+        if (row.historyKey && (!byIdentity[row.historyKey] || Number(row.gp || 0) > Number(byIdentity[row.historyKey].gp || 0))) byIdentity[row.historyKey] = row;
         var meta = playerIndex[row.realId] || {};
         if (meta.historyKey) byIdentity[meta.historyKey] = row;
       });
@@ -601,6 +620,7 @@
           var row = byIdentity[player._realId] || byIdentity[player._historyKey];
           if (!row) return;
           var updated = convertLegendSeasonPlayer(row, playerIndex[row.realId] || {});
+          updated._potentialSeed = Math.max(Number(player._potentialSeed) || 0, Number(updated._potentialSeed) || 0);
           var developmentOffset = Number(player._developmentOffset) || 0;
           var realizedCeiling = Number(player._realizedPotentialCeiling) || 99;
           if (developmentOffset) applyLegendRatingDelta(updated, Math.min(developmentOffset, realizedCeiling - Number(updated.ovr)));
