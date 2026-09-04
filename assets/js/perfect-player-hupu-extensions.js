@@ -326,6 +326,53 @@
     return clamp(base + (Number(value) || 0) * scale, 35, 99);
   }
 
+  function legendPotentialSeed(meta, nearest) {
+    var snapshots = (meta && meta.rosterSnapshots) || [];
+    var seed = Number(nearest && nearest.potential) || 0;
+    snapshots.forEach(function(snapshot) { seed = Math.max(seed, Number(snapshot.potential) || 0); });
+    if (!seed) {
+      var pick = Number(meta && meta.draft && meta.draft.pick) || 99;
+      seed = pick === 1 ? 9 : (pick <= 3 ? 8 : (pick <= 10 ? 7 : (pick <= 30 ? 6 : 5)));
+    }
+    return clamp(Math.round(seed), 1, 11);
+  }
+
+  function calibrateLegendOvr(rawOvr, snapshotRating, potentialSeed, nearest, row, meta) {
+    var rating = rawOvr;
+    // 顶级赛季使用非线性刻度，避免历史巨星全部挤在 85-90。
+    if (rawOvr >= 96) rating = 97 + (rawOvr - 96) * .5;
+    else if (rawOvr >= 92) rating = 94 + (rawOvr - 92) * .75;
+    else if (rawOvr >= 89) rating = 91 + (rawOvr - 89);
+    else if (rawOvr >= 86) rating = 87 + (rawOvr - 86) * 1.25;
+    if (rawOvr >= 84) rating += potentialSeed >= 11 ? 2 : (potentialSeed === 10 ? 1 : (potentialSeed === 9 ? .5 : 0));
+    if (snapshotRating) rating = Math.max(rating, rawOvr * .7 + snapshotRating * .3);
+    var sameSnapshotSeason = nearest && Math.abs(Number(nearest.startYear || 0) - Number(row.season || 0)) <= 1;
+    var honors = sameSnapshotSeason && nearest.honors || {};
+    if (Number(honors.mvp) > 0) rating = Math.max(rating, 97);
+    else if (Number(honors.dpoy) > 0) rating = Math.max(rating, 94);
+    else if (Number(honors.allNba1) > 0) rating = Math.max(rating, 93);
+    var careerMvp = 0, careerDpoy = 0;
+    ((meta && meta.rosterSnapshots) || []).forEach(function(snapshot) {
+      careerMvp = Math.max(careerMvp, Number(snapshot.honors && snapshot.honors.mvp) || 0);
+      careerDpoy = Math.max(careerDpoy, Number(snapshot.honors && snapshot.honors.dpoy) || 0);
+    });
+    var estimatedAge = nearest ? Number(nearest.age || 0) + Number(row.season || 0) - Number(nearest.startYear || 0) : 0;
+    if (careerMvp > 0 && estimatedAge >= 25 && estimatedAge <= 32 && rawOvr >= 84) rating = Math.max(rating, rawOvr >= 87 ? 96 : 95);
+    else if (careerDpoy > 0 && estimatedAge >= 24 && estimatedAge <= 32 && rawOvr >= 80) rating = Math.max(rating, 93);
+    return clamp(rating, 50, 99);
+  }
+
+  function applyLegendRatingDelta(player, delta, keepOverall) {
+    var weights = delta >= 0
+      ? {threePT:.65,MID:.8,FIN:1,DNK:.75,HAN:.8,PAS:.75,PDEF:.7,IDEF:.8,BLK:.75,REB:.8,ATH:.7,STR:.7,CLU:1}
+      : {threePT:.18,MID:.25,FIN:.7,DNK:1.25,HAN:.45,PAS:.2,PDEF:1.05,IDEF:.55,BLK:.55,REB:.45,ATH:1.3,STR:.7,CLU:.12};
+    ['threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU'].forEach(function(key) {
+      player[key] = clamp(Math.round(Number(player[key] || player.ovr) + delta * weights[key]), 25, 99);
+    });
+    if (!keepOverall) player.ovr = clamp(Math.round(Number(player.ovr) + delta), 50, 99);
+    return player;
+  }
+
   function convertLegendSeasonPlayer(row, meta) {
     meta = meta || {};
     var primary = meta.position && meta.position.primary || 3;
@@ -342,20 +389,23 @@
     var block = statRating(row.bpg, 25, 40);
     var athletic = clamp(45 + (Number(row.mins) || 0) * .75 + (Number(row.ppg) || 0) * .45, 40, 97);
     var strength = clamp(42 + (primary >= 4 ? 17 : primary === 3 ? 10 : 4) + (Number(row.rpg) || 0) * 2.2, 40, 98);
-    var ovr = clamp(52 + (Number(row.ppg) || 0) * .85 + (Number(row.rpg) || 0) * .55 + (Number(row.apg) || 0) * .8 + (Number(row.spg) || 0) * 2.2 + (Number(row.bpg) || 0) * 2.2, 50, 98);
+    var rawOvr = clamp(52 + (Number(row.ppg) || 0) * .85 + (Number(row.rpg) || 0) * .55 + (Number(row.apg) || 0) * .8 + (Number(row.spg) || 0) * 2.2 + (Number(row.bpg) || 0) * 2.2, 50, 98);
+    var ovr = rawOvr;
     var snapshots = meta.rosterSnapshots || [];
     var nearest = snapshots.slice().sort(function(a, b) {
       return Math.abs((a.startYear || 0) - (row.season || 0)) - Math.abs((b.startYear || 0) - (row.season || 0));
     })[0];
     var historicalAge = 0;
+    var snapshotRating = 0;
     if (nearest) {
       var yearDistance = Math.abs((nearest.startYear || 0) - (row.season || 0));
-      var snapshotRating = clamp(Number(nearest.rating || ovr) - Math.min(8, yearDistance * .5), 50, 99);
-      ovr = clamp(ovr * .35 + snapshotRating * .65, 50, 99);
+      snapshotRating = clamp(Number(nearest.rating || ovr) - Math.min(8, yearDistance * .5), 50, 99);
       historicalAge = Number(nearest.age || 0) + (Number(row.season || 0) - Number(nearest.startYear || 0));
     }
+    var potentialSeed = legendPotentialSeed(meta, nearest);
+    ovr = calibrateLegendOvr(rawOvr, snapshotRating, potentialSeed, nearest, row, meta);
     var careerBounds = (window.PERFECT_PLAYER_HISTORICAL_CAREER_BOUNDS || {})[row.realId] || {};
-    return {
+    var converted = {
       name: row.name || row.displayName || meta.nameEn,
       cname: meta.nameCn || meta.displayName || row.displayName || row.name,
       pos: pos,
@@ -365,15 +415,19 @@
       DNK: clamp((finish + athletic) / 2, 35, 99), HAN: clamp((pass + athletic) / 2, 35, 99), PAS: pass,
       PDEF: clamp((steal + athletic) / 2, 35, 99), IDEF: clamp((block + rebound) / 2, 35, 99),
       BLK: block, REB: rebound, ATH: athletic, STR: strength,
-      CLU: clamp(ovr + Math.min(5, Number(row.ppg) / 7), 35, 99),
+      CLU: clamp(rawOvr + Math.min(5, Number(row.ppg) / 7), 35, 99),
       _sourceKind: 'legend-season', _sourceYear: Number(row.season) || Number(row.seasonEndYear) - 1,
       _sourceLabel: window.formatLegendSeason(row.seasonEndYear), _photoLocal: meta.photoLocal || '',
       _poolUid: row.realId + '-' + row.team + '-' + row.seasonEndYear,
       _realId: row.realId || '', _historyKey: meta.historyKey || '',
       _age: historicalAge > 0 ? historicalAge : undefined,
+      _historicalBaselineOvr: Math.round(ovr * 10) / 10, _potentialSeed: potentialSeed,
       _historicalFirstSeasonEnd: Number(careerBounds.first || 0),
       _historicalLastSeasonEnd: Number(careerBounds.last || 0)
     };
+    applyLegendRatingDelta(converted, ovr - rawOvr, true);
+    converted.ovr = Math.round(ovr);
+    return converted;
   }
 
   function convertLegendPeakPlayer(row, meta, peaks, selectedEndYear, supplemental) {
@@ -547,7 +601,10 @@
           var row = byIdentity[player._realId] || byIdentity[player._historyKey];
           if (!row) return;
           var updated = convertLegendSeasonPlayer(row, playerIndex[row.realId] || {});
-          ['ovr','threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU','_age','_historicalFirstSeasonEnd','_historicalLastSeasonEnd'].forEach(function(k) { if (updated[k] != null) player[k]=updated[k]; });
+          var developmentOffset = Number(player._developmentOffset) || 0;
+          var realizedCeiling = Number(player._realizedPotentialCeiling) || 99;
+          if (developmentOffset) applyLegendRatingDelta(updated, Math.min(developmentOffset, realizedCeiling - Number(updated.ovr)));
+          ['ovr','threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU','_age','_historicalBaselineOvr','_potentialSeed','_historicalFirstSeasonEnd','_historicalLastSeasonEnd'].forEach(function(k) { if (updated[k] != null) player[k]=updated[k]; });
         });
       });
       var labels = {};
