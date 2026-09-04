@@ -1,7 +1,7 @@
 (function installPerfectPlayerAwardEngine() {
   'use strict';
 
-  var AWARD_ENGINE_VERSION = '2026.08.13-real-ballot-v1';
+  var AWARD_ENGINE_VERSION = '2026.09.04-dynamic-80pct-v2';
   var MAJOR_65_GAME_AWARDS = { mvp:true, dpoy:true, mip:true, allNBA:true, allDefense:true };
   var INDIVIDUAL_AWARD_CONFIG = {
     mvp: { ballotSize:5, points:[10,7,5,3,1], noise:5.2 },
@@ -124,15 +124,29 @@
     return { starter:false, rotationIndex:benchIndex, minutes:[27,23,19,15,11,8][benchIndex] || 6 };
   }
 
-  function leagueGamesFor(player, seasonKey) {
+  function scheduledGamesForTeam(team) {
+    var byTeam = window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM || {};
+    var teamGames = n(byTeam[team], 0);
+    if (teamGames > 0) return teamGames;
+    var schedule = STATE && STATE.season && STATE.season.schedule;
+    return Math.max(1, n(schedule && schedule.length, 82));
+  }
+
+  function awardMinimumGames(candidate) {
+    return Math.max(1, Math.ceil(n(candidate && candidate.scheduledGames, scheduledGamesForTeam(candidate && candidate.team)) * 0.8));
+  }
+
+  function leagueGamesFor(player, seasonKey, team) {
+    var seasonLength = scheduledGamesForTeam(team);
     var age = typeof getLeaguePlayerAge === 'function' ? n(getLeaguePlayerAge(player), 26) : n(player._age, 26);
     var sampleGames = n(player.ratingSampleGames, 0);
     var priorAvailabilityPenalty = sampleGames > 0 ? Math.max(0, 72 - sampleGames) * 0.12 : 0;
     if (player.ratingBasis === 'no-2025-26-games') priorAvailabilityPenalty += 4;
     var agePenalty = age >= 37 ? 6 + (age - 37) * 1.5 : age >= 33 ? (age - 32) * 0.8 : 0;
     var durabilityBonus = (n(player.ATH, 70) - 70) * 0.035 + (n(player.STR, 70) - 70) * 0.02;
-    var randomMissed = Math.floor(hash01(seasonKey + '|games|' + candidateKey(player)) * 11);
-    return clamp(Math.round(82 - randomMissed - agePenalty - priorAvailabilityPenalty + durabilityBonus), 54, 82);
+    var missedScale = seasonLength / 82;
+    var randomMissed = Math.floor(hash01(seasonKey + '|games|' + candidateKey(player)) * 11 * missedScale);
+    return clamp(Math.round(seasonLength - randomMissed - agePenalty * missedScale - priorAvailabilityPenalty * missedScale + durabilityBonus * missedScale), Math.max(1, Math.ceil(seasonLength * 0.55)), seasonLength);
   }
 
   function estimatedLeagueStats(player, role, seasonKey) {
@@ -210,7 +224,7 @@
         if (!player || player._isUser) return;
         var role = getRotationRole(team, player);
         if (role.minutes < 10) return;
-        var games = leagueGamesFor(player, seasonKey);
+        var games = leagueGamesFor(player, seasonKey, team);
         var starts = role.starter
           ? Math.max(0, games - Math.floor(hash01(seasonKey + '|starts|' + candidateKey(player)) * 5))
           : Math.floor(hash01(seasonKey + '|bench-starts|' + candidateKey(player)) * Math.min(12, games * 0.18));
@@ -228,6 +242,7 @@
           isRookie:isLeagueRookie(player, seasonStart),
           isUser:false,
           games:games,
+          scheduledGames:scheduledGamesForTeam(team),
           eligibleGames:stats.minutes >= 20 ? games : (stats.minutes >= 15 ? Math.min(2, games) : 0),
           seasonEndingException:false,
           minutes:stats.minutes,
@@ -293,6 +308,7 @@
       ts:possessions > 0 ? clamp(n(stats.pts) / (2 * possessions), 0.35, 0.75) : 0.54,
       minutes:round1(n(stats.mins, games * 30) / games),
       games:games,
+      scheduledGames:scheduledGamesForTeam(STATE.careerTeam),
       ovr:n(last.ovr, STATE.finalOVR)
     };
   }
@@ -368,8 +384,10 @@
     if (!candidate) return { eligible:false, reason:'无有效赛季数据' };
     if (MAJOR_65_GAME_AWARDS[award]) {
       var eligibleGames = n(candidate.eligibleGames, candidate.minutes >= 20 ? candidate.games : 0);
-      if (eligibleGames < 65 && !(candidate.seasonEndingException && eligibleGames >= 62)) {
-        return { eligible:false, reason:'出勤不足（' + eligibleGames + '/65场）' };
+      var minimumGames = awardMinimumGames(candidate);
+      var injuryExceptionGames = Math.max(1, Math.ceil(minimumGames * 62 / 65));
+      if (eligibleGames < minimumGames && !(candidate.seasonEndingException && eligibleGames >= injuryExceptionGames)) {
+        return { eligible:false, reason:'出勤不足（' + eligibleGames + '/' + minimumGames + '场，赛季80%）' };
       }
     }
     if ((award === 'mvp' || award === 'allNBA') && (candidate.minutes < 24 || impact(candidate) < 18)) {
@@ -730,7 +748,7 @@
         version:AWARD_ENGINE_VERSION,
         season:seasonKey,
         voters:100,
-        eligibilityRule:'MVP/DPOY/MIP/最佳阵容/最佳防守阵容：65场（每场至少20分钟，最多两场可为15-19分钟；赛季报销例外为62场）',
+        eligibilityRule:'MVP/DPOY/MIP/最佳阵容/最佳防守阵容：实际赛程的80%（向上取整；每场至少20分钟，最多两场可为15-19分钟）',
         ballotPoints:{ mvp:[10,7,5,3,1], other:[5,3,1], allNBA:[5,3,1], allDefense:[2,1], allRookie:[2,1] },
         results:{
           mvp:serializeBallotResults(mvp.results, 10),
