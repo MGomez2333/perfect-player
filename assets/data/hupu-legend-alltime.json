@@ -19,7 +19,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 97,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/moses-malone.jpg"
     },
     {
       "name": "Allen Iverson",
@@ -40,7 +41,8 @@
       "REB": 45,
       "ATH": 98,
       "STR": 65,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/allen-iverson.jpg"
     },
     {
       "name": "Joel Embiid",
@@ -61,7 +63,8 @@
       "REB": 94,
       "ATH": 69,
       "STR": 95,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/joel-embiid.webp"
     },
     {
       "name": "Julius Erving",
@@ -82,7 +85,8 @@
       "REB": 75,
       "ATH": 85,
       "STR": 85,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/julius-erving.jpg"
     },
     {
       "name": "Dolph Schayes",
@@ -103,7 +107,8 @@
       "REB": 96,
       "ATH": 69,
       "STR": 85,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/dolph-schayes.jpg"
     },
     {
       "name": "Billy Cunningham",
@@ -124,7 +129,8 @@
       "REB": 95,
       "ATH": 75,
       "STR": 87,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/billy-cunningham.jpg"
     },
     {
       "name": "Wilt Chamberlain",
@@ -145,7 +151,8 @@
       "REB": 92,
       "ATH": 75,
       "STR": 92,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/wilt-chamberlain.jpg"
     },
     {
       "name": "Bobby Jones",
@@ -166,7 +173,8 @@
       "REB": 60,
       "ATH": 75,
       "STR": 70,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/bobby-jones.png"
     },
     {
       "name": "Tyrese Maxey",
@@ -187,7 +195,8 @@
       "REB": 48,
       "ATH": 90,
       "STR": 44,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/tyrese-maxey.png"
     },
     {
       "name": "Hal Greer",
@@ -208,7 +217,8 @@
       "REB": 39,
       "ATH": 92,
       "STR": 40,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/hal-greer.jpg"
     },
     {
       "name": "Hersey Hawkins",
@@ -229,7 +239,8 @@
       "REB": 46,
       "ATH": 80,
       "STR": 55,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/hersey-hawkins.png"
     },
     {
       "name": "George McGinnis",
@@ -250,7 +261,8 @@
       "REB": 89,
       "ATH": 59,
       "STR": 98,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/george-mcginnis.jpg"
     },
     {
       "name": "Doug Collins",
@@ -271,7 +283,8 @@
       "REB": 37,
       "ATH": 73,
       "STR": 45,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/doug-collins.png"
     },
     {
       "name": "Ben Simmons",
@@ -292,7 +305,8 @@
       "REB": 76,
       "ATH": 93,
       "STR": 80,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/ben-simmons.webp"
     },
     {
       "name": "Maurice Cheeks",
@@ -313,7 +327,8 @@
       "REB": 42,
       "ATH": 80,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/maurice-cheeks.jpg"
     },
     {
       "name": "Charles Barkley",
@@ -334,7 +349,8 @@
       "REB": 97,
       "ATH": 90,
       "STR": 92,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/charles-barkley.jpg"
     }
   ],
   "MIL_HIST": [
@@ -357,7 +373,8 @@
       "REB": 98,
       "ATH": 81,
       "STR": 98,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kareem-abdul-jabbar.jpg"
     },
     {
       "name": "Giannis Antetokounmpo",
@@ -378,7 +395,8 @@
       "REB": 91,
       "ATH": 89,
       "STR": 94,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/giannis-antetokounmpo.webp"
     },
     {
       "name": "Oscar Robertson",
@@ -399,7 +417,8 @@
       "REB": 63,
       "ATH": 80,
       "STR": 75,
-      "CLU": 83
+      "CLU": 83,
+      "photoLocal": "assets/images/Player/hupu-legends/oscar-robertson.jpg"
     },
     {
       "name": "Sidney Moncrief",
@@ -420,7 +439,8 @@
       "REB": 74,
       "ATH": 89,
       "STR": 85,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/sidney-moncrief.jpg"
     },
     {
       "name": "Marques Johnson",
@@ -441,7 +461,8 @@
       "REB": 82,
       "ATH": 91,
       "STR": 77,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/marques-johnson.jpg"
     },
     {
       "name": "Ray Allen",
@@ -462,7 +483,8 @@
       "REB": 45,
       "ATH": 90,
       "STR": 62,
-      "CLU": 82
+      "CLU": 82,
+      "photoLocal": "assets/images/Player/hupu-legends/ray-allen.jpg"
     },
     {
       "name": "Bob Dandridge",
@@ -483,7 +505,8 @@
       "REB": 70,
       "ATH": 73,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-dandridge.jpg"
     },
     {
       "name": "Michael Redd",
@@ -504,7 +527,8 @@
       "REB": 43,
       "ATH": 80,
       "STR": 50,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/michael-redd.jpg"
     },
     {
       "name": "Khris Middleton",
@@ -525,7 +549,8 @@
       "REB": 65,
       "ATH": 71,
       "STR": 73,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/khris-middleton.png"
     },
     {
       "name": "Junior Bridgeman",
@@ -546,7 +571,8 @@
       "REB": 74,
       "ATH": 86,
       "STR": 75,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/junior-bridgeman.jpg"
     },
     {
       "name": "Vin Baker",
@@ -567,7 +593,8 @@
       "REB": 84,
       "ATH": 65,
       "STR": 79,
-      "CLU": 89
+      "CLU": 89,
+      "photoLocal": "assets/images/Player/hupu-legends/vin-baker.png"
     },
     {
       "name": "Terry Cummings",
@@ -588,7 +615,8 @@
       "REB": 79,
       "ATH": 61,
       "STR": 82,
-      "CLU": 76
+      "CLU": 76,
+      "photoLocal": "assets/images/Player/hupu-legends/terry-cummings.png"
     },
     {
       "name": "Glenn Robinson",
@@ -609,7 +637,8 @@
       "REB": 79,
       "ATH": 85,
       "STR": 85,
-      "CLU": 89
+      "CLU": 89,
+      "photoLocal": "assets/images/Player/hupu-legends/glenn-robinson.png"
     },
     {
       "name": "Brian Winters",
@@ -630,7 +659,8 @@
       "REB": 61,
       "ATH": 74,
       "STR": 66,
-      "CLU": 91
+      "CLU": 91,
+      "photoLocal": "assets/images/Player/hupu-legends/brian-winters.jpg"
     },
     {
       "name": "Paul Pressey",
@@ -651,7 +681,8 @@
       "REB": 65,
       "ATH": 68,
       "STR": 69,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-pressey.jpg"
     }
   ],
   "CHI_HIST": [
@@ -674,7 +705,8 @@
       "REB": 63,
       "ATH": 84,
       "STR": 71,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/michael-jordan.jpg"
     },
     {
       "name": "Scottie Pippen",
@@ -695,7 +727,8 @@
       "REB": 89,
       "ATH": 83,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/scottie-pippen.jpg"
     },
     {
       "name": "Derrick Rose",
@@ -716,7 +749,8 @@
       "REB": 55,
       "ATH": 98,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/derrick-rose.png"
     },
     {
       "name": "Artis Gilmore",
@@ -737,7 +771,8 @@
       "REB": 97,
       "ATH": 65,
       "STR": 95,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/artis-gilmore.jpg"
     },
     {
       "name": "Dennis Rodman",
@@ -758,7 +793,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 86,
-      "CLU": 99
+      "CLU": 99,
+      "photoLocal": "assets/images/Player/hupu-legends/dennis-rodman.jpg"
     },
     {
       "name": "Jimmy Butler",
@@ -779,7 +815,8 @@
       "REB": 69,
       "ATH": 83,
       "STR": 65,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jimmy-butler.png"
     },
     {
       "name": "Bob Love",
@@ -800,7 +837,8 @@
       "REB": 81,
       "ATH": 69,
       "STR": 82,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-love.jpg"
     },
     {
       "name": "Jerry Sloan",
@@ -821,7 +859,8 @@
       "REB": 78,
       "ATH": 80,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jerry-sloan.jpg"
     },
     {
       "name": "Joakim Noah",
@@ -842,7 +881,8 @@
       "REB": 92,
       "ATH": 61,
       "STR": 84,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/joakim-noah.png"
     },
     {
       "name": "B.J. Armstrong",
@@ -863,7 +903,8 @@
       "REB": 45,
       "ATH": 83,
       "STR": 40,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/b-j-armstrong.png"
     },
     {
       "name": "Reggie Theus",
@@ -884,7 +925,8 @@
       "REB": 52,
       "ATH": 81,
       "STR": 58,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/reggie-theus.jpg"
     },
     {
       "name": "Zach LaVine",
@@ -905,7 +947,8 @@
       "REB": 60,
       "ATH": 84,
       "STR": 44,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/zach-lavine.png"
     },
     {
       "name": "Horace Grant",
@@ -926,7 +969,8 @@
       "REB": 94,
       "ATH": 52,
       "STR": 81,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/horace-grant.png"
     },
     {
       "name": "Toni Kukoc",
@@ -947,7 +991,8 @@
       "REB": 53,
       "ATH": 61,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/toni-kukoc.jpg"
     },
     {
       "name": "Kirk Hinrich",
@@ -968,7 +1013,8 @@
       "REB": 50,
       "ATH": 86,
       "STR": 39,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kirk-hinrich.jpg"
     }
   ],
   "CLE_HIST": [
@@ -991,7 +1037,8 @@
       "REB": 79,
       "ATH": 95,
       "STR": 92,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/lebron-james.png"
     },
     {
       "name": "Kyrie Irving",
@@ -1012,7 +1059,8 @@
       "REB": 57,
       "ATH": 85,
       "STR": 37,
-      "CLU": 87
+      "CLU": 87,
+      "photoLocal": "assets/images/Player/hupu-legends/kyrie-irving.png"
     },
     {
       "name": "Mark Price",
@@ -1033,7 +1081,8 @@
       "REB": 44,
       "ATH": 80,
       "STR": 40,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/mark-price.jpg"
     },
     {
       "name": "Donovan Mitchell",
@@ -1054,7 +1103,8 @@
       "REB": 56,
       "ATH": 95,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/donovan-mitchell.png"
     },
     {
       "name": "Brad Daugherty",
@@ -1075,7 +1125,8 @@
       "REB": 92,
       "ATH": 55,
       "STR": 84,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/brad-daugherty.jpg"
     },
     {
       "name": "Evan Mobley",
@@ -1096,7 +1147,8 @@
       "REB": 85,
       "ATH": 72,
       "STR": 74,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/evan-mobley.png"
     },
     {
       "name": "Zydrunas Ilgauskas",
@@ -1117,7 +1169,8 @@
       "REB": 88,
       "ATH": 25,
       "STR": 91,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/zydrunas-ilgauskas.jpg"
     },
     {
       "name": "Larry Nance",
@@ -1138,7 +1191,8 @@
       "REB": 89,
       "ATH": 68,
       "STR": 70,
-      "CLU": 88
+      "CLU": 88,
+      "photoLocal": "assets/images/Player/hupu-legends/larry-nance.jpg"
     },
     {
       "name": "Kevin Love",
@@ -1159,7 +1213,8 @@
       "REB": 90,
       "ATH": 65,
       "STR": 88,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-love.webp"
     },
     {
       "name": "Terrell Brandon",
@@ -1180,7 +1235,8 @@
       "REB": 54,
       "ATH": 90,
       "STR": 58,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/terrell-brandon.png"
     },
     {
       "name": "Darius Garland",
@@ -1201,7 +1257,8 @@
       "REB": 44,
       "ATH": 88,
       "STR": 40,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/darius-garland.png"
     },
     {
       "name": "Campy Russell",
@@ -1222,7 +1279,8 @@
       "REB": 74,
       "ATH": 79,
       "STR": 42,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/campy-russell.jpg"
     },
     {
       "name": "Austin Carr",
@@ -1243,7 +1301,8 @@
       "REB": 45,
       "ATH": 81,
       "STR": 60,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/austin-carr.jpg"
     },
     {
       "name": "Bingo Smith",
@@ -1264,7 +1323,8 @@
       "REB": 51,
       "ATH": 81,
       "STR": 55,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/bingo-smith.jpg"
     },
     {
       "name": "Jim Chones",
@@ -1285,7 +1345,8 @@
       "REB": 85,
       "ATH": 44,
       "STR": 89,
-      "CLU": 42
+      "CLU": 42,
+      "photoLocal": "assets/images/Player/hupu-legends/jim-chones.jpg"
     }
   ],
   "BOS_HIST": [
@@ -1308,7 +1369,8 @@
       "REB": 84,
       "ATH": 65,
       "STR": 65,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/larry-bird.jpg"
     },
     {
       "name": "Bob Cousy",
@@ -1329,7 +1391,8 @@
       "REB": 78,
       "ATH": 95,
       "STR": 56,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-cousy.jpg"
     },
     {
       "name": "John Havlicek",
@@ -1350,7 +1413,8 @@
       "REB": 80,
       "ATH": 75,
       "STR": 80,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/john-havlicek.jpg"
     },
     {
       "name": "Kevin McHale",
@@ -1371,7 +1435,8 @@
       "REB": 95,
       "ATH": 68,
       "STR": 88,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-mchale.jpg"
     },
     {
       "name": "Dave Cowens",
@@ -1392,7 +1457,8 @@
       "REB": 96,
       "ATH": 66,
       "STR": 95,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dave-cowens.jpg"
     },
     {
       "name": "Jo Jo White",
@@ -1413,7 +1479,8 @@
       "REB": 30,
       "ATH": 96,
       "STR": 60,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jo-jo-white.jpg"
     },
     {
       "name": "Paul Pierce",
@@ -1434,7 +1501,8 @@
       "REB": 74,
       "ATH": 81,
       "STR": 85,
-      "CLU": 76
+      "CLU": 76,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-pierce.png"
     },
     {
       "name": "Jayson Tatum",
@@ -1455,7 +1523,8 @@
       "REB": 82,
       "ATH": 82,
       "STR": 71,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jayson-tatum.png"
     },
     {
       "name": "Robert Parish",
@@ -1476,7 +1545,8 @@
       "REB": 96,
       "ATH": 58,
       "STR": 95,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/robert-parish.jpg"
     },
     {
       "name": "Kevin Garnett",
@@ -1497,7 +1567,8 @@
       "REB": 86,
       "ATH": 77,
       "STR": 74,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-garnett.png"
     },
     {
       "name": "Bill Sharman",
@@ -1518,7 +1589,8 @@
       "REB": 80,
       "ATH": 86,
       "STR": 55,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/bill-sharman.jpg"
     },
     {
       "name": "Jaylen Brown",
@@ -1539,7 +1611,8 @@
       "REB": 59,
       "ATH": 79,
       "STR": 69,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jaylen-brown.png"
     },
     {
       "name": "Rajon Rondo",
@@ -1560,7 +1633,8 @@
       "REB": 54,
       "ATH": 85,
       "STR": 48,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/rajon-rondo.png"
     },
     {
       "name": "Tom Heinsohn",
@@ -1581,7 +1655,8 @@
       "REB": 88,
       "ATH": 60,
       "STR": 88,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/tom-heinsohn.jpg"
     },
     {
       "name": "Ray Allen",
@@ -1602,7 +1677,8 @@
       "REB": 45,
       "ATH": 74,
       "STR": 66,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/ray-allen.jpg"
     },
     {
       "name": "Bill Russell",
@@ -1623,7 +1699,8 @@
       "REB": 99,
       "ATH": 88,
       "STR": 92,
-      "CLU": 99
+      "CLU": 99,
+      "photoLocal": "assets/images/Player/hupu-legends/bill-russell.jpg"
     }
   ],
   "LAC_HIST": [
@@ -1646,7 +1723,8 @@
       "REB": 72,
       "ATH": 81,
       "STR": 75,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kawhi-leonard.png"
     },
     {
       "name": "Bob McAdoo",
@@ -1667,7 +1745,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 85,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-mcadoo.jpg"
     },
     {
       "name": "Chris Paul",
@@ -1688,7 +1767,8 @@
       "REB": 63,
       "ATH": 84,
       "STR": 58,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-paul.png"
     },
     {
       "name": "Elton Brand",
@@ -1709,7 +1789,8 @@
       "REB": 96,
       "ATH": 59,
       "STR": 96,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/elton-brand.jpg"
     },
     {
       "name": "World B. Free",
@@ -1730,7 +1811,8 @@
       "REB": 39,
       "ATH": 85,
       "STR": 68,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/world-b-free.jpg"
     },
     {
       "name": "Ron Harper",
@@ -1751,7 +1833,8 @@
       "REB": 51,
       "ATH": 76,
       "STR": 56,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/ron-harper.png"
     },
     {
       "name": "Paul George",
@@ -1772,7 +1855,8 @@
       "REB": 64,
       "ATH": 79,
       "STR": 70,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-george.webp"
     },
     {
       "name": "Blake Griffin",
@@ -1793,7 +1877,8 @@
       "REB": 88,
       "ATH": 68,
       "STR": 94,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/blake-griffin.png"
     },
     {
       "name": "DeAndre Jordan",
@@ -1814,7 +1899,8 @@
       "REB": 97,
       "ATH": 64,
       "STR": 94,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/deandre-jordan.png"
     },
     {
       "name": "Danny Manning",
@@ -1835,7 +1921,8 @@
       "REB": 88,
       "ATH": 74,
       "STR": 89,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/danny-manning.png"
     },
     {
       "name": "Chris Kaman",
@@ -1856,7 +1943,8 @@
       "REB": 85,
       "ATH": 63,
       "STR": 95,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-kaman.png"
     },
     {
       "name": "Corey Maggette",
@@ -1877,7 +1965,8 @@
       "REB": 56,
       "ATH": 83,
       "STR": 80,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/corey-maggette.jpg"
     },
     {
       "name": "Norm Nixon",
@@ -1898,7 +1987,8 @@
       "REB": 56,
       "ATH": 88,
       "STR": 64,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/norm-nixon.jpg"
     },
     {
       "name": "Swen Nater",
@@ -1919,7 +2009,8 @@
       "REB": 93,
       "ATH": 52,
       "STR": 90,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/swen-nater.jpg"
     },
     {
       "name": "JJ Redick",
@@ -1940,7 +2031,8 @@
       "REB": 44,
       "ATH": 60,
       "STR": 39,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jj-redick.png"
     }
   ],
   "MEM_HIST": [
@@ -1963,7 +2055,8 @@
       "REB": 89,
       "ATH": 50,
       "STR": 95,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/marc-gasol.png"
     },
     {
       "name": "Pau Gasol",
@@ -1984,7 +2077,8 @@
       "REB": 88,
       "ATH": 64,
       "STR": 90,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/pau-gasol.png"
     },
     {
       "name": "Zach Randolph",
@@ -2005,7 +2099,8 @@
       "REB": 92,
       "ATH": 50,
       "STR": 96,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/zach-randolph.jpg"
     },
     {
       "name": "Ja Morant",
@@ -2026,7 +2121,8 @@
       "REB": 61,
       "ATH": 92,
       "STR": 52,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/ja-morant.png"
     },
     {
       "name": "Mike Conley",
@@ -2047,7 +2143,8 @@
       "REB": 52,
       "ATH": 85,
       "STR": 40,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/mike-conley.png"
     },
     {
       "name": "Shareef Abdur-Rahim",
@@ -2068,7 +2165,8 @@
       "REB": 88,
       "ATH": 65,
       "STR": 79,
-      "CLU": 89
+      "CLU": 89,
+      "photoLocal": "assets/images/Player/hupu-legends/shareef-abdur-rahim.png"
     },
     {
       "name": "Mike Bibby",
@@ -2089,7 +2187,8 @@
       "REB": 44,
       "ATH": 83,
       "STR": 38,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/mike-bibby.jpg"
     },
     {
       "name": "Jaren Jackson Jr.",
@@ -2110,7 +2209,8 @@
       "REB": 72,
       "ATH": 63,
       "STR": 82,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/jaren-jackson-jr.png"
     },
     {
       "name": "Shane Battier",
@@ -2131,7 +2231,8 @@
       "REB": 56,
       "ATH": 74,
       "STR": 74,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/shane-battier.jpg"
     },
     {
       "name": "Tony Allen",
@@ -2152,7 +2253,8 @@
       "REB": 60,
       "ATH": 84,
       "STR": 75,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/tony-allen.png"
     },
     {
       "name": "Bryant Reeves",
@@ -2173,7 +2275,8 @@
       "REB": 78,
       "ATH": 60,
       "STR": 93,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/bryant-reeves.png"
     },
     {
       "name": "Jason Williams",
@@ -2194,7 +2297,8 @@
       "REB": 45,
       "ATH": 74,
       "STR": 35,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-williams.jpg"
     },
     {
       "name": "Rudy Gay",
@@ -2215,7 +2319,8 @@
       "REB": 65,
       "ATH": 61,
       "STR": 43,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/rudy-gay.png"
     },
     {
       "name": "Mike Miller",
@@ -2236,7 +2341,8 @@
       "REB": 70,
       "ATH": 78,
       "STR": 65,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/mike-miller.png"
     },
     {
       "name": "Jonas Valanciunas",
@@ -2257,7 +2363,8 @@
       "REB": 93,
       "ATH": 62,
       "STR": 89,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jonas-valanciunas.webp"
     }
   ],
   "ATL_HIST": [
@@ -2280,7 +2387,8 @@
       "REB": 82,
       "ATH": 94,
       "STR": 77,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/dominique-wilkins.jpg"
     },
     {
       "name": "Bob Pettit",
@@ -2301,7 +2409,8 @@
       "REB": 98,
       "ATH": 66,
       "STR": 88,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-pettit.jpg"
     },
     {
       "name": "Dikembe Mutombo",
@@ -2322,7 +2431,8 @@
       "REB": 94,
       "ATH": 68,
       "STR": 83,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/dikembe-mutombo.jpg"
     },
     {
       "name": "Cliff Hagan",
@@ -2343,7 +2453,8 @@
       "REB": 84,
       "ATH": 75,
       "STR": 80,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/cliff-hagan.jpg"
     },
     {
       "name": "Lou Hudson",
@@ -2364,7 +2475,8 @@
       "REB": 49,
       "ATH": 81,
       "STR": 75,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/lou-hudson.jpg"
     },
     {
       "name": "Joe Johnson",
@@ -2385,7 +2497,8 @@
       "REB": 48,
       "ATH": 84,
       "STR": 71,
-      "CLU": 65
+      "CLU": 65,
+      "photoLocal": "assets/images/Player/hupu-legends/joe-johnson.png"
     },
     {
       "name": "Joe Caldwell",
@@ -2406,7 +2519,8 @@
       "REB": 58,
       "ATH": 83,
       "STR": 65,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/joe-caldwell.jpg"
     },
     {
       "name": "Trae Young",
@@ -2427,7 +2541,8 @@
       "REB": 54,
       "ATH": 84,
       "STR": 50,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/trae-young.png"
     },
     {
       "name": "Kevin Willis",
@@ -2448,7 +2563,8 @@
       "REB": 95,
       "ATH": 34,
       "STR": 78,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-willis.png"
     },
     {
       "name": "Steve Smith",
@@ -2469,7 +2585,8 @@
       "REB": 55,
       "ATH": 82,
       "STR": 75,
-      "CLU": 93
+      "CLU": 93,
+      "photoLocal": "assets/images/Player/hupu-legends/steve-smith.png"
     },
     {
       "name": "Pete Maravich",
@@ -2490,7 +2607,8 @@
       "REB": 48,
       "ATH": 73,
       "STR": 41,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/pete-maravich.jpg"
     },
     {
       "name": "Doc Rivers",
@@ -2511,7 +2629,8 @@
       "REB": 44,
       "ATH": 86,
       "STR": 60,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/doc-rivers.jpg"
     },
     {
       "name": "Josh Smith",
@@ -2532,7 +2651,8 @@
       "REB": 89,
       "ATH": 84,
       "STR": 78,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/josh-smith.jpg"
     },
     {
       "name": "Al Horford",
@@ -2553,7 +2673,8 @@
       "REB": 71,
       "ATH": 53,
       "STR": 90,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/al-horford.png"
     },
     {
       "name": "Jeff Teague",
@@ -2574,7 +2695,8 @@
       "REB": 56,
       "ATH": 85,
       "STR": 64,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/jeff-teague.png"
     }
   ],
   "MIA_HIST": [
@@ -2597,7 +2719,8 @@
       "REB": 79,
       "ATH": 86,
       "STR": 92,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/lebron-james.png"
     },
     {
       "name": "Dwyane Wade",
@@ -2618,7 +2741,8 @@
       "REB": 59,
       "ATH": 96,
       "STR": 70,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dwyane-wade.jpg"
     },
     {
       "name": "Alonzo Mourning",
@@ -2639,7 +2763,8 @@
       "REB": 96,
       "ATH": 65,
       "STR": 96,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/alonzo-mourning.png"
     },
     {
       "name": "Jimmy Butler",
@@ -2660,7 +2785,8 @@
       "REB": 59,
       "ATH": 84,
       "STR": 76,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jimmy-butler.png"
     },
     {
       "name": "Shaquille O’Neal",
@@ -2681,7 +2807,8 @@
       "REB": 90,
       "ATH": 34,
       "STR": 99,
-      "CLU": 67
+      "CLU": 67,
+      "photoLocal": "assets/images/Player/hupu-legends/shaquille-oneal.png"
     },
     {
       "name": "Tim Hardaway",
@@ -2702,7 +2829,8 @@
       "REB": 46,
       "ATH": 96,
       "STR": 70,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/tim-hardaway.png"
     },
     {
       "name": "Chris Bosh",
@@ -2723,7 +2851,8 @@
       "REB": 86,
       "ATH": 69,
       "STR": 75,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-bosh.png"
     },
     {
       "name": "Glen Rice",
@@ -2744,7 +2873,8 @@
       "REB": 69,
       "ATH": 75,
       "STR": 78,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/glen-rice.png"
     },
     {
       "name": "Rony Seikaly",
@@ -2765,7 +2895,8 @@
       "REB": 90,
       "ATH": 60,
       "STR": 90,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/rony-seikaly.png"
     },
     {
       "name": "Bam Adebayo",
@@ -2786,7 +2917,8 @@
       "REB": 80,
       "ATH": 74,
       "STR": 85,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/bam-adebayo.webp"
     },
     {
       "name": "Eddie Jones",
@@ -2807,7 +2939,8 @@
       "REB": 45,
       "ATH": 73,
       "STR": 60,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/eddie-jones.jpg"
     },
     {
       "name": "Steve Smith",
@@ -2828,7 +2961,8 @@
       "REB": 44,
       "ATH": 68,
       "STR": 70,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/steve-smith.png"
     },
     {
       "name": "Hassan Whiteside",
@@ -2849,7 +2983,8 @@
       "REB": 96,
       "ATH": 65,
       "STR": 70,
-      "CLU": 93
+      "CLU": 93,
+      "photoLocal": "assets/images/Player/hupu-legends/hassan-whiteside.png"
     },
     {
       "name": "Udonis Haslem",
@@ -2870,7 +3005,8 @@
       "REB": 88,
       "ATH": 54,
       "STR": 84,
-      "CLU": 96
+      "CLU": 96,
+      "photoLocal": "assets/images/Player/hupu-legends/udonis-haslem.png"
     },
     {
       "name": "Tyler Herro",
@@ -2891,7 +3027,8 @@
       "REB": 68,
       "ATH": 79,
       "STR": 59,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/tyler-herro.webp"
     }
   ],
   "CHA_HIST": [
@@ -2914,7 +3051,8 @@
       "REB": 66,
       "ATH": 83,
       "STR": 78,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/glen-rice.png"
     },
     {
       "name": "Kemba Walker",
@@ -2935,7 +3073,8 @@
       "REB": 54,
       "ATH": 85,
       "STR": 50,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/kemba-walker.png"
     },
     {
       "name": "Eddie Jones",
@@ -2956,7 +3095,8 @@
       "REB": 45,
       "ATH": 80,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/eddie-jones.jpg"
     },
     {
       "name": "Alonzo Mourning",
@@ -2977,7 +3117,8 @@
       "REB": 88,
       "ATH": 65,
       "STR": 96,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/alonzo-mourning.png"
     },
     {
       "name": "Larry Johnson",
@@ -2998,7 +3139,8 @@
       "REB": 84,
       "ATH": 69,
       "STR": 88,
-      "CLU": 77
+      "CLU": 77,
+      "photoLocal": "assets/images/Player/hupu-legends/larry-johnson.jpg"
     },
     {
       "name": "Derrick Coleman",
@@ -3019,7 +3161,8 @@
       "REB": 85,
       "ATH": 63,
       "STR": 84,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/derrick-coleman.png"
     },
     {
       "name": "LaMelo Ball",
@@ -3040,7 +3183,8 @@
       "REB": 61,
       "ATH": 84,
       "STR": 50,
-      "CLU": 89
+      "CLU": 89,
+      "photoLocal": "assets/images/Player/hupu-legends/lamelo-ball.webp"
     },
     {
       "name": "Vlade Divac",
@@ -3061,7 +3205,8 @@
       "REB": 92,
       "ATH": 39,
       "STR": 84,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/vlade-divac.jpg"
     },
     {
       "name": "Dell Curry",
@@ -3082,7 +3227,8 @@
       "REB": 53,
       "ATH": 80,
       "STR": 55,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dell-curry.png"
     },
     {
       "name": "Muggsy Bogues",
@@ -3103,7 +3249,8 @@
       "REB": 47,
       "ATH": 95,
       "STR": 25,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/muggsy-bogues.jpg"
     },
     {
       "name": "Kendall Gill",
@@ -3124,7 +3271,8 @@
       "REB": 55,
       "ATH": 79,
       "STR": 70,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kendall-gill.png"
     },
     {
       "name": "Baron Davis",
@@ -3145,7 +3293,8 @@
       "REB": 62,
       "ATH": 91,
       "STR": 66,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/baron-davis.jpg"
     },
     {
       "name": "Gerald Wallace",
@@ -3166,7 +3315,8 @@
       "REB": 83,
       "ATH": 85,
       "STR": 60,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/gerald-wallace.jpg"
     },
     {
       "name": "P.J. Brown",
@@ -3187,7 +3337,8 @@
       "REB": 89,
       "ATH": 50,
       "STR": 80,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/p-j-brown.png"
     },
     {
       "name": "Stephen Jackson",
@@ -3208,7 +3359,8 @@
       "REB": 65,
       "ATH": 69,
       "STR": 43,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/stephen-jackson.jpg"
     }
   ],
   "UTA_HIST": [
@@ -3231,7 +3383,8 @@
       "REB": 45,
       "ATH": 95,
       "STR": 69,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/john-stockton.jpg"
     },
     {
       "name": "Karl Malone",
@@ -3252,7 +3405,8 @@
       "REB": 96,
       "ATH": 78,
       "STR": 97,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/karl-malone.jpg"
     },
     {
       "name": "Pete Maravich",
@@ -3273,7 +3427,8 @@
       "REB": 59,
       "ATH": 88,
       "STR": 49,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/pete-maravich.jpg"
     },
     {
       "name": "Adrian Dantley",
@@ -3294,7 +3449,8 @@
       "REB": 75,
       "ATH": 88,
       "STR": 82,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/adrian-dantley.jpg"
     },
     {
       "name": "Mark Eaton",
@@ -3315,7 +3471,8 @@
       "REB": 94,
       "ATH": 25,
       "STR": 95,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/mark-eaton.jpg"
     },
     {
       "name": "Andrei Kirilenko",
@@ -3336,7 +3493,8 @@
       "REB": 87,
       "ATH": 78,
       "STR": 70,
-      "CLU": 91
+      "CLU": 91,
+      "photoLocal": "assets/images/Player/hupu-legends/andrei-kirilenko.jpg"
     },
     {
       "name": "Donovan Mitchell",
@@ -3357,7 +3515,8 @@
       "REB": 51,
       "ATH": 96,
       "STR": 60,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/donovan-mitchell.png"
     },
     {
       "name": "Rudy Gobert",
@@ -3378,7 +3537,8 @@
       "REB": 95,
       "ATH": 48,
       "STR": 87,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/rudy-gobert.png"
     },
     {
       "name": "Gordon Hayward",
@@ -3399,7 +3559,8 @@
       "REB": 69,
       "ATH": 79,
       "STR": 42,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/gordon-hayward.png"
     },
     {
       "name": "Carlos Boozer",
@@ -3420,7 +3581,8 @@
       "REB": 94,
       "ATH": 59,
       "STR": 94,
-      "CLU": 61
+      "CLU": 61,
+      "photoLocal": "assets/images/Player/hupu-legends/carlos-boozer.jpg"
     },
     {
       "name": "Darrel Griffith",
@@ -3441,7 +3603,8 @@
       "REB": 55,
       "ATH": 80,
       "STR": 50,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/darrel-griffith.jpg"
     },
     {
       "name": "Deron Williams",
@@ -3462,7 +3625,8 @@
       "REB": 47,
       "ATH": 89,
       "STR": 69,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/deron-williams.png"
     },
     {
       "name": "Thurl Bailey",
@@ -3483,7 +3647,8 @@
       "REB": 70,
       "ATH": 73,
       "STR": 78,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/thurl-bailey.png"
     },
     {
       "name": "Truck Robinson",
@@ -3504,7 +3669,8 @@
       "REB": 94,
       "ATH": 74,
       "STR": 94,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/truck-robinson.jpg"
     },
     {
       "name": "Jeff Hornacek",
@@ -3525,7 +3691,8 @@
       "REB": 59,
       "ATH": 73,
       "STR": 35,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jeff-hornacek.jpg"
     }
   ],
   "SAC_HIST": [
@@ -3548,7 +3715,8 @@
       "REB": 88,
       "ATH": 93,
       "STR": 75,
-      "CLU": 83
+      "CLU": 83,
+      "photoLocal": "assets/images/Player/hupu-legends/oscar-robertson.jpg"
     },
     {
       "name": "Jerry Lucas",
@@ -3569,7 +3737,8 @@
       "REB": 98,
       "ATH": 64,
       "STR": 89,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jerry-lucas.jpg"
     },
     {
       "name": "Mitch Richmond",
@@ -3590,7 +3759,8 @@
       "REB": 62,
       "ATH": 86,
       "STR": 79,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/mitch-richmond.jpg"
     },
     {
       "name": "Nate Archibald",
@@ -3611,7 +3781,8 @@
       "REB": 30,
       "ATH": 99,
       "STR": 50,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/nate-archibald.jpg"
     },
     {
       "name": "Chris Webber",
@@ -3632,7 +3803,8 @@
       "REB": 92,
       "ATH": 79,
       "STR": 88,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-webber.jpg"
     },
     {
       "name": "DeMarcus Cousins",
@@ -3653,7 +3825,8 @@
       "REB": 91,
       "ATH": 63,
       "STR": 97,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/demarcus-cousins.png"
     },
     {
       "name": "Wayne Embry",
@@ -3674,7 +3847,8 @@
       "REB": 94,
       "ATH": 70,
       "STR": 90,
-      "CLU": 88
+      "CLU": 88,
+      "photoLocal": "assets/images/Player/hupu-legends/wayne-embry.jpg"
     },
     {
       "name": "Peja Stojakovic",
@@ -3695,7 +3869,8 @@
       "REB": 62,
       "ATH": 73,
       "STR": 60,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/peja-stojakovic.jpg"
     },
     {
       "name": "Mike Bibby",
@@ -3716,7 +3891,8 @@
       "REB": 44,
       "ATH": 83,
       "STR": 38,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/mike-bibby.jpg"
     },
     {
       "name": "Vlade Divac",
@@ -3737,7 +3913,8 @@
       "REB": 94,
       "ATH": 39,
       "STR": 84,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/vlade-divac.jpg"
     },
     {
       "name": "Domantas Sabonis",
@@ -3758,7 +3935,8 @@
       "REB": 94,
       "ATH": 48,
       "STR": 82,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/domantas-sabonis.png"
     },
     {
       "name": "Otis Birdsong",
@@ -3779,7 +3957,8 @@
       "REB": 59,
       "ATH": 88,
       "STR": 59,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/otis-birdsong.png"
     },
     {
       "name": "Kevin Martin",
@@ -3800,7 +3979,8 @@
       "REB": 59,
       "ATH": 81,
       "STR": 31,
-      "CLU": 58
+      "CLU": 58,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-martin.png"
     },
     {
       "name": "Eddie Johnson",
@@ -3821,7 +4001,8 @@
       "REB": 55,
       "ATH": 84,
       "STR": 65,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/eddie-johnson.png"
     },
     {
       "name": "Doug Christie",
@@ -3842,7 +4023,8 @@
       "REB": 53,
       "ATH": 73,
       "STR": 50,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/doug-christie.png"
     }
   ],
   "NYK_HIST": [
@@ -3865,7 +4047,8 @@
       "REB": 61,
       "ATH": 96,
       "STR": 72,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/walt-frazier.jpg"
     },
     {
       "name": "Patrick Ewing",
@@ -3886,7 +4069,8 @@
       "REB": 95,
       "ATH": 69,
       "STR": 97,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/patrick-ewing.jpg"
     },
     {
       "name": "Willis Reed",
@@ -3907,7 +4091,8 @@
       "REB": 94,
       "ATH": 73,
       "STR": 92,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/willis-reed.jpg"
     },
     {
       "name": "Jalen Brunson",
@@ -3928,7 +4113,8 @@
       "REB": 45,
       "ATH": 84,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jalen-brunson.webp"
     },
     {
       "name": "Richie Guerin",
@@ -3949,7 +4135,8 @@
       "REB": 80,
       "ATH": 89,
       "STR": 85,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/richie-guerin.jpg"
     },
     {
       "name": "Carmelo Anthony",
@@ -3970,7 +4157,8 @@
       "REB": 84,
       "ATH": 83,
       "STR": 82,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/carmelo-anthony.png"
     },
     {
       "name": "Dave Debusschere",
@@ -3991,7 +4179,8 @@
       "REB": 97,
       "ATH": 69,
       "STR": 92,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/dave-debusschere.jpg"
     },
     {
       "name": "Allan Houston",
@@ -4012,7 +4201,8 @@
       "REB": 62,
       "ATH": 84,
       "STR": 54,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/allan-houston.jpg"
     },
     {
       "name": "Bernard King",
@@ -4033,7 +4223,8 @@
       "REB": 55,
       "ATH": 90,
       "STR": 61,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/bernard-king.jpg"
     },
     {
       "name": "Micheal Ray Richardson",
@@ -4054,7 +4245,8 @@
       "REB": 59,
       "ATH": 88,
       "STR": 68,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/micheal-ray-richardson.jpg"
     },
     {
       "name": "Amar’e Stoudemire",
@@ -4075,7 +4267,8 @@
       "REB": 77,
       "ATH": 78,
       "STR": 82,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/amare-stoudemire.png"
     },
     {
       "name": "John Starks",
@@ -4096,7 +4289,8 @@
       "REB": 59,
       "ATH": 80,
       "STR": 70,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/john-starks.png"
     },
     {
       "name": "Earl Monroe",
@@ -4117,7 +4311,8 @@
       "REB": 38,
       "ATH": 81,
       "STR": 68,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/earl-monroe.jpg"
     },
     {
       "name": "Charles Oakley",
@@ -4138,7 +4333,8 @@
       "REB": 95,
       "ATH": 73,
       "STR": 90,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/charles-oakley.png"
     },
     {
       "name": "Julius Randle",
@@ -4159,7 +4355,8 @@
       "REB": 85,
       "ATH": 73,
       "STR": 87,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/julius-randle.png"
     }
   ],
   "LAL_HIST": [
@@ -4182,7 +4379,8 @@
       "REB": 54,
       "ATH": 93,
       "STR": 70,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kobe-bryant.png"
     },
     {
       "name": "Magic Johnson",
@@ -4203,7 +4401,8 @@
       "REB": 84,
       "ATH": 93,
       "STR": 80,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/magic-johnson.jpg"
     },
     {
       "name": "Shaquille O’Neal",
@@ -4224,7 +4423,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 99,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/shaquille-oneal.png"
     },
     {
       "name": "Jerry West",
@@ -4245,7 +4445,8 @@
       "REB": 35,
       "ATH": 90,
       "STR": 70,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/jerry-west.jpg"
     },
     {
       "name": "Kareem Abdul-Jabbar",
@@ -4266,7 +4467,8 @@
       "REB": 95,
       "ATH": 56,
       "STR": 84,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kareem-abdul-jabbar.jpg"
     },
     {
       "name": "Elgin Baylor",
@@ -4287,7 +4489,8 @@
       "REB": 95,
       "ATH": 95,
       "STR": 80,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/elgin-baylor.jpg"
     },
     {
       "name": "LeBron James",
@@ -4308,7 +4511,8 @@
       "REB": 84,
       "ATH": 89,
       "STR": 89,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/lebron-james.png"
     },
     {
       "name": "James Worthy",
@@ -4329,7 +4533,8 @@
       "REB": 85,
       "ATH": 83,
       "STR": 80,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/james-worthy.jpg"
     },
     {
       "name": "George Mikan",
@@ -4350,7 +4555,8 @@
       "REB": 97,
       "ATH": 50,
       "STR": 94,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/george-mikan.jpg"
     },
     {
       "name": "Anthony Davis",
@@ -4371,7 +4577,8 @@
       "REB": 89,
       "ATH": 79,
       "STR": 87,
-      "CLU": 96
+      "CLU": 96,
+      "photoLocal": "assets/images/Player/hupu-legends/anthony-davis.png"
     },
     {
       "name": "Pau Gasol",
@@ -4392,7 +4599,8 @@
       "REB": 88,
       "ATH": 53,
       "STR": 85,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/pau-gasol.png"
     },
     {
       "name": "Wilt Chamberlain",
@@ -4413,7 +4621,8 @@
       "REB": 86,
       "ATH": 73,
       "STR": 90,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/wilt-chamberlain.jpg"
     },
     {
       "name": "Gail Goodrich",
@@ -4434,7 +4643,8 @@
       "REB": 59,
       "ATH": 80,
       "STR": 50,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/gail-goodrich.jpg"
     },
     {
       "name": "Jamaal Wilkes",
@@ -4455,7 +4665,8 @@
       "REB": 84,
       "ATH": 83,
       "STR": 70,
-      "CLU": 88
+      "CLU": 88,
+      "photoLocal": "assets/images/Player/hupu-legends/jamaal-wilkes.jpg"
     },
     {
       "name": "Michael Cooper",
@@ -4476,7 +4687,8 @@
       "REB": 48,
       "ATH": 75,
       "STR": 50,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/michael-cooper.jpg"
     }
   ],
   "ORL_HIST": [
@@ -4499,7 +4711,8 @@
       "REB": 60,
       "ATH": 91,
       "STR": 68,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/tracy-mcgrady.jpg"
     },
     {
       "name": "Penny Hardaway",
@@ -4520,7 +4733,8 @@
       "REB": 68,
       "ATH": 89,
       "STR": 68,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/penny-hardaway.jpg"
     },
     {
       "name": "Dwight Howard",
@@ -4541,7 +4755,8 @@
       "REB": 97,
       "ATH": 88,
       "STR": 98,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/dwight-howard.png"
     },
     {
       "name": "Shaquille O’Neal",
@@ -4562,7 +4777,8 @@
       "REB": 80,
       "ATH": 79,
       "STR": 99,
-      "CLU": 67
+      "CLU": 67,
+      "photoLocal": "assets/images/Player/hupu-legends/shaquille-oneal.png"
     },
     {
       "name": "Paolo Banchero",
@@ -4583,7 +4799,8 @@
       "REB": 76,
       "ATH": 80,
       "STR": 77,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/paolo-banchero.webp"
     },
     {
       "name": "Rashard Lewis",
@@ -4604,7 +4821,8 @@
       "REB": 63,
       "ATH": 74,
       "STR": 70,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/rashard-lewis.jpg"
     },
     {
       "name": "Hedo Turkoglu",
@@ -4625,7 +4843,8 @@
       "REB": 70,
       "ATH": 75,
       "STR": 70,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/hedo-turkoglu.jpg"
     },
     {
       "name": "Grant Hill",
@@ -4646,7 +4865,8 @@
       "REB": 69,
       "ATH": 83,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/grant-hill.jpg"
     },
     {
       "name": "Nikola Vucevic",
@@ -4667,7 +4887,8 @@
       "REB": 93,
       "ATH": 62,
       "STR": 87,
-      "CLU": 79
+      "CLU": 79,
+      "photoLocal": "assets/images/Player/hupu-legends/nikola-vucevic.png"
     },
     {
       "name": "Nick Anderson",
@@ -4688,7 +4909,8 @@
       "REB": 60,
       "ATH": 69,
       "STR": 80,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/nick-anderson.png"
     },
     {
       "name": "Scott Skiles",
@@ -4709,7 +4931,8 @@
       "REB": 47,
       "ATH": 81,
       "STR": 48,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/scott-skiles.png"
     },
     {
       "name": "Horace Grant",
@@ -4730,7 +4953,8 @@
       "REB": 90,
       "ATH": 52,
       "STR": 81,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/horace-grant.png"
     },
     {
       "name": "Dennis Scott",
@@ -4751,7 +4975,8 @@
       "REB": 47,
       "ATH": 68,
       "STR": 67,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/dennis-scott.png"
     },
     {
       "name": "Jameer Nelson",
@@ -4772,7 +4997,8 @@
       "REB": 51,
       "ATH": 86,
       "STR": 74,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/jameer-nelson.png"
     },
     {
       "name": "Darrell Armstrong",
@@ -4793,7 +5019,8 @@
       "REB": 41,
       "ATH": 85,
       "STR": 44,
-      "CLU": 84
+      "CLU": 84,
+      "photoLocal": "assets/images/Player/hupu-legends/darrell-armstrong.png"
     }
   ],
   "DAL_HIST": [
@@ -4816,7 +5043,8 @@
       "REB": 92,
       "ATH": 63,
       "STR": 89,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dirk-nowitzki.png"
     },
     {
       "name": "Luka Doncic",
@@ -4837,7 +5065,8 @@
       "REB": 82,
       "ATH": 83,
       "STR": 70,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/luka-doncic.png"
     },
     {
       "name": "Derek Harper",
@@ -4858,7 +5087,8 @@
       "REB": 41,
       "ATH": 88,
       "STR": 56,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/derek-harper.png"
     },
     {
       "name": "Rolando Blackman",
@@ -4879,7 +5109,8 @@
       "REB": 52,
       "ATH": 85,
       "STR": 69,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/rolando-blackman.jpg"
     },
     {
       "name": "Mark Aguirre",
@@ -4900,7 +5131,8 @@
       "REB": 70,
       "ATH": 78,
       "STR": 88,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/mark-aguirre.png"
     },
     {
       "name": "Jim Jackson",
@@ -4921,7 +5153,8 @@
       "REB": 60,
       "ATH": 81,
       "STR": 75,
-      "CLU": 91
+      "CLU": 91,
+      "photoLocal": "assets/images/Player/hupu-legends/jim-jackson.png"
     },
     {
       "name": "Michael Finley",
@@ -4942,7 +5175,8 @@
       "REB": 68,
       "ATH": 83,
       "STR": 68,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/michael-finley.jpg"
     },
     {
       "name": "Jamal Mashburn",
@@ -4963,7 +5197,8 @@
       "REB": 64,
       "ATH": 78,
       "STR": 82,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jamal-mashburn.jpg"
     },
     {
       "name": "Steve Nash",
@@ -4984,7 +5219,8 @@
       "REB": 42,
       "ATH": 90,
       "STR": 40,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/steve-nash.jpg"
     },
     {
       "name": "Jason Kidd",
@@ -5005,7 +5241,8 @@
       "REB": 62,
       "ATH": 91,
       "STR": 58,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-kidd.jpg"
     },
     {
       "name": "Jason Terry",
@@ -5026,7 +5263,8 @@
       "REB": 39,
       "ATH": 94,
       "STR": 40,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-terry.png"
     },
     {
       "name": "James Donaldson",
@@ -5047,7 +5285,8 @@
       "REB": 89,
       "ATH": 63,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/james-donaldson.png"
     },
     {
       "name": "Brad Davis",
@@ -5068,7 +5307,8 @@
       "REB": 38,
       "ATH": 80,
       "STR": 50,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/brad-davis.jpg"
     },
     {
       "name": "Shawn Bradley",
@@ -5089,7 +5329,8 @@
       "REB": 89,
       "ATH": 25,
       "STR": 65,
-      "CLU": 50
+      "CLU": 50,
+      "photoLocal": "assets/images/Player/hupu-legends/shawn-bradley.png"
     },
     {
       "name": "Tyson Chandler",
@@ -5110,7 +5351,8 @@
       "REB": 89,
       "ATH": 63,
       "STR": 80,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/tyson-chandler.png"
     }
   ],
   "BKN_HIST": [
@@ -5133,7 +5375,8 @@
       "REB": 79,
       "ATH": 91,
       "STR": 85,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/julius-erving.jpg"
     },
     {
       "name": "Kevin Durant",
@@ -5154,7 +5397,8 @@
       "REB": 79,
       "ATH": 80,
       "STR": 63,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-durant.png"
     },
     {
       "name": "Jason Kidd",
@@ -5175,7 +5419,8 @@
       "REB": 75,
       "ATH": 93,
       "STR": 70,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-kidd.jpg"
     },
     {
       "name": "Drazen Petrovic",
@@ -5196,7 +5441,8 @@
       "REB": 69,
       "ATH": 74,
       "STR": 66,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/drazen-petrovic.jpg"
     },
     {
       "name": "Vince Carter",
@@ -5217,7 +5463,8 @@
       "REB": 55,
       "ATH": 86,
       "STR": 57,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/vince-carter.png"
     },
     {
       "name": "Kyrie Irving",
@@ -5238,7 +5485,8 @@
       "REB": 55,
       "ATH": 85,
       "STR": 37,
-      "CLU": 81
+      "CLU": 81,
+      "photoLocal": "assets/images/Player/hupu-legends/kyrie-irving.png"
     },
     {
       "name": "James Harden",
@@ -5259,7 +5507,8 @@
       "REB": 68,
       "ATH": 85,
       "STR": 71,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/james-harden.png"
     },
     {
       "name": "Buck Williams",
@@ -5280,7 +5529,8 @@
       "REB": 94,
       "ATH": 65,
       "STR": 90,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/buck-williams.jpg"
     },
     {
       "name": "Derrick Coleman",
@@ -5301,7 +5551,8 @@
       "REB": 90,
       "ATH": 63,
       "STR": 92,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/derrick-coleman.png"
     },
     {
       "name": "Kenny Anderson",
@@ -5322,7 +5573,8 @@
       "REB": 34,
       "ATH": 85,
       "STR": 35,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/kenny-anderson.png"
     },
     {
       "name": "Brook Lopez",
@@ -5343,7 +5595,8 @@
       "REB": 89,
       "ATH": 25,
       "STR": 93,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/brook-lopez.png"
     },
     {
       "name": "Richard Jefferson",
@@ -5364,7 +5617,8 @@
       "REB": 55,
       "ATH": 83,
       "STR": 69,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/richard-jefferson.png"
     },
     {
       "name": "Kenyon Martin",
@@ -5385,7 +5639,8 @@
       "REB": 93,
       "ATH": 73,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/kenyon-martin.jpg"
     },
     {
       "name": "Otis Birdsong",
@@ -5406,7 +5661,8 @@
       "REB": 59,
       "ATH": 88,
       "STR": 39,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/otis-birdsong.png"
     },
     {
       "name": "Keith Van Horn",
@@ -5427,7 +5683,8 @@
       "REB": 78,
       "ATH": 68,
       "STR": 44,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/keith-van-horn.png"
     }
   ],
   "DEN_HIST": [
@@ -5450,7 +5707,8 @@
       "REB": 93,
       "ATH": 63,
       "STR": 93,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/nikola-jokic.webp"
     },
     {
       "name": "David Thompson",
@@ -5471,7 +5729,8 @@
       "REB": 78,
       "ATH": 95,
       "STR": 78,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/david-thompson.jpg"
     },
     {
       "name": "Carmelo Anthony",
@@ -5492,7 +5751,8 @@
       "REB": 84,
       "ATH": 94,
       "STR": 85,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/carmelo-anthony.png"
     },
     {
       "name": "Alex English",
@@ -5513,7 +5773,8 @@
       "REB": 79,
       "ATH": 88,
       "STR": 82,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/alex-english.jpg"
     },
     {
       "name": "Fat Lever",
@@ -5534,7 +5795,8 @@
       "REB": 84,
       "ATH": 91,
       "STR": 50,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/fat-lever.png"
     },
     {
       "name": "Dan Issel",
@@ -5555,7 +5817,8 @@
       "REB": 94,
       "ATH": 65,
       "STR": 96,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dan-issel.jpg"
     },
     {
       "name": "Allen Iverson",
@@ -5576,7 +5839,8 @@
       "REB": 59,
       "ATH": 93,
       "STR": 65,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/allen-iverson.jpg"
     },
     {
       "name": "Dikembe Mutombo",
@@ -5597,7 +5861,8 @@
       "REB": 95,
       "ATH": 68,
       "STR": 93,
-      "CLU": 91
+      "CLU": 91,
+      "photoLocal": "assets/images/Player/hupu-legends/dikembe-mutombo.jpg"
     },
     {
       "name": "Kiki Vandeweghe",
@@ -5618,7 +5883,8 @@
       "REB": 66,
       "ATH": 71,
       "STR": 80,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kiki-vandeweghe.jpg"
     },
     {
       "name": "Mahmoud Abdul-Rauf",
@@ -5639,7 +5905,8 @@
       "REB": 39,
       "ATH": 85,
       "STR": 32,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/mahmoud-abdul-rauf.png"
     },
     {
       "name": "Byron Beck",
@@ -5660,7 +5927,8 @@
       "REB": 93,
       "ATH": 70,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/byron-beck.jpg"
     },
     {
       "name": "Antonio McDyess",
@@ -5681,7 +5949,8 @@
       "REB": 90,
       "ATH": 63,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/antonio-mcdyess.jpg"
     },
     {
       "name": "Chauncey Billups",
@@ -5702,7 +5971,8 @@
       "REB": 50,
       "ATH": 75,
       "STR": 75,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/chauncey-billups.jpg"
     },
     {
       "name": "Jamal Murray",
@@ -5723,7 +5993,8 @@
       "REB": 52,
       "ATH": 80,
       "STR": 54,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/jamal-murray.png"
     },
     {
       "name": "Marcus Camby",
@@ -5744,7 +6015,8 @@
       "REB": 95,
       "ATH": 60,
       "STR": 76,
-      "CLU": 93
+      "CLU": 93,
+      "photoLocal": "assets/images/Player/hupu-legends/marcus-camby.jpg"
     }
   ],
   "IND_HIST": [
@@ -5767,7 +6039,8 @@
       "REB": 75,
       "ATH": 79,
       "STR": 65,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-george.webp"
     },
     {
       "name": "Mel Daniels",
@@ -5788,7 +6061,8 @@
       "REB": 97,
       "ATH": 75,
       "STR": 93,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/mel-daniels.jpg"
     },
     {
       "name": "Jermaine O’Neal",
@@ -5809,7 +6083,8 @@
       "REB": 89,
       "ATH": 77,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jermaine-oneal.jpg"
     },
     {
       "name": "Freddie Lewis",
@@ -5830,7 +6105,8 @@
       "REB": 30,
       "ATH": 92,
       "STR": 50,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/freddie-lewis.jpg"
     },
     {
       "name": "George McGinnis",
@@ -5851,7 +6127,8 @@
       "REB": 96,
       "ATH": 59,
       "STR": 98,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/george-mcginnis.jpg"
     },
     {
       "name": "Danny Granger",
@@ -5872,7 +6149,8 @@
       "REB": 70,
       "ATH": 86,
       "STR": 65,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/danny-granger.jpg"
     },
     {
       "name": "Ron Artest",
@@ -5893,7 +6171,8 @@
       "REB": 56,
       "ATH": 83,
       "STR": 70,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/ron-artest.jpg"
     },
     {
       "name": "Bob Netolicky",
@@ -5914,7 +6193,8 @@
       "REB": 94,
       "ATH": 75,
       "STR": 85,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-netolicky.jpg"
     },
     {
       "name": "Tyrese Haliburton",
@@ -5935,7 +6215,8 @@
       "REB": 55,
       "ATH": 83,
       "STR": 59,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/tyrese-haliburton.webp"
     },
     {
       "name": "Rik Smits",
@@ -5956,7 +6237,8 @@
       "REB": 88,
       "ATH": 55,
       "STR": 84,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/rik-smits.png"
     },
     {
       "name": "Chuck Person",
@@ -5977,7 +6259,8 @@
       "REB": 82,
       "ATH": 74,
       "STR": 80,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/chuck-person.png"
     },
     {
       "name": "Don Buse",
@@ -5998,7 +6281,8 @@
       "REB": 45,
       "ATH": 84,
       "STR": 61,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/don-buse.jpg"
     },
     {
       "name": "Pascal Siakam",
@@ -6019,7 +6303,8 @@
       "REB": 69,
       "ATH": 76,
       "STR": 70,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/pascal-siakam.png"
     },
     {
       "name": "Roy Hibbert",
@@ -6040,7 +6325,8 @@
       "REB": 77,
       "ATH": 25,
       "STR": 93,
-      "CLU": 68
+      "CLU": 68,
+      "photoLocal": "assets/images/Player/hupu-legends/roy-hibbert.jpg"
     },
     {
       "name": "Domantas Sabonis",
@@ -6061,7 +6347,8 @@
       "REB": 90,
       "ATH": 48,
       "STR": 82,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/domantas-sabonis.png"
     },
     {
       "name": "Reggie Miller",
@@ -6082,7 +6369,8 @@
       "REB": 55,
       "ATH": 78,
       "STR": 58,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/reggie-miller.jpg"
     }
   ],
   "NOP_HIST": [
@@ -6105,7 +6393,8 @@
       "REB": 55,
       "ATH": 96,
       "STR": 68,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-paul.png"
     },
     {
       "name": "Anthony Davis",
@@ -6126,7 +6415,8 @@
       "REB": 89,
       "ATH": 79,
       "STR": 87,
-      "CLU": 96
+      "CLU": 96,
+      "photoLocal": "assets/images/Player/hupu-legends/anthony-davis.png"
     },
     {
       "name": "Baron Davis",
@@ -6147,7 +6437,8 @@
       "REB": 62,
       "ATH": 85,
       "STR": 66,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/baron-davis.jpg"
     },
     {
       "name": "Jamal Mashburn",
@@ -6168,7 +6459,8 @@
       "REB": 64,
       "ATH": 78,
       "STR": 82,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jamal-mashburn.jpg"
     },
     {
       "name": "Zion Williamson",
@@ -6189,7 +6481,8 @@
       "REB": 78,
       "ATH": 86,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/zion-williamson.png"
     },
     {
       "name": "David West",
@@ -6210,7 +6503,8 @@
       "REB": 86,
       "ATH": 52,
       "STR": 96,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/david-west.png"
     },
     {
       "name": "Jrue Holiday",
@@ -6231,7 +6525,8 @@
       "REB": 52,
       "ATH": 79,
       "STR": 49,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/jrue-holiday.webp"
     },
     {
       "name": "DeMarcus Cousins",
@@ -6252,7 +6547,8 @@
       "REB": 91,
       "ATH": 58,
       "STR": 97,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/demarcus-cousins.png"
     },
     {
       "name": "Brandon Ingram",
@@ -6273,7 +6569,8 @@
       "REB": 68,
       "ATH": 71,
       "STR": 42,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/brandon-ingram.webp"
     },
     {
       "name": "David Wesley",
@@ -6294,7 +6591,8 @@
       "REB": 59,
       "ATH": 83,
       "STR": 42,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/david-wesley.png"
     },
     {
       "name": "Tyson Chandler",
@@ -6315,7 +6613,8 @@
       "REB": 95,
       "ATH": 63,
       "STR": 80,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/tyson-chandler.png"
     },
     {
       "name": "Julius Randle",
@@ -6336,7 +6635,8 @@
       "REB": 80,
       "ATH": 66,
       "STR": 87,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/julius-randle.png"
     },
     {
       "name": "Peja Stojakovic",
@@ -6357,7 +6657,8 @@
       "REB": 62,
       "ATH": 65,
       "STR": 54,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/peja-stojakovic.jpg"
     },
     {
       "name": "Lonzo Ball",
@@ -6378,7 +6679,8 @@
       "REB": 62,
       "ATH": 85,
       "STR": 52,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/lonzo-ball.png"
     },
     {
       "name": "Eric Gordon",
@@ -6399,7 +6701,8 @@
       "REB": 42,
       "ATH": 80,
       "STR": 65,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/eric-gordon.png"
     }
   ],
   "DET_HIST": [
@@ -6422,7 +6725,8 @@
       "REB": 45,
       "ATH": 94,
       "STR": 65,
-      "CLU": 96
+      "CLU": 96,
+      "photoLocal": "assets/images/Player/hupu-legends/isiah-thomas.jpg"
     },
     {
       "name": "Joe Dumars",
@@ -6443,7 +6747,8 @@
       "REB": 66,
       "ATH": 84,
       "STR": 67,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/joe-dumars.jpg"
     },
     {
       "name": "Grant Hill",
@@ -6464,7 +6769,8 @@
       "REB": 74,
       "ATH": 94,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/grant-hill.jpg"
     },
     {
       "name": "Bob Lanier",
@@ -6485,7 +6791,8 @@
       "REB": 97,
       "ATH": 76,
       "STR": 94,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/bob-lanier.jpg"
     },
     {
       "name": "Chauncey Billups",
@@ -6506,7 +6813,8 @@
       "REB": 50,
       "ATH": 88,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/chauncey-billups.jpg"
     },
     {
       "name": "Dave Bing",
@@ -6527,7 +6835,8 @@
       "REB": 40,
       "ATH": 91,
       "STR": 58,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/dave-bing.jpg"
     },
     {
       "name": "Ben Wallace",
@@ -6548,7 +6857,8 @@
       "REB": 86,
       "ATH": 65,
       "STR": 92,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/ben-wallace.jpg"
     },
     {
       "name": "Jerry Stackhouse",
@@ -6569,7 +6879,8 @@
       "REB": 41,
       "ATH": 84,
       "STR": 74,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/jerry-stackhouse.jpg"
     },
     {
       "name": "Richard Hamilton",
@@ -6590,7 +6901,8 @@
       "REB": 45,
       "ATH": 76,
       "STR": 50,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/richard-hamilton.jpg"
     },
     {
       "name": "Dave Debusschere",
@@ -6611,7 +6923,8 @@
       "REB": 97,
       "ATH": 69,
       "STR": 92,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/dave-debusschere.jpg"
     },
     {
       "name": "Dennis Rodman",
@@ -6632,7 +6945,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 86,
-      "CLU": 99
+      "CLU": 99,
+      "photoLocal": "assets/images/Player/hupu-legends/dennis-rodman.jpg"
     },
     {
       "name": "Bailey Howell",
@@ -6653,7 +6967,8 @@
       "REB": 93,
       "ATH": 69,
       "STR": 82,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/bailey-howell.jpg"
     },
     {
       "name": "Bill Laimbeer",
@@ -6674,7 +6989,8 @@
       "REB": 87,
       "ATH": 35,
       "STR": 88,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/bill-laimbeer.jpg"
     },
     {
       "name": "Kelly Tripucka",
@@ -6695,7 +7011,8 @@
       "REB": 58,
       "ATH": 79,
       "STR": 73,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kelly-tripucka.jpg"
     },
     {
       "name": "Andre Drummond",
@@ -6716,7 +7033,8 @@
       "REB": 98,
       "ATH": 54,
       "STR": 95,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/andre-drummond.png"
     },
     {
       "name": "Rasheed Wallace",
@@ -6737,7 +7055,8 @@
       "REB": 86,
       "ATH": 78,
       "STR": 88,
-      "CLU": 72
+      "CLU": 72,
+      "photoLocal": "assets/images/Player/hupu-legends/rasheed-wallace.jpg"
     }
   ],
   "TOR_HIST": [
@@ -6760,7 +7079,8 @@
       "REB": 72,
       "ATH": 81,
       "STR": 75,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kawhi-leonard.png"
     },
     {
       "name": "Vince Carter",
@@ -6781,7 +7101,8 @@
       "REB": 65,
       "ATH": 90,
       "STR": 65,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/vince-carter.png"
     },
     {
       "name": "Chris Bosh",
@@ -6802,7 +7123,8 @@
       "REB": 94,
       "ATH": 72,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-bosh.png"
     },
     {
       "name": "Kyle Lowry",
@@ -6823,7 +7145,8 @@
       "REB": 55,
       "ATH": 83,
       "STR": 70,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/kyle-lowry.png"
     },
     {
       "name": "DeMar DeRozan",
@@ -6844,7 +7167,8 @@
       "REB": 60,
       "ATH": 81,
       "STR": 48,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/demar-derozan.png"
     },
     {
       "name": "Pascal Siakam",
@@ -6865,7 +7189,8 @@
       "REB": 69,
       "ATH": 70,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/pascal-siakam.png"
     },
     {
       "name": "Damon Stoudamire",
@@ -6886,7 +7211,8 @@
       "REB": 46,
       "ATH": 94,
       "STR": 51,
-      "CLU": 71
+      "CLU": 71,
+      "photoLocal": "assets/images/Player/hupu-legends/damon-stoudamire.png"
     },
     {
       "name": "Scottie Barnes",
@@ -6907,7 +7233,8 @@
       "REB": 71,
       "ATH": 82,
       "STR": 74,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/scottie-barnes.webp"
     },
     {
       "name": "Antonio Davis",
@@ -6928,7 +7255,8 @@
       "REB": 87,
       "ATH": 55,
       "STR": 80,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/antonio-davis.png"
     },
     {
       "name": "Tracy McGrady",
@@ -6949,7 +7277,8 @@
       "REB": 62,
       "ATH": 93,
       "STR": 68,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/tracy-mcgrady.jpg"
     },
     {
       "name": "Morris Peterson",
@@ -6970,7 +7299,8 @@
       "REB": 56,
       "ATH": 78,
       "STR": 68,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/morris-peterson.jpg"
     },
     {
       "name": "Doug Christie",
@@ -6991,7 +7321,8 @@
       "REB": 53,
       "ATH": 76,
       "STR": 50,
-      "CLU": 86
+      "CLU": 86,
+      "photoLocal": "assets/images/Player/hupu-legends/doug-christie.png"
     },
     {
       "name": "Andrea Bargnani",
@@ -7012,7 +7343,8 @@
       "REB": 77,
       "ATH": 66,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/andrea-bargnani.jpg"
     },
     {
       "name": "Fred VanVleet",
@@ -7033,7 +7365,8 @@
       "REB": 53,
       "ATH": 83,
       "STR": 42,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/fred-vanvleet.png"
     },
     {
       "name": "Jonas Valanciunas",
@@ -7054,7 +7387,8 @@
       "REB": 91,
       "ATH": 61,
       "STR": 84,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/jonas-valanciunas.webp"
     }
   ],
   "HOU_HIST": [
@@ -7077,7 +7411,8 @@
       "REB": 98,
       "ATH": 65,
       "STR": 92,
-      "CLU": 79
+      "CLU": 79,
+      "photoLocal": "assets/images/Player/hupu-legends/hakeem-olajuwon.jpg"
     },
     {
       "name": "Moses Malone",
@@ -7098,7 +7433,8 @@
       "REB": 98,
       "ATH": 78,
       "STR": 97,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/moses-malone.jpg"
     },
     {
       "name": "James Harden",
@@ -7119,7 +7455,8 @@
       "REB": 69,
       "ATH": 89,
       "STR": 74,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/james-harden.png"
     },
     {
       "name": "Clyde Drexler",
@@ -7140,7 +7477,8 @@
       "REB": 70,
       "ATH": 78,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/clyde-drexler.jpg"
     },
     {
       "name": "Tracy McGrady",
@@ -7161,7 +7499,8 @@
       "REB": 60,
       "ATH": 85,
       "STR": 79,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/tracy-mcgrady.jpg"
     },
     {
       "name": "Yao Ming",
@@ -7182,7 +7521,8 @@
       "REB": 97,
       "ATH": 25,
       "STR": 90,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/yao-ming.png"
     },
     {
       "name": "Calvin Murphy",
@@ -7203,7 +7543,8 @@
       "REB": 44,
       "ATH": 96,
       "STR": 50,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/calvin-murphy.jpg"
     },
     {
       "name": "Chris Paul",
@@ -7224,7 +7565,8 @@
       "REB": 67,
       "ATH": 84,
       "STR": 62,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-paul.png"
     },
     {
       "name": "Ralph Sampson",
@@ -7245,7 +7587,8 @@
       "REB": 86,
       "ATH": 44,
       "STR": 85,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/ralph-sampson.jpg"
     },
     {
       "name": "Elvin Hayes",
@@ -7266,7 +7609,8 @@
       "REB": 93,
       "ATH": 75,
       "STR": 85,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/elvin-hayes.jpg"
     },
     {
       "name": "Rudy Tomjanovich",
@@ -7287,7 +7631,8 @@
       "REB": 84,
       "ATH": 73,
       "STR": 70,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/rudy-tomjanovich.jpg"
     },
     {
       "name": "Steve Francis",
@@ -7308,7 +7653,8 @@
       "REB": 59,
       "ATH": 88,
       "STR": 54,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/steve-francis.jpg"
     },
     {
       "name": "Kenny Smith",
@@ -7329,7 +7675,8 @@
       "REB": 38,
       "ATH": 88,
       "STR": 50,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kenny-smith.png"
     },
     {
       "name": "Otis Thorpe",
@@ -7350,7 +7697,8 @@
       "REB": 88,
       "ATH": 63,
       "STR": 84,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/otis-thorpe.png"
     },
     {
       "name": "Vernon Maxwell",
@@ -7371,7 +7719,8 @@
       "REB": 57,
       "ATH": 81,
       "STR": 69,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/vernon-maxwell.png"
     }
   ],
   "SAS_HIST": [
@@ -7394,7 +7743,8 @@
       "REB": 96,
       "ATH": 66,
       "STR": 96,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/tim-duncan.png"
     },
     {
       "name": "David Robinson",
@@ -7415,7 +7765,8 @@
       "REB": 87,
       "ATH": 70,
       "STR": 95,
-      "CLU": 66
+      "CLU": 66,
+      "photoLocal": "assets/images/Player/hupu-legends/david-robinson.jpg"
     },
     {
       "name": "Tony Parker",
@@ -7436,7 +7787,8 @@
       "REB": 47,
       "ATH": 98,
       "STR": 50,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/tony-parker.png"
     },
     {
       "name": "Kawhi Leonard",
@@ -7457,7 +7809,8 @@
       "REB": 65,
       "ATH": 84,
       "STR": 75,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kawhi-leonard.png"
     },
     {
       "name": "George Gervin",
@@ -7478,7 +7831,8 @@
       "REB": 87,
       "ATH": 93,
       "STR": 70,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/george-gervin.jpg"
     },
     {
       "name": "Manu Ginobili",
@@ -7499,7 +7853,8 @@
       "REB": 62,
       "ATH": 84,
       "STR": 43,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/manu-ginobili.png"
     },
     {
       "name": "Louie Dampier",
@@ -7520,7 +7875,8 @@
       "REB": 55,
       "ATH": 88,
       "STR": 40,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/louie-dampier.jpg"
     },
     {
       "name": "Larry Kenon",
@@ -7541,7 +7897,8 @@
       "REB": 83,
       "ATH": 80,
       "STR": 60,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/larry-kenon.jpg"
     },
     {
       "name": "Sean Elliott",
@@ -7562,7 +7919,8 @@
       "REB": 53,
       "ATH": 74,
       "STR": 64,
-      "CLU": 72
+      "CLU": 72,
+      "photoLocal": "assets/images/Player/hupu-legends/sean-elliott.jpg"
     },
     {
       "name": "James Silas",
@@ -7583,7 +7941,8 @@
       "REB": 61,
       "ATH": 84,
       "STR": 44,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/james-silas.jpg"
     },
     {
       "name": "LaMarcus Aldridge",
@@ -7604,7 +7963,8 @@
       "REB": 82,
       "ATH": 43,
       "STR": 87,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/lamarcus-aldridge.png"
     },
     {
       "name": "Bruce Bowen",
@@ -7625,7 +7985,8 @@
       "REB": 47,
       "ATH": 78,
       "STR": 75,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/bruce-bowen.png"
     },
     {
       "name": "Victor Wembanyama",
@@ -7646,7 +8007,8 @@
       "REB": 92,
       "ATH": 66,
       "STR": 57,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/victor-wembanyama.png"
     },
     {
       "name": "Artis Gilmore",
@@ -7667,7 +8029,8 @@
       "REB": 83,
       "ATH": 61,
       "STR": 91,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/artis-gilmore.jpg"
     },
     {
       "name": "Johnny Moore",
@@ -7688,7 +8051,8 @@
       "REB": 55,
       "ATH": 85,
       "STR": 34,
-      "CLU": 73
+      "CLU": 73,
+      "photoLocal": "assets/images/Player/hupu-legends/johnny-moore.jpg"
     }
   ],
   "PHX_HIST": [
@@ -7711,7 +8075,8 @@
       "REB": 61,
       "ATH": 93,
       "STR": 50,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/steve-nash.jpg"
     },
     {
       "name": "Dennis Johnson",
@@ -7732,7 +8097,8 @@
       "REB": 50,
       "ATH": 88,
       "STR": 67,
-      "CLU": 87
+      "CLU": 87,
+      "photoLocal": "assets/images/Player/hupu-legends/dennis-johnson.jpg"
     },
     {
       "name": "Devin Booker",
@@ -7753,7 +8119,8 @@
       "REB": 55,
       "ATH": 79,
       "STR": 59,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/devin-booker.png"
     },
     {
       "name": "Amar’e Stoudemire",
@@ -7774,7 +8141,8 @@
       "REB": 89,
       "ATH": 78,
       "STR": 82,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/amare-stoudemire.png"
     },
     {
       "name": "Shawn Marion",
@@ -7795,7 +8163,8 @@
       "REB": 90,
       "ATH": 75,
       "STR": 70,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/shawn-marion.png"
     },
     {
       "name": "Walter Davis",
@@ -7816,7 +8185,8 @@
       "REB": 57,
       "ATH": 83,
       "STR": 54,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/walter-davis.jpg"
     },
     {
       "name": "Jason Kidd",
@@ -7837,7 +8207,8 @@
       "REB": 62,
       "ATH": 94,
       "STR": 58,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-kidd.jpg"
     },
     {
       "name": "Charlie Scott",
@@ -7858,7 +8229,8 @@
       "REB": 64,
       "ATH": 88,
       "STR": 69,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/charlie-scott.jpg"
     },
     {
       "name": "Tom Chambers",
@@ -7879,7 +8251,8 @@
       "REB": 90,
       "ATH": 68,
       "STR": 84,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/tom-chambers.jpg"
     },
     {
       "name": "Kevin Johnson",
@@ -7900,7 +8273,8 @@
       "REB": 44,
       "ATH": 91,
       "STR": 48,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-johnson.jpg"
     },
     {
       "name": "Dick Van Arsdale",
@@ -7921,7 +8295,8 @@
       "REB": 66,
       "ATH": 73,
       "STR": 55,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/dick-van-arsdale.jpg"
     },
     {
       "name": "Paul Westphal",
@@ -7942,7 +8317,8 @@
       "REB": 58,
       "ATH": 75,
       "STR": 50,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-westphal.jpg"
     },
     {
       "name": "Dan Majerle",
@@ -7963,7 +8339,8 @@
       "REB": 58,
       "ATH": 75,
       "STR": 79,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/dan-majerle.jpg"
     },
     {
       "name": "Larry Nance",
@@ -7984,7 +8361,8 @@
       "REB": 74,
       "ATH": 68,
       "STR": 70,
-      "CLU": 77
+      "CLU": 77,
+      "photoLocal": "assets/images/Player/hupu-legends/larry-nance.jpg"
     },
     {
       "name": "Alvan Adams",
@@ -8005,7 +8383,8 @@
       "REB": 89,
       "ATH": 63,
       "STR": 88,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/alvan-adams.jpg"
     },
     {
       "name": "Charles Barkley",
@@ -8026,7 +8405,8 @@
       "REB": 97,
       "ATH": 90,
       "STR": 92,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/charles-barkley.jpg"
     }
   ],
   "OKC_HIST": [
@@ -8049,7 +8429,8 @@
       "REB": 84,
       "ATH": 86,
       "STR": 55,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-durant.png"
     },
     {
       "name": "Shai Gilgeous-Alexander",
@@ -8070,7 +8451,8 @@
       "REB": 68,
       "ATH": 86,
       "STR": 60,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/shai-gilgeous-alexander.webp"
     },
     {
       "name": "Gary Payton",
@@ -8091,7 +8473,8 @@
       "REB": 46,
       "ATH": 93,
       "STR": 65,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/gary-payton.jpg"
     },
     {
       "name": "Russell Westbrook",
@@ -8112,7 +8495,8 @@
       "REB": 90,
       "ATH": 98,
       "STR": 77,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/russell-westbrook.png"
     },
     {
       "name": "Ray Allen",
@@ -8133,7 +8517,8 @@
       "REB": 59,
       "ATH": 90,
       "STR": 62,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/ray-allen.jpg"
     },
     {
       "name": "Dennis Johnson",
@@ -8154,7 +8539,8 @@
       "REB": 50,
       "ATH": 88,
       "STR": 67,
-      "CLU": 87
+      "CLU": 87,
+      "photoLocal": "assets/images/Player/hupu-legends/dennis-johnson.jpg"
     },
     {
       "name": "Shawn Kemp",
@@ -8175,7 +8561,8 @@
       "REB": 88,
       "ATH": 80,
       "STR": 85,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/shawn-kemp.png"
     },
     {
       "name": "Rashard Lewis",
@@ -8196,7 +8583,8 @@
       "REB": 63,
       "ATH": 81,
       "STR": 70,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/rashard-lewis.jpg"
     },
     {
       "name": "Spencer Haywood",
@@ -8217,7 +8605,8 @@
       "REB": 95,
       "ATH": 75,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/spencer-haywood.jpg"
     },
     {
       "name": "Jack Sikma",
@@ -8238,7 +8627,8 @@
       "REB": 93,
       "ATH": 53,
       "STR": 92,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/jack-sikma.jpg"
     },
     {
       "name": "Jalen Williams",
@@ -8259,7 +8649,8 @@
       "REB": 62,
       "ATH": 87,
       "STR": 50,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jalen-williams.webp"
     },
     {
       "name": "Fred Brown",
@@ -8280,7 +8671,8 @@
       "REB": 49,
       "ATH": 85,
       "STR": 37,
-      "CLU": 87
+      "CLU": 87,
+      "photoLocal": "assets/images/Player/hupu-legends/fred-brown.jpg"
     },
     {
       "name": "Dale Ellis",
@@ -8301,7 +8693,8 @@
       "REB": 60,
       "ATH": 78,
       "STR": 65,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/dale-ellis.jpg"
     },
     {
       "name": "Xavier McDaniel",
@@ -8322,7 +8715,8 @@
       "REB": 82,
       "ATH": 80,
       "STR": 75,
-      "CLU": 82
+      "CLU": 82,
+      "photoLocal": "assets/images/Player/hupu-legends/xavier-mcdaniel.png"
     },
     {
       "name": "Detlef Schrempf",
@@ -8343,7 +8737,8 @@
       "REB": 58,
       "ATH": 59,
       "STR": 66,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/detlef-schrempf.png"
     }
   ],
   "MIN_HIST": [
@@ -8366,7 +8761,8 @@
       "REB": 95,
       "ATH": 87,
       "STR": 89,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-garnett.png"
     },
     {
       "name": "Anthony Edwards",
@@ -8387,7 +8783,8 @@
       "REB": 63,
       "ATH": 91,
       "STR": 62,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/anthony-edwards.png"
     },
     {
       "name": "Kevin Love",
@@ -8408,7 +8805,8 @@
       "REB": 96,
       "ATH": 65,
       "STR": 92,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-love.webp"
     },
     {
       "name": "Karl-Anthony Towns",
@@ -8429,7 +8827,8 @@
       "REB": 91,
       "ATH": 76,
       "STR": 80,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/karl-anthony-towns.webp"
     },
     {
       "name": "Tom Gugliotta",
@@ -8450,7 +8849,8 @@
       "REB": 82,
       "ATH": 70,
       "STR": 80,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/tom-gugliotta.png"
     },
     {
       "name": "Sam Cassell",
@@ -8471,7 +8871,8 @@
       "REB": 46,
       "ATH": 86,
       "STR": 34,
-      "CLU": 72
+      "CLU": 72,
+      "photoLocal": "assets/images/Player/hupu-legends/sam-cassell.jpg"
     },
     {
       "name": "Jimmy Butler",
@@ -8492,7 +8893,8 @@
       "REB": 51,
       "ATH": 84,
       "STR": 65,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/jimmy-butler.png"
     },
     {
       "name": "Stephon Marbury",
@@ -8513,7 +8915,8 @@
       "REB": 47,
       "ATH": 94,
       "STR": 64,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/stephon-marbury.png"
     },
     {
       "name": "Terrell Brandon",
@@ -8534,7 +8937,8 @@
       "REB": 54,
       "ATH": 90,
       "STR": 58,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/terrell-brandon.png"
     },
     {
       "name": "Doug West",
@@ -8555,7 +8959,8 @@
       "REB": 48,
       "ATH": 80,
       "STR": 71,
-      "CLU": 65
+      "CLU": 65,
+      "photoLocal": "assets/images/Player/hupu-legends/doug-west.png"
     },
     {
       "name": "Wally Szczerbiak",
@@ -8576,7 +8981,8 @@
       "REB": 52,
       "ATH": 76,
       "STR": 27,
-      "CLU": 74
+      "CLU": 74,
+      "photoLocal": "assets/images/Player/hupu-legends/wally-szczerbiak.jpg"
     },
     {
       "name": "Christian Laettner",
@@ -8597,7 +9003,8 @@
       "REB": 84,
       "ATH": 50,
       "STR": 74,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/christian-laettner.png"
     },
     {
       "name": "Isaiah Rider",
@@ -8618,7 +9025,8 @@
       "REB": 51,
       "ATH": 84,
       "STR": 55,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/isaiah-rider.jpg"
     },
     {
       "name": "Andrew Wiggins",
@@ -8639,7 +9047,8 @@
       "REB": 47,
       "ATH": 81,
       "STR": 48,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/andrew-wiggins.webp"
     },
     {
       "name": "Latrell Sprewell",
@@ -8660,7 +9069,8 @@
       "REB": 47,
       "ATH": 64,
       "STR": 48,
-      "CLU": 75
+      "CLU": 75,
+      "photoLocal": "assets/images/Player/hupu-legends/latrell-sprewell.png"
     }
   ],
   "POR_HIST": [
@@ -8683,7 +9093,8 @@
       "REB": 75,
       "ATH": 90,
       "STR": 75,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/clyde-drexler.jpg"
     },
     {
       "name": "Bill Walton",
@@ -8704,7 +9115,8 @@
       "REB": 98,
       "ATH": 63,
       "STR": 93,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/bill-walton.jpg"
     },
     {
       "name": "Damian Lillard",
@@ -8725,7 +9137,8 @@
       "REB": 53,
       "ATH": 88,
       "STR": 63,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/damian-lillard.webp"
     },
     {
       "name": "Brandon Roy",
@@ -8746,7 +9159,8 @@
       "REB": 57,
       "ATH": 88,
       "STR": 68,
-      "CLU": 80
+      "CLU": 80,
+      "photoLocal": "assets/images/Player/hupu-legends/brandon-roy.jpg"
     },
     {
       "name": "Maurice Lucas",
@@ -8767,7 +9181,8 @@
       "REB": 90,
       "ATH": 73,
       "STR": 90,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/maurice-lucas.jpg"
     },
     {
       "name": "LaMarcus Aldridge",
@@ -8788,7 +9203,8 @@
       "REB": 92,
       "ATH": 43,
       "STR": 82,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/lamarcus-aldridge.png"
     },
     {
       "name": "Arvydas Sabonis",
@@ -8809,7 +9225,8 @@
       "REB": 89,
       "ATH": 50,
       "STR": 88,
-      "CLU": 72
+      "CLU": 72,
+      "photoLocal": "assets/images/Player/hupu-legends/arvydas-sabonis.png"
     },
     {
       "name": "Geoff Petrie",
@@ -8830,7 +9247,8 @@
       "REB": 56,
       "ATH": 84,
       "STR": 70,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/geoff-petrie.jpg"
     },
     {
       "name": "Jerome Kersey",
@@ -8851,7 +9269,8 @@
       "REB": 80,
       "ATH": 75,
       "STR": 76,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/jerome-kersey.png"
     },
     {
       "name": "Terry Porter",
@@ -8872,7 +9291,8 @@
       "REB": 48,
       "ATH": 81,
       "STR": 55,
-      "CLU": 91
+      "CLU": 91,
+      "photoLocal": "assets/images/Player/hupu-legends/terry-porter.jpg"
     },
     {
       "name": "Sidney Wicks",
@@ -8893,7 +9313,8 @@
       "REB": 85,
       "ATH": 72,
       "STR": 82,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/sidney-wicks.jpg"
     },
     {
       "name": "Kiki Vandeweghe",
@@ -8914,7 +9335,8 @@
       "REB": 50,
       "ATH": 71,
       "STR": 80,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/kiki-vandeweghe.jpg"
     },
     {
       "name": "C.J. McCollum",
@@ -8935,7 +9357,8 @@
       "REB": 59,
       "ATH": 82,
       "STR": 60,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/c-j-mccollum.png"
     },
     {
       "name": "Jim Paxson",
@@ -8956,7 +9379,8 @@
       "REB": 59,
       "ATH": 84,
       "STR": 65,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/jim-paxson.jpg"
     },
     {
       "name": "Kevin Duckworth",
@@ -8977,7 +9401,8 @@
       "REB": 86,
       "ATH": 25,
       "STR": 93,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-duckworth.png"
     },
     {
       "name": "Rasheed Wallace",
@@ -8998,7 +9423,8 @@
       "REB": 86,
       "ATH": 78,
       "STR": 88,
-      "CLU": 72
+      "CLU": 72,
+      "photoLocal": "assets/images/Player/hupu-legends/rasheed-wallace.jpg"
     }
   ],
   "GSW_HIST": [
@@ -9021,7 +9447,8 @@
       "REB": 99,
       "ATH": 88,
       "STR": 95,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/wilt-chamberlain.jpg"
     },
     {
       "name": "Stephen Curry",
@@ -9042,7 +9469,8 @@
       "REB": 53,
       "ATH": 93,
       "STR": 48,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/stephen-curry.png"
     },
     {
       "name": "Kevin Durant",
@@ -9063,7 +9491,8 @@
       "REB": 79,
       "ATH": 80,
       "STR": 63,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/kevin-durant.png"
     },
     {
       "name": "Rick Barry",
@@ -9084,7 +9513,8 @@
       "REB": 85,
       "ATH": 86,
       "STR": 79,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/rick-barry.jpg"
     },
     {
       "name": "Chris Mullin",
@@ -9105,7 +9535,8 @@
       "REB": 59,
       "ATH": 78,
       "STR": 79,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/chris-mullin.jpg"
     },
     {
       "name": "Nate Thurmond",
@@ -9126,7 +9557,8 @@
       "REB": 98,
       "ATH": 75,
       "STR": 95,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/nate-thurmond.jpg"
     },
     {
       "name": "Klay Thompson",
@@ -9147,7 +9579,8 @@
       "REB": 47,
       "ATH": 68,
       "STR": 55,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/klay-thompson.png"
     },
     {
       "name": "Baron Davis",
@@ -9168,7 +9601,8 @@
       "REB": 62,
       "ATH": 85,
       "STR": 66,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/baron-davis.jpg"
     },
     {
       "name": "Paul Arizin",
@@ -9189,7 +9623,8 @@
       "REB": 88,
       "ATH": 87,
       "STR": 66,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/paul-arizin.jpg"
     },
     {
       "name": "Tim Hardaway",
@@ -9210,7 +9645,8 @@
       "REB": 46,
       "ATH": 96,
       "STR": 70,
-      "CLU": 94
+      "CLU": 94,
+      "photoLocal": "assets/images/Player/hupu-legends/tim-hardaway.png"
     },
     {
       "name": "Draymond Green",
@@ -9231,7 +9667,8 @@
       "REB": 85,
       "ATH": 76,
       "STR": 90,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/draymond-green.png"
     },
     {
       "name": "Mitch Richmond",
@@ -9252,7 +9689,8 @@
       "REB": 62,
       "ATH": 84,
       "STR": 79,
-      "CLU": 97
+      "CLU": 97,
+      "photoLocal": "assets/images/Player/hupu-legends/mitch-richmond.jpg"
     },
     {
       "name": "Sleepy Floyd",
@@ -9273,7 +9711,8 @@
       "REB": 32,
       "ATH": 91,
       "STR": 45,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/sleepy-floyd.jpg"
     },
     {
       "name": "Jason Richardson",
@@ -9294,7 +9733,8 @@
       "REB": 71,
       "ATH": 93,
       "STR": 64,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/jason-richardson.jpg"
     },
     {
       "name": "Purvis Short",
@@ -9315,7 +9755,8 @@
       "REB": 55,
       "ATH": 80,
       "STR": 65,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/purvis-short.jpg"
     },
     {
       "name": "Andre Iguodala",
@@ -9336,7 +9777,8 @@
       "REB": 72,
       "ATH": 90,
       "STR": 78,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/andre-iguodala.webp"
     }
   ],
   "WAS_HIST": [
@@ -9359,7 +9801,8 @@
       "REB": 98,
       "ATH": 75,
       "STR": 95,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/elvin-hayes.jpg"
     },
     {
       "name": "Wes Unseld",
@@ -9380,7 +9823,8 @@
       "REB": 97,
       "ATH": 79,
       "STR": 98,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/wes-unseld.jpg"
     },
     {
       "name": "Gilbert Arenas",
@@ -9401,7 +9845,8 @@
       "REB": 62,
       "ATH": 94,
       "STR": 78,
-      "CLU": 96
+      "CLU": 96,
+      "photoLocal": "assets/images/Player/hupu-legends/gilbert-arenas.jpg"
     },
     {
       "name": "Moses Malone",
@@ -9422,7 +9867,8 @@
       "REB": 85,
       "ATH": 43,
       "STR": 92,
-      "CLU": 66
+      "CLU": 66,
+      "photoLocal": "assets/images/Player/hupu-legends/moses-malone.jpg"
     },
     {
       "name": "John Wall",
@@ -9443,7 +9889,8 @@
       "REB": 51,
       "ATH": 96,
       "STR": 60,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/john-wall.png"
     },
     {
       "name": "Earl Monroe",
@@ -9464,7 +9911,8 @@
       "REB": 38,
       "ATH": 81,
       "STR": 68,
-      "CLU": 92
+      "CLU": 92,
+      "photoLocal": "assets/images/Player/hupu-legends/earl-monroe.jpg"
     },
     {
       "name": "Bradley Beal",
@@ -9485,7 +9933,8 @@
       "REB": 51,
       "ATH": 76,
       "STR": 62,
-      "CLU": 78
+      "CLU": 78,
+      "photoLocal": "assets/images/Player/hupu-legends/bradley-beal.png"
     },
     {
       "name": "Phil Chenier",
@@ -9506,7 +9955,8 @@
       "REB": 55,
       "ATH": 80,
       "STR": 50,
-      "CLU": 70
+      "CLU": 70,
+      "photoLocal": "assets/images/Player/hupu-legends/phil-chenier.jpg"
     },
     {
       "name": "Caron Butler",
@@ -9527,7 +9977,8 @@
       "REB": 51,
       "ATH": 78,
       "STR": 74,
-      "CLU": 79
+      "CLU": 79,
+      "photoLocal": "assets/images/Player/hupu-legends/caron-butler.png"
     },
     {
       "name": "Antawn Jamison",
@@ -9548,7 +9999,8 @@
       "REB": 82,
       "ATH": 73,
       "STR": 82,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/antawn-jamison.jpg"
     },
     {
       "name": "Bernard King",
@@ -9569,7 +10021,8 @@
       "REB": 62,
       "ATH": 78,
       "STR": 61,
-      "CLU": 98
+      "CLU": 98,
+      "photoLocal": "assets/images/Player/hupu-legends/bernard-king.jpg"
     },
     {
       "name": "Don Ohl",
@@ -9590,7 +10043,8 @@
       "REB": 52,
       "ATH": 84,
       "STR": 49,
-      "CLU": 95
+      "CLU": 95,
+      "photoLocal": "assets/images/Player/hupu-legends/don-ohl.jpg"
     },
     {
       "name": "Jeff Ruland",
@@ -9611,7 +10065,8 @@
       "REB": 88,
       "ATH": 48,
       "STR": 88,
-      "CLU": 90
+      "CLU": 90,
+      "photoLocal": "assets/images/Player/hupu-legends/jeff-ruland.jpg"
     },
     {
       "name": "Jeff Malone",
@@ -9632,7 +10087,8 @@
       "REB": 60,
       "ATH": 81,
       "STR": 48,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/jeff-malone.png"
     },
     {
       "name": "Jack Marin",
@@ -9653,7 +10109,8 @@
       "REB": 79,
       "ATH": 83,
       "STR": 78,
-      "CLU": 85
+      "CLU": 85,
+      "photoLocal": "assets/images/Player/hupu-legends/jack-marin.jpg"
     }
   ]
 }

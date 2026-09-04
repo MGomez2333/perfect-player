@@ -239,7 +239,7 @@
 
   function loadLegendPeaks() {
     if (!legendPeaksPromise) {
-      legendPeaksPromise = fetch('assets/data/hupu-legend-alltime.json?v=20260904-hupu457', { cache:'no-store' })
+      legendPeaksPromise = fetch('assets/data/hupu-legend-alltime.json?v=20260904-hupu-headshots-v2', { cache:'no-store' })
         .then(function(response) {
           if (!response.ok) throw new Error('虎扑传奇能力库加载失败：' + response.status);
           return response.json();
@@ -652,6 +652,7 @@
       CLU: clamp(player.CLU, 0, 99),
       _sourceKind: 'hupu-alltime', _sourceLabel: '虎扑队史传奇库',
       _legendPeak: true, _legendPeakLabel: '虎扑球队专属版本',
+      _photoLocal: player.photoLocal || '',
       _poolUid: 'hupu:' + team + ':' + player.name
     };
   }
