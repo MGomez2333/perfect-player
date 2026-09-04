@@ -117,6 +117,25 @@ async function main() {
       return STATE.season.schedule.length;
     });
     assert.equal(lockoutSchedule, 50, '1998-99 缩水赛季应生成 50 场赛程');
+    const pandemicSchedules = await page.evaluate(async () => {
+      await window.loadLegendLeagueSeason(2020);
+      const counts = window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM;
+      return { warriors: counts.GSW, mavericks: counts.DAL, hawks: counts.ATL };
+    });
+    assert.deepEqual(pandemicSchedules, { warriors: 65, mavericks: 75, hawks: 67 }, '2019-20 应采用逐队真实场次');
+    const expansionHistory = await page.evaluate(async () => {
+      await window.loadLegendLeagueSeason(1988);
+      STATE.careerTeam = 'NYK';
+      STATE._leagueChanges = { retired: [], rookies: [], teamChanges: {}, trades: [] };
+      await window.prepareLegendNextSeason(1989);
+      const teams1989 = NBA2K_TEAMS.slice();
+      const conf1989 = Object.assign({}, window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM);
+      await window.prepareLegendNextSeason(1990);
+      return { teams1989, conf1989, teams1990: NBA2K_TEAMS.slice() };
+    });
+    assert.ok(expansionHistory.teams1989.includes('MIA') && expansionHistory.teams1989.includes('CHA'), '1988-89 应加入热火与黄蜂');
+    assert.equal(expansionHistory.conf1989.MIA, 'WEST', '热火首季应按当年联盟分区进入西部');
+    assert.ok(expansionHistory.teams1990.includes('ORL') && expansionHistory.teams1990.includes('MIN'), '1989-90 应加入魔术与森林狼');
     const historicalDraft = await page.evaluate(async () => {
       await window.loadLegendLeagueSeason(1997);
       STATE.mode = 'legend';
@@ -140,6 +159,32 @@ async function main() {
     assert.equal(historicalDraft.duncanElsewhere, false, '1997 邓肯不应被模拟战绩分配给其他球队');
     assert.equal(historicalDraft.billupsCeltics, true, '1997 比卢普斯必须加入凯尔特人');
     assert.equal(historicalDraft.mcgradyRaptors, true, '1997 麦迪必须加入猛龙');
+    const contractUi = await page.evaluate(() => {
+      STATE.career = STATE.career || {};
+      STATE.career.currentAge = 30;
+      STATE.career.contract = 1;
+      STATE.career.flags = {};
+      STATE.careerTeam = 'SAS';
+      openContractNegotiation('SAS', 4);
+      selectNegotiatedYears(2);
+      document.getElementById('contract-player-option').checked = true;
+      const result = {
+        title: document.querySelector('#contract-negotiation-modal .team-picker-header').innerText,
+        rotationRows: document.querySelectorAll('#contract-negotiation-modal [style*="border-bottom"]').length,
+        years: STATE._contractNegotiation.years,
+        option: document.getElementById('contract-player-option').checked,
+        age42Chance: getLeagueRetirementChance({ovr:80,ATH:80,STR:80,FIN:80,DNK:80,REB:80,threePT:80,MID:80,HAN:80,PAS:80,CLU:80}, 42),
+        age43Chance: getLeagueRetirementChance({}, 43)
+      };
+      document.getElementById('contract-negotiation-modal').remove();
+      return result;
+    });
+    assert.match(contractUi.title, /谈合同/);
+    assert.ok(contractUi.rotationRows >= 5, '合同页面应展示球队主要轮换');
+    assert.equal(contractUi.years, 2, '合同年限应可调整');
+    assert.equal(contractUi.option, true, '最后一年球员选项应可勾选');
+    assert.ok(contractUi.age42Chance < 100, '球员应有机会打到 42 岁');
+    assert.equal(contractUi.age43Chance, 100, '43 岁应强制退役');
     const fontsReady = await page.evaluate(async () => {
       await Promise.all([document.fonts.load('700 16px Fredoka'), document.fonts.load('600 16px Nunito'), document.fonts.load('500 16px "Noto Sans SC"')]);
       return ['Fredoka', 'Nunito', 'Noto Sans SC'].every(font => document.fonts.check('16px "' + font + '"'));

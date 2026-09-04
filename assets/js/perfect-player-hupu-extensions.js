@@ -135,6 +135,7 @@
   var legendPlayersPromise = null;
   var legendPeaksPromise = null;
   var legendDraftPromise = null;
+  var legendTeamGamesPromise = null;
   var legendLeaguePromises = {};
   var legendYears = [];
   var activeLegendDecade = null;
@@ -174,8 +175,24 @@
   }
 
   var PANDEMIC_2020_GAMES = {ATL:67,BOS:72,BKN:72,CHA:65,CHI:65,CLE:65,DAL:75,DEN:73,DET:66,GSW:65,HOU:72,IND:73,LAC:72,LAL:71,MEM:73,MIA:73,MIL:73,MIN:64,NOP:72,NYK:66,OKC:72,ORL:73,PHI:73,PHX:73,POR:74,SAC:72,SAS:71,TOR:72,UTA:72,WAS:72};
-  function historicalScheduledGames(endYear, team) {
+  function loadLegendTeamGames() {
+    if (!legendTeamGamesPromise) {
+      legendTeamGamesPromise = fetchLegendJson('season_team_games.json').then(function(payload) {
+        return (payload && payload.seasons) || {};
+      }).catch(function() { return {}; });
+    }
+    return legendTeamGamesPromise;
+  }
+
+  function historicalScheduledGames(endYear, team, rawTeam) {
     endYear = Number(endYear);
+    var seasonMap = window.PERFECT_PLAYER_REAL_TEAM_GAMES && window.PERFECT_PLAYER_REAL_TEAM_GAMES[String(endYear)];
+    if (seasonMap) {
+      var historicalKey = String(rawTeam || '').toUpperCase();
+      if (historicalKey && Number(seasonMap[historicalKey])) return Number(seasonMap[historicalKey]);
+      var matching = Object.keys(seasonMap).filter(function(key) { return canonicalHistoricalTeam(key) === team; });
+      if (matching.length === 1) return Number(seasonMap[matching[0]]) || 82;
+    }
     if (endYear === 1999) return 50;
     if (endYear === 2012) return 66;
     if (endYear === 2020) return PANDEMIC_2020_GAMES[team] || 72;
@@ -414,7 +431,8 @@
       legendLeaguePromises[endYear] = Promise.all([
         fetchLegendJson('player_seasons_' + endYear + '.json'),
         loadLegendPlayers(),
-        loadLegendDraftData()
+        loadLegendDraftData(),
+        loadLegendTeamGames()
       ]).then(function(results) {
         var payload = results[0] || {};
         var playerIndex = results[1] || {};
@@ -458,14 +476,17 @@
         window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS = {};
         activeTeams.forEach(function(team) { var label=historicalTeamLabel(rawTeamByCanonical[team],endYear); if(label) window.PERFECT_PLAYER_HISTORICAL_TEAM_LABELS[team]=label; });
         window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = teamGameCounts;
-        activeTeams.forEach(function(team) { teamGameCounts[team] = historicalScheduledGames(endYear, team); });
-        window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = Math.min(82, seasonGameCount || 82);
+        window.PERFECT_PLAYER_REAL_TEAM_GAMES = results[3] || {};
+        activeTeams.forEach(function(team) { teamGameCounts[team] = historicalScheduledGames(endYear, team, rawTeamByCanonical[team]); });
+        var actualCounts = Object.keys(teamGameCounts).map(function(team) { return Number(teamGameCounts[team]) || 0; });
+        var actualMax = actualCounts.length ? Math.max.apply(null, actualCounts) : (seasonGameCount || 82);
+        window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = Math.min(82, actualMax || 82);
         window.PERFECT_PLAYER_LEGEND_LEAGUE_REPORT = {
           season: endYear,
           label: window.formatLegendSeason(endYear),
           teams: activeTeams.length,
           players: totalPlayers,
-          seasonGames: Math.min(82, seasonGameCount || 82),
+          seasonGames: Math.min(82, actualMax || 82),
           gamesByTeam: Object.assign({}, teamGameCounts)
         };
         if (typeof clearLineupCache === 'function') clearLineupCache();
@@ -481,7 +502,7 @@
 
   window.prepareLegendNextSeason = function(endYear) {
     endYear = Number(endYear);
-    return Promise.all([fetchLegendJson('player_seasons_' + endYear + '.json'), loadLegendPlayers(), loadLegendDraftData()]).then(function(results) {
+    return Promise.all([fetchLegendJson('player_seasons_' + endYear + '.json'), loadLegendPlayers(), loadLegendDraftData(), loadLegendTeamGames()]).then(function(results) {
       var rows = (results[0] && results[0].rows) || [];
       var playerIndex = results[1] || {};
       var grouped = {}, byIdentity = {}, rawByTeam = {}, gamesByTeam = {};
@@ -534,7 +555,8 @@
       window.PERFECT_PLAYER_LEGEND_CONFERENCE_BY_TEAM = historicalConferenceMap(nextTeams,endYear);
       window.PERFECT_PLAYER_LEGEND_ACTIVE_TEAMS = nextTeams.slice();
       window.PERFECT_PLAYER_LEGEND_GAMES_BY_TEAM = gamesByTeam;
-      nextTeams.forEach(function(team) { gamesByTeam[team] = historicalScheduledGames(endYear, team); });
+      window.PERFECT_PLAYER_REAL_TEAM_GAMES = results[3] || {};
+      nextTeams.forEach(function(team) { gamesByTeam[team] = historicalScheduledGames(endYear, team, rawByTeam[team]); });
       var observedGames = Object.keys(gamesByTeam).map(function(t){return gamesByTeam[t];});
       window.PERFECT_PLAYER_LEGEND_SEASON_GAMES = Math.min(82, observedGames.length ? Math.max.apply(null, observedGames) : 82);
       window.PERFECT_PLAYER_LEGEND_CURRENT_END_YEAR = endYear;

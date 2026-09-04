@@ -60,6 +60,8 @@ async function main() {
       document.querySelector('#pp-ach-close').click();
       STATE._careerSaved = false;
       STATE.career.totalStats = { pts:40000, reb:20000, ast:14000, stl:3000, blk:3500, fgm:15000, fga:29500, threeM:4000, tov:5000, games:1500 };
+      STATE.career.playoffStats = { pts:8000, reb:2000, ast:1900, stl:450, blk:500, fgm:2800, fga:5500, threeM:480, tov:900, games:280, doubleDoubles:140, tripleDoubles:25 };
+      STATE.career.seasons = [{ regularSingleGameRecords:{pts:72,reb:24,ast:18,stl:7,blk:8,fgm:25,threeM:10,ftm:18,tov:8,misses:25}, playoffSingleGameRecords:{pts:55,reb:22,ast:16,stl:6,blk:7,fgm:20,threeM:9,tov:7} }];
       STATE.season.playerStats = { pts:3440, reb:3924, ast:1806, stl:265, blk:330, fgm:961, fga:2002, threeM:248, tov:650, games:122 };
       PP_FX.openPanel();
       document.querySelector('#pp-ach-tab-records').click();
@@ -69,11 +71,17 @@ async function main() {
         totals: PP_FX.syncCareerRecords()
       };
     });
-    assert.equal(recordReport.cards, 12);
+    assert.equal(recordReport.cards, 41);
     assert.equal(recordReport.totals.pts, 43440);
     assert.equal(recordReport.totals.misses, 15541);
     assert.match(recordReport.text, /你已成为新的 NBA 历史第一|追平 NBA 历史纪录/);
     assert.match(recordReport.text, /斯蒂芬·库里 · 4,248记/);
+    assert.match(recordReport.text, /常规赛单场最高/);
+    assert.match(recordReport.text, /季后赛单场最高/);
+    assert.match(recordReport.text, /季后赛生涯累计/);
+    assert.match(recordReport.text, /单场得分[\s\S]*72/);
+    assert.match(recordReport.text, /季后赛单场得分[\s\S]*55/);
+    assert.match(recordReport.text, /季后赛生涯得分[\s\S]*8,000/);
 
     const archiveReport = await page.evaluate(() => {
       PP_FX.resetAchievements();

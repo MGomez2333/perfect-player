@@ -18714,6 +18714,9 @@ function selectContractOption(team, years, playerOption) {
   } else {
     STATE.career.contract = clampCareerContractYears((STATE.career.flags && STATE.career.flags.freeAgentChoice === 'stay') ? 3 : 2, STATE.career.currentAge);
   }
+  STATE.career.contractPlayerOption = !!playerOption && STATE.career.contract > 1;
+  STATE._leagueChanges = STATE._leagueChanges || {};
+  STATE._leagueChanges.userContract = { from:oldTeam, to:team, years:STATE.career.contract, playerOption:STATE.career.contractPlayerOption };
   if (STATE.career && STATE.career.flags) STATE.career.flags.waived = false;
   if (STATE.career && STATE.career.flags && STATE.career.flags.superstarRecruitInterest) {
     STATE.career.flags.lastSuperstarRecruitChoiceTeam = team;
@@ -19548,7 +19551,7 @@ function inferAge(playerName, ovr) {
 
 var LEBRON_JAMES_SPECIAL_RULE = {
   initialAge: 41,
-  maxRetirementAge: 42
+  maxRetirementAge: 43
 };
 
 function normalizePlayerIdentityKey(value) {
@@ -19599,9 +19602,6 @@ function getLeagueRetirementChance(player, age) {
     if (yearsPastReality === 1) return Math.max(88, age >= 40 ? 96 : 88);
     if (yearsPastReality === 0) return Math.max(58, age >= 38 ? 78 : 58);
   }
-  STATE.career.contractPlayerOption = !!playerOption && STATE.career.contract > 1;
-  STATE._leagueChanges = STATE._leagueChanges || {};
-  STATE._leagueChanges.userContract = { from:oldTeam, to:team, years:STATE.career.contract, playerOption:STATE.career.contractPlayerOption };
   if (age < 34) return 0;
   var baseByAge = { 34:2, 35:4, 36:8, 37:14, 38:23, 39:34, 40:48, 41:68 };
   var base = baseByAge[age] == null ? 0 : baseByAge[age];
@@ -25644,7 +25644,7 @@ if (window._sdkReady && document.getElementById('career-area')) {
 
 <script src="assets/js/perfect-player-awards.js?v=20260813-real-ballot-v1"></script>
 <script src="assets/js/perfect-player-event-library.js"></script>
-<script src="assets/js/perfect-player-hupu-extensions.js?v=20260810-career-state-effects"></script>
-<script src="assets/js/perfect-player-enhancements.js?v=20260809-achievement-rules-v2"></script>
+<script src="assets/js/perfect-player-hupu-extensions.js?v=20260904-historical-league-v3"></script>
+<script src="assets/js/perfect-player-enhancements.js?v=20260904-record-book-v3"></script>
 </body>
 </html>
