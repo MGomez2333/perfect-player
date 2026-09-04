@@ -4313,7 +4313,7 @@ function renderCareerSpin() {
         <button class="btn btn-sm slot-btn" onclick="pullCareerHandle()" style="background:var(--orange);color:#fff;">
           🎲 随机球队
         </button>
-        <button class="btn btn-sm slot-btn" onclick="showCareerTeamPicker()" style="background:var(--bg-card);color:var(--text);">
+        <button class="btn btn-sm slot-btn" id="career-team-picker-btn" type="button" style="background:var(--bg-card);color:var(--text);">
           🎯 自选球队
         </button>
       </div>
@@ -4321,6 +4321,9 @@ function renderCareerSpin() {
   `;
   
   if (typeof fetchAdTeamTask === 'function') fetchAdTeamTask();
+
+  var teamPickerButton = document.getElementById('career-team-picker-btn');
+  if (teamPickerButton) teamPickerButton.addEventListener('click', function () { showCareerTeamPicker(); });
   
   const reel = document.getElementById('career-slot-reel');
   if (reel) {
@@ -4481,7 +4484,9 @@ function showCareerTeamPicker(teamList) {
     subLine = '🎉 看视频获得 · 全 ' + allTeams.length + ' 队任选';
   } else {
     // 从已访问球队中随机选 pickCount 支
-    allTeams = STATE._teamsVisited.length > 0 ? STATE._teamsVisited.slice() : [...NBA2K_TEAMS];
+    var visitedTeams = Array.isArray(STATE._teamsVisited) ? STATE._teamsVisited : [];
+    var availableTeams = typeof getAvailableBuildTeams === 'function' ? getAvailableBuildTeams() : Array.from(NBA2K_TEAMS || []);
+    allTeams = visitedTeams.length > 0 ? visitedTeams.slice() : availableTeams.slice();
     for (var i = allTeams.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var tmp = allTeams[i]; allTeams[i] = allTeams[j]; allTeams[j] = tmp;
@@ -4496,11 +4501,11 @@ function showCareerTeamPicker(teamList) {
     var cn = SIM_CONFIG.TEAM_NAMES[t] || t;
     var city = window.TEAM_CITY[t] || '';
     var logo = getTeamLogo(t, 36);
-    gridHtml += '<div class="team-pick-card" data-team="' + t + '" onclick="selectCareerTeamFromPicker(\'' + t + '\')">' +
+    gridHtml += '<button type="button" class="team-pick-card" data-team="' + t + '">' +
       logo +
       '<span class="tpc-abbr">' + cn + '</span>' +
       '<span class="tpc-name">' + city + '</span>' +
-    '</div>';
+    '</button>';
   });
   
   var overlay = document.createElement('div');
@@ -4525,6 +4530,9 @@ function showCareerTeamPicker(teamList) {
   });
   
   document.body.appendChild(overlay);
+  overlay.querySelectorAll('.team-pick-card').forEach(function(card) {
+    card.addEventListener('click', function() { selectCareerTeamFromPicker(card.getAttribute('data-team')); });
+  });
   if (typeof renderAdTeamStatus === 'function') renderAdTeamStatus();
 }
 
@@ -25644,7 +25652,7 @@ if (window._sdkReady && document.getElementById('career-area')) {
 
 <script src="assets/js/perfect-player-awards.js?v=20260813-real-ballot-v1"></script>
 <script src="assets/js/perfect-player-event-library.js"></script>
-<script src="assets/js/perfect-player-hupu-extensions.js?v=20260904-historical-league-v3"></script>
-<script src="assets/js/perfect-player-enhancements.js?v=20260904-record-book-v3"></script>
+<script src="assets/js/perfect-player-hupu-extensions.js?v=20260904-hupu457-v1"></script>
+<script src="assets/js/perfect-player-enhancements.js?v=20260904-legacy-copy-v1"></script>
 </body>
 </html>

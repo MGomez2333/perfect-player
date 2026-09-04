@@ -857,7 +857,7 @@
           '<button class="pp-ach-close" id="pp-lg-close" aria-label="关闭">✕</button>' +
         '</div>' +
         '<div class="pp-lg-lp"></div>' +
-        '<div class="pp-lg-hint">解锁成就积累传承点，投入永久强化。每条路线越往后越贵；全部成就最多提供 ' + maxLegacyLP() + ' 点，而全路线共需 ' + legacyTreeCost() + ' 点，无法同时点满，请选择自己的长期专精。</div>' +
+        '<div class="pp-lg-hint">解锁成就积累传承点，投入永久强化。每条路线越往后越贵，可随时重置并重新分配。</div>' +
         '<div class="pp-ach-grid pp-lg-grid"></div>' +
         '<div class="pp-lg-foot"><button class="pp-lg-respec" id="pp-lg-respec">重置强化并返还全部传承点</button></div>' +
       '</div>';

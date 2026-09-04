@@ -239,9 +239,9 @@
 
   function loadLegendPeaks() {
     if (!legendPeaksPromise) {
-      legendPeaksPromise = fetch('assets/data/perfect-player-legend-peaks.json', { cache:'no-store' })
+      legendPeaksPromise = fetch('assets/data/hupu-legend-alltime.json?v=20260904-hupu457', { cache:'no-store' })
         .then(function(response) {
-          if (!response.ok) throw new Error('传奇巅峰能力库加载失败：' + response.status);
+          if (!response.ok) throw new Error('虎扑传奇能力库加载失败：' + response.status);
           return response.json();
         })
         .then(function(payload) { return payload || {}; });
@@ -394,16 +394,17 @@
     endYear = Number(endYear);
     return loadLegendPeaks().then(function(payload) {
       var teams = {};
-      Object.keys(payload.teams || {}).forEach(function(team) {
-        teams[team] = (payload.teams[team] || []).map(function(card) {
-          var player = convertPlayer(card);
+      Object.keys(payload || {}).forEach(function(teamKey) {
+        var team = String(teamKey).replace(/_HIST$/, '');
+        teams[team] = (payload[teamKey] || []).map(function(card) {
+          var player = convertHupuLegendPlayer(card, team);
           player._sourceKind = 'legend-season';
           player._sourceYear = Number(endYear) - 1;
           player._sourceLabel = window.formatLegendSeason(endYear);
           player._legendPeak = true;
-          player._legendPeakLabel = card.source ? card.source.label : '';
+          player._legendPeakLabel = '虎扑球队专属版本';
           player._legendRosterSupplement = false;
-          player.type = '队史传奇 · 生涯巅峰卡';
+          player.type = '队史传奇 · 虎扑球队专属卡';
           return player;
         });
         teams[team].forEach(function(player) {
@@ -416,8 +417,8 @@
         season: endYear, teams: Object.keys(teams).length,
         players: Object.keys(teams).reduce(function(total, team) { return total + teams[team].length; }, 0),
         peakCards: Object.keys(teams).reduce(function(total, team) { return total + teams[team].length; }, 0),
-        cardsPerTeam: 25,
-        cardsPerPosition: 5
+        source: 'HUPU NBA2K_ALLTIME_DATA',
+        cardsPerTeam: '15-16'
       };
       return window.PERFECT_PLAYER_LEGEND_REPORT;
     });
@@ -634,6 +635,24 @@
       _photoLocal: player.photoLocal,
       _photoUrl: player.photoUrl || '',
       _poolUid: player.uid
+    };
+  }
+
+  function convertHupuLegendPlayer(player, team) {
+    return {
+      name: player.name, cname: player.cname || player.name,
+      pos: player.pos || 'SF', height: player.height || '',
+      type: player.type || '队史传奇', ovr: clamp(player.ovr, 50, 99),
+      threePT: clamp(player.threePT, 0, 99), MID: clamp(player.MID, 0, 99),
+      FIN: clamp(player.FIN, 0, 99), DNK: clamp(player.DNK, 0, 99),
+      HAN: clamp(player.HAN, 0, 99), PAS: clamp(player.PAS, 0, 99),
+      PDEF: clamp(player.PDEF, 0, 99), IDEF: clamp(player.IDEF, 0, 99),
+      BLK: clamp(player.BLK, 0, 99), REB: clamp(player.REB, 0, 99),
+      ATH: clamp(player.ATH, 0, 99), STR: clamp(player.STR, 0, 99),
+      CLU: clamp(player.CLU, 0, 99),
+      _sourceKind: 'hupu-alltime', _sourceLabel: '虎扑队史传奇库',
+      _legendPeak: true, _legendPeakLabel: '虎扑球队专属版本',
+      _poolUid: 'hupu:' + team + ':' + player.name
     };
   }
 
