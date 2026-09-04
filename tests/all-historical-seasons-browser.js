@@ -10,6 +10,13 @@ const browserPath = ['C:/Program Files/Google/Chrome/Application/chrome.exe','C:
   try {
     const page = await browser.newPage();
     await page.goto('http://127.0.0.1:8035/nba-perfect-player.html', { waitUntil:'networkidle' });
+    await page.evaluate(() => { STATE.mode = 'current'; showScreen('screen-position'); renderPositionSelect(); });
+    await page.locator('.pos-card').first().click();
+    await page.locator('#screen-position .btn-primary').click();
+    await page.waitForSelector('#screen-build.active');
+    await page.locator('#screen-build .build-edit-btn').click();
+    await page.waitForSelector('#screen-position.active');
+    assert.equal(await page.evaluate(() => STATE.position), null, '确认位置后应能返回并重新选择');
     const results = await page.evaluate(async () => {
       const manifest = await fetch('assets/data/historical/manifest.json').then(r => r.json());
       const years = manifest.files.playerSeasons.map(f => Number(f.match(/(\d{4})/)[1])).sort((a,b) => a-b);

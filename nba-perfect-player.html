@@ -1558,7 +1558,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   <div class="screen" id="screen-build">
     <div class="section-title">
       <h1>建球员</h1>
-      <!-- <button class="build-edit-btn" onclick="openEditProfile()" title="编辑个人信息">✏️</button> -->
+      <button class="build-edit-btn" style="width:auto;padding:0 10px;border-radius:16px;font-size:12px;" onclick="backFromBuildToPosition()" title="返回重新选择位置">‹ 返回位置</button>
     </div>
     <div id="build-pos-indicator" style="text-align:center;padding:4px 0 2px;font-family:var(--font-display);font-size:13px;color:var(--text-dim);letter-spacing:0.5px;"></div>
     <div id="build-progress-area"></div>
@@ -2856,6 +2856,29 @@ function confirmPosition() {
   renderTeamPicker();
 }
 
+function backFromBuildToPosition() {
+  if (STATE.lockedCount > 0 && !window.confirm('返回后会清空本次已选择的能力值，确定重新选择位置吗？')) return;
+  STATE.position = null;
+  STATE.attrs = {};
+  STATE.attrSlots = {};
+  STATE.lockedCount = 0;
+  STATE.usedPlayers = [];
+  STATE.buildStep = 'select';
+  STATE.selectedAttr = null;
+  STATE.selectedPlayer = null;
+  STATE.currentTeam = null;
+  STATE.currentRoster = [];
+  STATE._shownThisTeam = [];
+  STATE._drawPlayers = [];
+  STATE._teamsVisited = [];
+  STATE._mustLockAfterSpin = false;
+  STATE._locking = false;
+  STATE.finalOVR = 0;
+  _slotSpinning = false;
+  renderPositionSelect();
+  showScreen('screen-position');
+}
+
 // ==================== 3. 建球员 - LEFT-RIGHT SPLIT ====================
 
 function renderBuildUI() {
@@ -3087,6 +3110,8 @@ function pullHandle() {
 
 function spinSlotMachine() {
   if (_slotSpinning) return;
+  var buildScreen = document.getElementById('screen-build');
+  if (!buildScreen || !buildScreen.classList.contains('active')) return;
   _slotSpinning = true;
   
   const reel = document.getElementById('slot-reel');
@@ -3133,6 +3158,7 @@ function spinSlotMachine() {
   
   // 动画结束后，精确回正到目标位置（去掉过渡，直接对齐）
   setTimeout(() => {
+    if (!document.getElementById('screen-build').classList.contains('active')) { _slotSpinning = false; return; }
     reel.classList.remove('spinning');
     
     // ★ 关键修复：无过渡跳转到精确位置，确保显示正确
