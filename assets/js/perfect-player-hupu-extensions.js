@@ -228,7 +228,7 @@
 
   function loadLegendPlayers() {
     if (!legendPlayersPromise) {
-      legendPlayersPromise = fetchLegendJson('players.json').then(function(payload) {
+      legendPlayersPromise = fetchLegendJson('players_runtime.json').then(function(payload) {
         var index = {};
         (payload.players || []).forEach(function(player) { index[player.realId] = player; });
         return index;
@@ -252,7 +252,7 @@
   function loadLegendDraftData() {
     if (!legendDraftPromise) {
       legendDraftPromise = Promise.all([
-        fetchLegendJson('draft_classes.json'),
+        fetchLegendJson('draft_classes_runtime.json'),
         fetchLegendJson('draft_destinations.json'),
         fetchLegendJson('career_bounds.json')
       ]).then(function(results) {
