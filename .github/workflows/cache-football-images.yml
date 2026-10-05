@@ -1,0 +1,29 @@
+name: Cache football manager images
+on:
+  push:
+    paths:
+      - '.github/workflows/cache-football-images.yml'
+      - 'football-manager/cache-images.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  cache-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download original artwork and fix image paths
+        run: python football-manager/cache-images.py
+      - name: Publish cached images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add football-manager
+          if ! git diff --cached --quiet; then
+            git commit -m "Cache all football manager images and fix same-origin loading"
+            git push
+          fi
