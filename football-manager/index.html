@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#152e23">
+  <title>绿茵传奇经理</title>
+  <link rel="icon" type="image/webp" href="https://activity-static.hupu.com/shaper/published/app_2abbb7f838/h5/game-logo.webp">
+  <link rel="preload" as="image" href="https://activity-static.hupu.com/shaper/published/app_2abbb7f838/h5/game-logo.webp">
+  <link rel="preload" as="image" href="https://activity-static.hupu.com/shaper/published/app_2abbb7f838/h5/home-champion-v2.webp" fetchpriority="low">
+  <link rel="stylesheet" href="./h5/styles.css?v=0.5.206">
+<style>
+body{margin:0;background:#102f27}
+#app:has(.startup-screen){padding:0;max-width:none;background:#0c1117}
+.startup-screen{box-sizing:border-box;min-height:100vh;min-height:100svh;padding:clamp(24px,6vh,56px) 24px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;overflow:hidden;background:radial-gradient(ellipse at 95% 12%,#65876755,transparent 50%),radial-gradient(ellipse at 10% 75%,#36715a66,transparent 55%),#102f27;color:#f6f3e6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;text-align:center}
+.startup-screen *{box-sizing:border-box}.startup-brand{display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:3px;color:#d2dfcf}.startup-brand b{width:30px;height:34px;display:grid;place-items:center;border:1px solid #bdcb90;border-radius:8px 8px 14px 14px;background:#dbe3b512;color:#edf2c4;font-size:17px;letter-spacing:0}.startup-kicker{margin:0 0 12px;font-size:11px;letter-spacing:4px;color:#cad5a0}.startup-title{margin:0;font-size:clamp(29px,8.5vw,38px);line-height:1.25;letter-spacing:2px;font-weight:850}.startup-title span{display:block;color:#dbdfa8}.startup-tagline{font-size:13px;line-height:1.8;color:#c2d2c6;margin:14px 0 0}
+.startup-stadium{position:relative;width:min(100%,320px);padding:22px 10px 0}.startup-stadium:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:repeating-linear-gradient(90deg,#e5e9b9 0 3px,transparent 3px 12px);opacity:.55;border-radius:8px}.startup-pitch{position:relative;height:176px;border:1px solid #93b69b88;border-radius:12px;background:repeating-linear-gradient(0deg,#ffffff03 0 25px,#ffffff09 25px 50px),linear-gradient(130deg,#356349,#1d4a38);box-shadow:0 20px 30px #0003;overflow:hidden}.startup-pitch svg{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);fill:none;stroke:#c7dbc166;stroke-width:1.3}.startup-player{position:absolute;width:13px;height:13px;border:2px solid #e9ecd1;background:#d2d998;border-radius:50%;box-shadow:0 3px 5px #0004}.startup-player.a{left:18%;top:62%}.startup-player.b{left:47%;top:26%}.startup-player.c{left:77%;top:48%}.startup-ball{position:absolute;left:20%;top:62%;width:8px;height:8px;border:2px solid #fff;background:#223e30;border-radius:50%;animation:startup-pass 3.4s ease-in-out infinite;box-shadow:0 0 9px #f7f4d2a0}
+.startup-caption{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;color:#cbd9cd;font-size:10px;letter-spacing:1px}.startup-caption b{color:#eef1c8;font-size:11px;font-weight:500}.startup-loading-card{width:min(100%,340px);padding:18px 16px;border:1px solid #b7c8aa30;border-radius:16px;background:#ffffff08}.startup-steps{display:flex;justify-content:space-between;gap:5px;margin-bottom:17px;font-size:11px;color:#c0cec2}.startup-steps span{display:flex;align-items:center;gap:5px}.startup-steps i{width:5px;height:5px;border-radius:50%;background:#91aa94}.startup-steps [aria-current=step]{color:#f1efbe}.startup-steps [aria-current=step] i{background:#e3e6a8;box-shadow:0 0 0 3px #d6deb41a}.startup-status,.startup-screen .loading{padding:0;min-height:3.4em;margin:0;background:none;color:#f0f3e7;font-size:13px;line-height:1.7;font-weight:600}.startup-note{margin:12px 0 0;color:#bacabd;font-size:11px;line-height:1.7}.startup-status p{margin:0 0 9px}.startup-retry{margin:12px auto 0;padding:12px 22px;border:0;border-radius:10px;background:#e0e6b4;color:#18392b;font:inherit;font-size:14px;font-weight:700}.startup-screen.is-error .startup-ball{animation:none}.startup-screen.is-error .startup-note{display:none}
+@keyframes startup-pass{0%,12%,100%{transform:translate(0,0)}38%,48%{transform:translate(75px,-58px)}72%,82%{transform:translate(146px,-20px)}}
+@media(max-height:680px){.startup-screen{gap:17px;padding-top:22px}.startup-pitch{height:148px}.startup-loading-card{padding:14px}.startup-tagline{margin-top:9px}.startup-stadium{width:min(100%,280px)}}
+@media(prefers-reduced-motion:reduce){.startup-ball{animation:none}}
+.startup-screen:not(.is-error) .startup-status::before{content:"";display:block;width:16px;height:16px;margin:0 auto 12px;border:2px solid #b8c8b6;border-right-color:transparent;border-radius:50%;animation:startup-wait .8s linear infinite}
+@keyframes startup-wait{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.startup-screen:not(.is-error) .startup-status::before{animation:none}}
+.startup-screen{background:radial-gradient(ellipse at 50% 15%,#24303b,transparent 65%),#0c1117}.startup-logo{display:block;width:min(100%,280px,42svh);height:auto;aspect-ratio:1;object-fit:contain;border-radius:12px;margin:auto}.startup-title{line-height:0}.startup-tagline{margin-top:14px}@media(max-height:680px){.startup-logo{width:min(100%,210px,34svh)}}
+.startup-screen{padding-top:max(32px,calc(env(safe-area-inset-top) + 20px));padding-bottom:max(28px,calc(env(safe-area-inset-bottom) + 20px))}
+.startup-screen.is-error{gap:20px}.startup-screen.is-error .startup-logo{width:min(100%,240px,32svh)}.startup-screen.is-error .startup-steps{display:none}.startup-screen.is-error .startup-loading-card{padding:24px 22px;border-color:#bfad7438;background:linear-gradient(145deg,#ffffff0d,#ffffff04);box-shadow:0 16px 40px #0002}
+.startup-error-title{margin:0 0 10px;font-size:20px;line-height:1.4;color:#f4e6c1;letter-spacing:.5px}.startup-status .startup-error-copy{margin:0;color:#c9ced1;font-size:13px;line-height:1.8;font-weight:400}.startup-screen.is-error .startup-retry{display:block;width:100%;min-height:46px;margin:20px 0 14px;background:linear-gradient(130deg,#e9d9a2,#cfb575);color:#25251d;border:1px solid #f9e9b66b;box-shadow:inset 0 1px 0 #fff5}.startup-status .startup-error-note{margin:0;color:#89979c;font-size:11px;font-weight:400}.startup-retry:focus-visible{outline:2px solid #f6e8c0;outline-offset:4px}
+@media(max-height:600px){.startup-screen.is-error{gap:12px}.startup-screen.is-error .startup-logo{width:min(100%,170px,27svh)}.startup-screen.is-error .startup-loading-card{padding:18px}.startup-screen.is-error .startup-tagline{display:none}}
+</style>
+
+<style id="colorbox-selection-styles">
+    body { user-select: none; -webkit-user-select: none; }
+    input, textarea { user-select: text; -webkit-user-select: text; }
+  </style>
+
+
+
+
+</head>
+<body>
+  <main id="app"><section class="startup-screen" aria-label="游戏加载">
+      <div class="startup-brand">属于你的执教传奇</div>
+      <div><h1 class="startup-title"><img class="startup-logo" src="https://activity-static.hupu.com/shaper/published/app_2abbb7f838/h5/game-logo.webp" width="768" height="768" alt="绿茵传奇经理" fetchpriority="high"></h1><p class="startup-tagline">排出你的阵容，写下你的冠军故事。</p></div>
+      <div class="startup-loading-card"><div class="startup-steps" aria-label="加载步骤"><span data-boot-stage="resources" aria-current="step"><i></i>游戏资源</span><span data-boot-stage="account"><i></i>连接账号</span><span data-boot-stage="save"><i></i>生涯档案</span></div><div class="startup-status loading" role="status" aria-live="polite">正在载入游戏资源…</div><p class="startup-note">首次进入需要加载球员资料，请稍候</p></div>
+    </section></main>
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script defer src="./h5/loader.js"></script></body>
+</html>
