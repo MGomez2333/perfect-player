@@ -23,6 +23,7 @@ def refs(s,u):
  return {urljoin(u,v) for v in re.findall(r'["\x27`]((?:https?://|\./|\.\./|/)[^"\x27`\s]*?\.(?:js|css|json|csv)(?:\?[^"\x27`\s]*)?)["\x27`]',s) if '${' not in v and '\\' not in v and not any(k in v for k in SKIP)}
 entries={};todo={BASE+'__ai_app.html'}
 while todo:
+ for u in todo:(ROOT/target(u)).unlink(missing_ok=True)
  with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
   for u,b in zip(sorted(todo),ex.map(fetch,sorted(todo))):entries[u]=b.decode()
  todo=set().union(*(refs(s,u) for u,s in entries.items()))-entries.keys()
@@ -46,7 +47,7 @@ for u,s in entries.items():
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./local-runtime.js"></script>')
+  s=s.replace('<head>','<head><script src="./local-runtime.js?v=20261008-r6"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,t);')
