@@ -14,7 +14,7 @@
   let count=current.regularSimulation?.currentGames||0;const moment=hooks?.moment?.();if(moment?.kind==='journey-result'||current.screen==='result'){item.seasons[r.season]={...(r.parallel_stats||core.resultStats(r)),complete:true};save();return;}
   // Regular-season live progress is counted only through already displayed games.
   if(moment?.kind==='season-checkpoint')count=Math.max(count,moment.checkpoint.games||0);
-  const step=current.broadcastStep||0,played=[],moments=hooks?.moments?.()||[];for(let i=0;i<=step;i++){const m=moments[i];if(m?.kind==='game-box'&&m.game?.player_line&&!played.includes(m.game))played.push(m.game);}
+  const step=current.broadcastStep||0,played=[],moments=hooks?.moments?.()||[];for(let i=0;i<=step;i++){const m=moments[i];if(m?.kind==='season-checkpoint')count=Math.max(count,m.checkpoint.games||0);if(m?.kind==='game-box'&&m.game?.player_line&&!played.includes(m.game))played.push(m.game);}
   if(played.length)count=r.regular_season.games.length;
   if(count||played.length){item.seasons[r.season]={season:r.season,regular:core.summarize(r.regular_season.games.slice(0,count)),playoffs:core.summarize(played)};save();}
  }

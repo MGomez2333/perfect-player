@@ -49,11 +49,11 @@ for u,s in entries.items():
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./career-core.js?v=20261009-r10"></script><script src="./career-extras.js?v=20261009-r10"></script><script src="./local-runtime.js?v=20261009-r10"></script>')
+  s=s.replace('<head>','<head><script src="./career-core.js?v=20261009-r11"></script><script src="./career-extras.js?v=20261009-r11"></script><script src="./local-runtime.js?v=20261009-r11"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
-  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261009-r10')
+  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261009-r11')
   s=s.replace('getUser:()=>xn()','getUser:async()=>null')
   s=s.replace('广告播放中','领取中').replace('观看广告','领取奖励').replace('看广告','领取奖励').replace('广告换队','免费换队').replace('广告 · 高质重抽','免费 · 高质重抽')
   s=s.replace('https://ai-1786703713642-d0el49h17f235e5-1252166086.ap-shanghai.app.tcloudbase.com/api','')

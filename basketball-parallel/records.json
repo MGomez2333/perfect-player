@@ -1,5 +1,5 @@
 {
- "verified":"2026-10-09","scope":"NBA常规赛；纪录参照固定快照，季后赛另计",
+ "verified":"2026-10-08","scope":"NBA常规赛；纪录参照固定快照，季后赛另计",
  "single":[
   {"key":"pts","label":"单场得分王","target":100,"holder":"张伯伦","source":"https://www.nba.com/news/most-points-scored-by-a-player-in-an-nba-game"},
   {"key":"reb","label":"单场篮板王","target":55,"holder":"张伯伦","source":"https://www.nba.com/watch/video/this-day-in-history-wilt-chamberlain-grabs-55-rebounds-vs-the-celtics"},
