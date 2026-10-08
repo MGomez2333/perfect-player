@@ -49,11 +49,11 @@ for u,s in entries.items():
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./career-core.js?v=20261009-r12"></script><script src="./career-extras.js?v=20261009-r12"></script><script src="./local-runtime.js?v=20261009-r12"></script>')
+  s=s.replace('<head>','<head><script src="./career-core.js?v=20261009-r13"></script><script src="./career-extras.js?v=20261009-r13"></script><script src="./local-runtime.js?v=20261009-r13"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
-  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261009-r12')
+  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261009-r13')
   s=s.replace('U.draftPlayerDraw>0&&U.seasons.some(', 'U.draftPlayerDraw>0&&(U.draftSeason===`all-time`||U.seasons.some(').replace('e.teams.some(e=>e.abbreviation===U.draftTeam));U.draftPlayerDraw','e.teams.some(e=>e.abbreviation===U.draftTeam)));U.draftPlayerDraw')
   s=s.replace('getUser:()=>xn()','getUser:async()=>null')
   s=s.replace('广告播放中','领取中').replace('观看广告','领取奖励').replace('看广告','领取奖励').replace('广告换队','免费换队').replace('广告 · 高质重抽','免费 · 高质重抽')
