@@ -1,5 +1,9 @@
 def patch_frontend(s):
     changes={
+      'if(H.loading=!0,H.error=null,$(),await Y(),d())try{': 'if(H.loading=!0,H.error=null,$(),d())try{',
+      'async function nl(e){return sc(`/team-offers`,{method:`POST`,data:e})}': 'async function nl(e){return window.parallelCareer.wait(sc(`/team-offers`,{method:`POST`,data:e}),15000)}',
+      'H.expandedCandidateId=null,await Y()}catch(e){d()': 'H.expandedCandidateId=null,Y().catch(()=>{})}catch(e){d()',
+
       'function $(){if(document.documentElement': 'function $(){window.parallelCareer?.bind(G,H,{save:()=>Y(),redraw:()=>$(),moment:()=>H.result?Fk(H.result)[H.broadcastStep]:null,moments:()=>H.result?Fk(H.result):[],grantSkill:(c,id,kind)=>ht(c,id,kind),openAchievements:()=>{H.achievementsOpen=!0;$()}});if(document.documentElement',
       'function Z(e,t){return e===': 'function Z(e,t){if(e===`我`||e===`你`)return window.parallelCareer?.name(H)||`我的球员`;return e===',
       'function gt(e,t){': 'function gt(e,t){for(const a of e.permanentAugments||[]){if(a.id===`apprentice`&&a.choice){let r=xe(a.choice),h=e.rewards?.mentorHistory||[];if(r){let rows=h.filter(x=>x.teammateIds.includes(r.playerId));if(new Set(rows.map(x=>x.season)).size>=2&&rows.some(x=>x.wonTitle))ht(e,r.id,`apprentice`);}}}',
