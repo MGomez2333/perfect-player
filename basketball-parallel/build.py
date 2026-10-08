@@ -44,10 +44,11 @@ if fail:
  (ROOT/'asset-failures.json').write_text(json.dumps(fail,ensure_ascii=False,indent=2));raise RuntimeError(f'{len(fail)} missing assets')
 urlmap={u:PREFIX+target(u) for u in entries.keys()|images}
 for u,s in entries.items():
+ s=s.replace('function Cl(e){return e.team_label.replace','function Cl(e){return (e.team_label||e.team||``).replace')
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./local-runtime.js?v=20261008-r7"></script>')
+  s=s.replace('<head>','<head><script src="./local-runtime.js?v=20261008-r8"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,t);')
