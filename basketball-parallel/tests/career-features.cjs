@@ -1,0 +1,28 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'),file='dynasty-history-9ba1c1cf68e1.js',history=vm.runInNewContext(fs.readFileSync([path.join(root,file),path.join(root,'source',file)].find(fs.existsSync),'utf8').replace('export{e as HISTORY_PACKS};','e;'));
+const c={URL,Element:{prototype:{attachShadow(){}}},document:{currentScript:{src:'https://test.local/local-runtime.js'},addEventListener(){}},window:{__REGRET_STATIC__:{seasons:[{season:'2017-18',teams:history[2017].teams.map(t=>({abbreviation:t[0],team_id:t[1]}))}]}},location:{href:'https://test.local/'},fetch:async()=>({json:async()=>JSON.parse(fs.readFileSync(path.join(root,'legacy-talents.json'),'utf8'))}),__HIST:{HISTORY_PACKS:history}};
+vm.createContext(c);vm.runInContext(fs.readFileSync(path.join(root,'career-core.js'),'utf8'),c);vm.runInContext(fs.readFileSync(path.join(root,'local-runtime.js'),'utf8').replace("import(BASE+'dynasty-history-9ba1c1cf68e1.js')","Promise.resolve(__HIST)").replace(' function honor(',' window.testLine=line;window.testRandom=random; function honor('),c);
+const core=c.window.ParallelCareerCore,req=c.window.parallelRequest,keys=['threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU'],ratings=v=>Object.fromEntries(keys.map(k=>[k,v]));
+const sim=(data={})=>req('/simulate',{data:{season:'2017-18',team:'GSW',seed:123,player:{position:'C',current_ratings:ratings(99),name:'测试中锋'},career_context:{career_year:1,career_id:'test',age:20},...data}});
+(async()=>{
+ assert.equal(core.franchise('NOH'),core.franchise('NOP'));assert.notEqual(core.franchise('NOH'),core.franchise('CHO'));
+ assert.equal(core.teamAt('NOH','2013-14'),'NOP');assert.equal(core.teamAt('NOP','2005-06'),'NOK');
+ const next=await req('/career/next-season',{data:{season:'2012-13',team:'NOH'}});assert.equal(next.team,'NOP');
+ const offers=await req('/career/offers',{data:{season:'2012-13',team:'NOH',seed:7,player:{overall:99}}});assert.equal(offers.offers[0].team,'NOP');assert.equal(offers.offers[0].kind,'stay');assert.equal(offers.offers.filter(o=>o.kind==='stay').length,1);
+ for(const o of offers.offers){assert.ok(o.roster.length>0&&o.title_odds);assert.ok(o.roster.every(p=>Number.isFinite(p.age)&&p.contract));}
+ const career={careerId:'a',careerYear:1,currentSeason:'2012-13',currentTeam:'NOH',seasons:[{season:'2013-14',team:'NOH'}],seasonAugment:{key:'a:1',confirmed:true,selected:0,cards:[{id:'rebound',tier:3}]}};
+ core.migrate(career);core.migrate(career);assert.equal(career.permanentAugments.length,1);assert.equal(career.seasons[0].team,'NOP');
+ core.remember(career,{key:'a:2',confirmed:true,selected:0,cards:[{id:'rebound',tier:2}]});assert.equal(career.permanentAugments.length,2);
+ assert.equal(core.augments({permanent_augments:career.permanentAugments,augment:{id:'rebound',tier:2,key:'a:2'}}).length,2);
+ const base=await sim({player:{position:'C',current_ratings:ratings(85)}}),boost=await sim({player:{position:'C',current_ratings:ratings(85)},career_context:{career_id:'a',career_year:3,permanent_augments:career.permanentAugments}});
+ assert.ok(boost.regular_season.player_averages.reb>base.regular_season.player_averages.reb);assert.equal(boost.permanent_augments.length,2);
+ const result=await sim();assert.equal(result.player.name,'测试中锋');assert.ok(result.league_honors.dpoy.is_user);assert.ok(result.league_honors.all_defense.first.some(p=>p.is_user));assert.ok(result.regular_season.player_averages.stl>1.8&&result.regular_season.player_averages.blk>4);
+ for(const g of [...result.regular_season.games,...result.playoff_series.flatMap(s=>s.games)])for(const team of [g.home,g.away]){const rows=g.box_score[team];assert.equal(rows.reduce((n,r)=>n+r.pts,0),team===g.home?g.home_score:g.away_score);assert.equal(rows.reduce((n,r)=>n+r.min,0),240);for(const r of rows){for(const k of ['pts','reb','ast','stl','blk','min'])assert.ok(Number.isInteger(r[k])&&r[k]>=0,`${team} ${k}`);assert.equal(r.pts,r.fgm*2+r.three_m+r.ftm);}}
+ assert.equal(JSON.stringify(result),JSON.stringify(await sim()));
+ const before=await req('/career/develop',{data:{age:36,player:{ratings:ratings(99)}}}),after=await req('/career/develop',{data:{age:36,player:{ratings:ratings(99)},permanent_augments:[{id:'ageless',tier:3}]}});assert.ok(after.ratings.ATH>before.ratings.ATH);
+ const known=core.summarize([{pts:10,reb:10,ast:10,stl:10,blk:10},{pts:10,reb:10,ast:0,stl:0,blk:0}]);assert.equal(known.counts.doubleDouble,2);assert.equal(known.counts.tripleDouble,1);assert.equal(known.counts.quintupleDouble,1);assert.equal(known.counts.fiveByFive,1);
+ const highs={pts:0,reb:0,ast:0,stl:0,blk:0};let quint=false,quad=false;
+ for(let seed=1;seed<=40000;seed++){const l=c.window.testLine(ratings(110),c.window.testRandom(seed),'C');for(const k of Object.keys(highs))highs[k]=Math.max(highs[k],l[k]);const n=Object.keys(highs).filter(k=>l[k]>=10).length;quint||=n===5;quad||=n>=4;}
+ assert.ok(quint&&quad,'Four and five doubles must have a reachable seed');assert.ok(highs.pts>100&&highs.reb>55&&highs.ast>30&&highs.stl>11&&highs.blk>17,'Every basic single-game record must have a reachable path');
+ console.log('PASS: real integer box scores / team totals / 240 minutes, franchise renames and genuine stay offers, complete offer rosters, persistent stacked augments, names, defensive awards, aging resistance, multiple-double accounting, deterministic games, reachable historical records and quintuple-double.');console.log({defense:result.regular_season.player_averages.stl+' STL / '+result.regular_season.player_averages.blk+' BLK',highs});
+})().catch(e=>{console.error(e);process.exitCode=1;});

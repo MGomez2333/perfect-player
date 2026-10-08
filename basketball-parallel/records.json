@@ -1,0 +1,19 @@
+{
+ "verified":"2026-10-09","scope":"NBA常规赛；纪录参照固定快照，季后赛另计",
+ "single":[
+  {"key":"pts","label":"单场得分王","target":100,"holder":"张伯伦","source":"https://www.nba.com/news/most-points-scored-by-a-player-in-an-nba-game"},
+  {"key":"reb","label":"单场篮板王","target":55,"holder":"张伯伦","source":"https://www.nba.com/watch/video/this-day-in-history-wilt-chamberlain-grabs-55-rebounds-vs-the-celtics"},
+  {"key":"ast","label":"单场助攻王","target":30,"holder":"斯科特·斯凯尔斯","source":"https://www.nba.com/watch/video/this-day-in-history-historical-feature-scott-skiles-records-30-assists-in-a-game"},
+  {"key":"stl","label":"单场抢断王","target":11,"holder":"拉里·肯农 / 肯达尔·吉尔","source":"https://www.nba.com/news/most-steals-by-a-player-in-a-single-nba-game"},
+  {"key":"blk","label":"单场盖帽王","target":17,"holder":"埃尔摩·史密斯","source":"https://www.nba.com/news/the-most-blocks-by-a-player-in-an-nba-game"}
+ ],
+ "career":[
+  {"key":"pts","label":"生涯得分王","target":43440,"holder":"勒布朗·詹姆斯","source":"https://www.nba.com/news/lebron-james-lakers-legacy-closes"},
+  {"key":"reb","label":"生涯篮板王","target":23924,"holder":"张伯伦","source":"https://www.nba.com/news/archive-75-wilt-chamberlain"},
+  {"key":"ast","label":"生涯助攻王","target":15806,"holder":"约翰·斯托克顿","source":"https://www.nba.com/jazz/news/latest-teaser-for-note-worthy-50-seasons-of-jazz-basketball-highlights-the-1990s"},
+  {"key":"stl","label":"生涯抢断王","target":3265,"holder":"约翰·斯托克顿","source":"https://www.nba.com/jazz/news/latest-teaser-for-note-worthy-50-seasons-of-jazz-basketball-highlights-the-1990s"},
+  {"key":"blk","label":"生涯盖帽王","target":3830,"holder":"哈基姆·奥拉朱旺","source":"https://www.nba.com/news/history-nba-legend-hakeem-olajuwon"},
+  {"key":"doubleDouble","label":"生涯两双王","target":968,"holder":"张伯伦（含早期历史统计口径）","source":"https://en.wikipedia.org/wiki/Double-double"},
+  {"key":"tripleDouble","label":"生涯三双王","target":209,"holder":"拉塞尔·威斯布鲁克","source":"https://www.nba.com/news/most-triple-doubles-in-nba-history"}
+ ]
+}

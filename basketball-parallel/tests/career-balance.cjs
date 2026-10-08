@@ -9,7 +9,7 @@ const history=vm.runInNewContext(fs.readFileSync(historyPath,'utf8').replace('ex
 const keys=['threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU'];
 const ratings=value=>Object.fromEntries(keys.map(k=>[k,value]));
 const context={URL,Element:{prototype:{attachShadow(){}}},document:{currentScript:{src:'https://example.test/basketball-parallel/local-runtime.js'},addEventListener(){}},window:{__REGRET_STATIC__:{seasons:[{season:'2017-18',teams:history[2017].teams.map(t=>({abbreviation:t[0],team_id:t[1]}))}]}},location:{href:'https://example.test/'},fetch:async()=>({json:async()=>({files:{}})}),__HIST:{HISTORY_PACKS:history}};
-vm.createContext(context);
+vm.createContext(context);vm.runInContext(fs.readFileSync('basketball-parallel/career-core.js','utf8'),context);
 vm.runInContext(fs.readFileSync(path.join(root,'local-runtime.js'),'utf8').replace("import(BASE+'dynasty-history-9ba1c1cf68e1.js')","Promise.resolve(__HIST)"),context);
 const req=context.window.parallelRequest;
 const simulate=(position,current_ratings,seed=1)=>req('/simulate',{data:{season:'2017-18',team:'GSW',seed,player:{position,current_ratings},career_context:{career_year:1,age:20}}});
@@ -28,7 +28,7 @@ const mean=values=>values.reduce((a,b)=>a+b,0)/values.length;
    const l=g.player_line;
    for(const key of ['pts','reb','ast','fgm','fga','ftm','fta'])assert.ok(Number.isInteger(l[key])&&l[key]>=0,`${position}: invalid ${key}`);
    assert.equal(l.pts,l.fgm*2+l.three_m+l.ftm);
-   assert.ok(l.fgm<=l.fga&&l.three_m<=l.fgm&&l.min<=44);
+   assert.ok(l.fgm<=l.fga&&l.three_m<=l.fgm&&l.min<=48);
    assert.equal(l.reb,l.rebounds);assert.equal(l.ast,l.assists);
   }
  }

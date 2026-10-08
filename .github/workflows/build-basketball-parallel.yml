@@ -3,6 +3,11 @@ on:
   push:
     paths:
       - basketball-parallel/build.py
+      - basketball-parallel/frontend_patches.py
+      - basketball-parallel/local-runtime.js
+      - basketball-parallel/career-core.js
+      - basketball-parallel/career-extras.js
+      - basketball-parallel/records.json
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,6 +22,10 @@ jobs:
           python-version: '3.12'
       - name: Cache original modules and images
         run: python basketball-parallel/build.py
+      - name: Verify local career rules
+        run: |
+          node basketball-parallel/tests/career-features.cjs
+          node basketball-parallel/tests/career-balance.cjs
       - name: Publish cached game
         run: |
           git config user.name 'github-actions[bot]'

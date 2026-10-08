@@ -1,4 +1,5 @@
 from pathlib import Path
+from frontend_patches import patch_frontend
 import urllib.request,concurrent.futures,re,json,hashlib,time
 from urllib.parse import urljoin,urlparse
 ROOT=Path(__file__).parent
@@ -48,18 +49,20 @@ for u,s in entries.items():
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./local-runtime.js?v=20261009-r9"></script>')
+  s=s.replace('<head>','<head><script src="./career-core.js?v=20261009-r10"></script><script src="./career-extras.js?v=20261009-r10"></script><script src="./local-runtime.js?v=20261009-r10"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
-  s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,t);')
+  s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
+  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261009-r10')
   s=s.replace('getUser:()=>xn()','getUser:async()=>null')
   s=s.replace('广告播放中','领取中').replace('观看广告','领取奖励').replace('看广告','领取奖励').replace('广告换队','免费换队').replace('广告 · 高质重抽','免费 · 高质重抽')
   s=s.replace('https://ai-1786703713642-d0el49h17f235e5-1252166086.ap-shanghai.app.tcloudbase.com/api','')
   # Direct application is the index; also preserve relative navigation to __ai_app.html.
   (ROOT/'index.html').write_text(s)
  if u.endswith('career-prismatic.js'):
+  s=patch_frontend(s)
   s=s.replace('function tk(){','function tk(){return true;')
-  s=s.replace('async function sc(e,t={}){','async function sc(e,t={}){return window.parallelRequest(e,t);')
+  s=s.replace('async function sc(e,t={}){','async function sc(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
   s=s.replace('getUser:()=>Pc()','getUser:async()=>null')
   s=s.replace('广告播放中','领取中').replace('观看广告','领取奖励').replace('看广告','领取奖励').replace('广告换队','免费换队').replace('广告 · 高质重抽','免费 · 高质重抽')
  (ROOT/target(u)).write_text(s)
