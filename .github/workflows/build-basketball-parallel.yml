@@ -8,6 +8,7 @@ on:
       - basketball-parallel/career-core.js
       - basketball-parallel/career-extras.js
       - basketball-parallel/records.json
+      - basketball-parallel/legend-profiles.json
   workflow_dispatch:
 permissions:
   contents: write

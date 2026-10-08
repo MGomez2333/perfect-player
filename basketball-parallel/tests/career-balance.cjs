@@ -8,7 +8,7 @@ const historyPath=[path.join(root,historyName),path.join(root,'source',historyNa
 const history=vm.runInNewContext(fs.readFileSync(historyPath,'utf8').replace('export{e as HISTORY_PACKS};','e;'));
 const keys=['threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU'];
 const ratings=value=>Object.fromEntries(keys.map(k=>[k,value]));
-const context={URL,Element:{prototype:{attachShadow(){}}},document:{currentScript:{src:'https://example.test/basketball-parallel/local-runtime.js'},addEventListener(){}},window:{__REGRET_STATIC__:{seasons:[{season:'2017-18',teams:history[2017].teams.map(t=>({abbreviation:t[0],team_id:t[1]}))}]}},location:{href:'https://example.test/'},fetch:async()=>({json:async()=>({files:{}})}),__HIST:{HISTORY_PACKS:history}};
+const context={URL,Element:{prototype:{attachShadow(){}}},document:{currentScript:{src:'https://example.test/basketball-parallel/local-runtime.js'},addEventListener(){}},window:{__REGRET_STATIC__:{seasons:[{season:'2017-18',teams:history[2017].teams.map(t=>({abbreviation:t[0],team_id:t[1]}))}]}},location:{href:'https://example.test/'},fetch:async url=>({json:async()=>String(url).endsWith('asset-manifest.json')?{files:{}}:JSON.parse(fs.readFileSync(path.join(root,String(url).split('/').at(-1)),'utf8'))}),__HIST:{HISTORY_PACKS:history}};
 vm.createContext(context);vm.runInContext(fs.readFileSync('basketball-parallel/career-core.js','utf8'),context);
 vm.runInContext(fs.readFileSync(path.join(root,'local-runtime.js'),'utf8').replace("import(BASE+'dynasty-history-9ba1c1cf68e1.js')","Promise.resolve(__HIST)"),context);
 const req=context.window.parallelRequest;
