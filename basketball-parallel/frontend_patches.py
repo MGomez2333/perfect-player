@@ -20,3 +20,9 @@ def patch_frontend(s):
         if old not in s: raise ValueError('Frontend patch anchor missing: '+old[:80])
         s=s.replace(old,new)
     return s
+
+
+def patch_dynasty(s):
+    old='async prepareRewardVideo(){await es(e,`releaseMemory`,{}),e.client.destroy()}'
+    if s.count(old)!=1: raise ValueError('Dynasty reward lifecycle anchor missing')
+    return s.replace(old,'async prepareRewardVideo(){return true}')

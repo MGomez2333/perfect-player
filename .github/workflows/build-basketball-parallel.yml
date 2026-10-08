@@ -28,6 +28,7 @@ jobs:
         run: |
           node basketball-parallel/tests/career-features.cjs
           node basketball-parallel/tests/draft-loading.cjs
+          node basketball-parallel/tests/dynasty-rewards.cjs
           node basketball-parallel/tests/career-balance.cjs
       - name: Publish cached game
         run: |
