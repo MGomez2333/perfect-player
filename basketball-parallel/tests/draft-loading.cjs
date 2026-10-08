@@ -1,6 +1,6 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),cp=require('node:child_process');
 const root=path.resolve(__dirname,'..');
-const patched=cp.execFileSync('python3',['-c',"import sys;sys.path.insert(0,sys.argv[1]);from frontend_patches import patch_frontend;print(patch_frontend(open(sys.argv[1]+'/source/career-prismatic.js').read()))",root],{encoding:'utf8',maxBuffer:8*1024*1024});
+const patched=fs.existsSync(path.join(root,'source/career-prismatic.js'))?cp.execFileSync('python3',['-c',"import sys;sys.path.insert(0,sys.argv[1]);from frontend_patches import patch_frontend;print(patch_frontend(open(sys.argv[1]+'/source/career-prismatic.js').read()))",root],{encoding:'utf8',maxBuffer:8*1024*1024}):fs.readFileSync(path.join(root,'career-prismatic.js'),'utf8');
 const gm=patched.slice(patched.indexOf('async function GM('),patched.indexOf('function KM()',patched.indexOf('async function GM(')));
 const extras=fs.readFileSync(path.join(root,'career-extras.js'),'utf8');
 const wait=extras.slice(extras.indexOf('function wait('),extras.indexOf(' window.parallelCareer={',extras.indexOf('function wait(')));
