@@ -42,6 +42,10 @@
  document.addEventListener('click',e=>{const b=e.target.closest('[data-action],[data-star-cards-open],button');if(!b)return;const a=b.dataset.action||'';let title;if(b.matches('[data-star-cards-open]'))title='我的梦之队';if(['choose-regret','resume-home-regret'].includes(a))title='回到一场球';if(/trinity/.test(a)&&/^(start|resume|open)/.test(a))title='他化自在';if(title){e.preventDefault();e.stopImmediatePropagation();notice(title);}},true);
  // Preserve image-based rendering even when an upstream spelling has changed.
  let mapping;window.parallelAssetMap=fetch(BASE+'asset-manifest.json').then(r=>r.json()).then(m=>mapping=m.files);
- const remap=root=>{for(const img of root.querySelectorAll?.('img[src]')||[]){if(mapping?.[img.getAttribute('src')])img.src=mapping[img.getAttribute('src')];img.decoding='async';}};
- document.addEventListener('DOMContentLoaded',()=>{window.parallelAssetMap.then(()=>remap(document));new MutationObserver(rs=>{for(const r of rs)for(const n of r.addedNodes)if(n.nodeType===1)remap(n);}).observe(document.body,{childList:true,subtree:true});});
+ const roots=new Set();
+ const fix=img=>{const src=img.getAttribute('src');if(mapping?.[src])img.setAttribute('src',mapping[src]);img.decoding='async';};
+ const remap=root=>{if(root.matches?.('img[src]'))fix(root);for(const img of root.querySelectorAll?.('img[src]')||[])fix(img);for(const el of root.querySelectorAll?.('*')||[])if(el.shadowRoot)watch(el.shadowRoot);};
+ function watch(root){if(roots.has(root))return;roots.add(root);remap(root);new MutationObserver(rs=>{for(const r of rs){if(r.type==='attributes')fix(r.target);else for(const n of r.addedNodes)if(n.nodeType===1)remap(n);}}).observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});}
+ const attach=Element.prototype.attachShadow;Element.prototype.attachShadow=function(options){const root=attach.call(this,options);watch(root);return root;};
+ document.addEventListener('DOMContentLoaded',()=>{watch(document);window.parallelAssetMap.then(()=>{for(const root of roots)remap(root);});});
 })();
