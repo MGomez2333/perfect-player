@@ -10,6 +10,7 @@ on:
       - basketball-parallel/records.json
       - basketball-parallel/legend-profiles.json
       - basketball-parallel/tests/**
+      - basketball-parallel/source-snapshot.part*
   workflow_dispatch:
 permissions:
   contents: write
@@ -31,6 +32,7 @@ jobs:
           node basketball-parallel/tests/dynasty-rewards.cjs
           node basketball-parallel/tests/career-balance.cjs
           node basketball-parallel/tests/career-volatility.cjs
+          node basketball-parallel/tests/permanent-augments.cjs
       - name: Publish cached game
         run: |
           git config user.name 'github-actions[bot]'

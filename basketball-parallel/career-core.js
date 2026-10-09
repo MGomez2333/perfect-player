@@ -26,6 +26,22 @@
   const convert=t=>Object.fromEntries(Object.entries({pts:'points',reb:'rebounds',ast:'assists',stl:'steals',blk:'blocks',three_m:'threes'}).filter(([k,v])=>t?.[v]!=null).map(([k,v])=>[k,Math.max(0,Number(t[v])||0)]));
   return {season:s.season,regular:{games:s.playerAverages?.games??null,totals:convert(s.totals),highs:convert(s.singleGameHighs),counts:{},legacy:true},playoffs:{games:s.playoffGames??null,totals:convert(s.playoffTotals),highs:convert(s.playoffSingleGameHighs),counts:{},legacy:true}};
  }
+ function collectReaper(career,result,{moments=[],step=0,complete=false}={}){
+  if(!career||!result)return false;
+  const before=JSON.stringify(career.reaperOpportunities||[]),seen=new Set(moments.slice(0,Math.max(0,step)+1).filter(m=>m.kind==='game-box').map(m=>m.game));
+  const won=(result.playoff_series||[]).filter(s=>s.winner===result.team&&s.teams.includes(result.team)&&(complete||seen.has(s.games?.at(-1))));
+  career.reaperOpportunities??=[];
+  const cards=career.permanentAugments||result.permanent_augments||[];
+  for(const card of cards.filter(a=>a.id==='reaper')){
+   let op=career.reaperOpportunities.find(x=>x.key===card.key&&x.season===result.season);
+   const candidates=(result.reaper_rounds||[]).filter(r=>won.some(s=>s.round===r.round)).flatMap(r=>r.skills);
+   if(!candidates.length)continue;
+   if(!op){op={key:card.key,season:result.season,options:[],skills:[]};career.reaperOpportunities.push(op);}
+   for(const skill of candidates)if(!op.options.includes(skill.id)){op.options.push(skill.id);op.skills.push(skill);}
+   if(card.key===career.seasonAugment?.key&&career.seasonAugment.reaperAccepted)op.claimed=career.seasonAugment.reaperAccepted;
+  }
+  return before!==JSON.stringify(career.reaperOpportunities);
+ }
  function request(data,career,name){migrate(career);const out={...data,player:{...data.player,name:name||career?.customName||'我的球员'},career_context:{...data.career_context}};if(career){remember(career,career.seasonAugment);out.career_context.permanent_augments=(career.permanentAugments||[]).map(a=>({...a}));out.career_context.career_id=career.careerId;}if(out.career_context.augment){const current=out.career_context.permanent_augments?.find(a=>a.key===career?.seasonAugment?.key);out.career_context.augment={...out.career_context.augment,key:current?.key||out.career_context.augment.key||`${out.career_context.career_id||"draft"}:${out.career_context.career_year||1}`};}return out;}
- const api={franchise,teamAt,selected,remember,migrate,augments,summarize,resultStats,visibleStats,archivedStats,request};root.ParallelCareerCore=api;if(typeof module!=='undefined')module.exports=api;
+ const api={franchise,teamAt,selected,remember,migrate,augments,summarize,resultStats,visibleStats,archivedStats,collectReaper,request};root.ParallelCareerCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
