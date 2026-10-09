@@ -8,3 +8,5 @@ const loaded=JSON.parse(JSON.stringify(c));core.collectReaper(loaded,result,{com
 core.collectReaper(loaded,{...result,season:'2027-28'},{complete:true});assert.equal(loaded.reaperOpportunities.length,4);assert.equal(loaded.reaperOpportunities[2].claimed,undefined);
 const old={permanentAugments:[a],seasonAugment:{key:'c:1',reaperAccepted:'one'}};core.collectReaper(old,result,{complete:true});assert.equal(old.reaperOpportunities[0].claimed,'one');
 console.log('PASS: permanent reapers trigger only after visible wins, stack per card, persist claims, and renew next season.');
+
+const migrated={careerId:'real',careerYear:2,currentSeason:'2027-28',currentTeam:'BOS',permanentAugments:[{...a,key:'real:1'}],seasons:[{careerYear:1,season:'2026-27',parallelAugments:[{...a,key:'draft:1'}]}]};core.migrate(migrated);core.migrate(migrated);assert.equal(migrated.permanentAugments.length,1);assert.equal(migrated.permanentAugments[0].key,'real:1');console.log('PASS: initial draft augment is not duplicated when career identity is assigned.');

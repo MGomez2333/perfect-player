@@ -7,6 +7,7 @@
  function remember(career,state){if(!career)return;const aug=selected(state);if(!aug)return;career.permanentAugments??=[];const key=aug.key||`${career.careerId}:${career.careerYear}`;const old=career.permanentAugments.find(a=>a.key===key);if(old)Object.assign(old,aug,{key});else career.permanentAugments.push({...aug,key,acquiredSeason:career.currentSeason});}
  function migrate(career){if(!career)return career;remember(career,career.seasonAugment);career.currentTeam=teamAt(career.currentTeam,career.currentSeason);career.franchiseId=franchise(career.currentTeam);if(career.contract){career.contract.team=teamAt(career.contract.team,career.currentSeason);career.contract.franchiseId=franchise(career.contract.team);}
   for(const s of career.seasons||[]){s.team=teamAt(s.team,s.season);s.franchiseId=franchise(s.team);if(s.parallelAugments)for(const a of s.parallelAugments){career.permanentAugments??=[];if(!career.permanentAugments.some(x=>x.key===a.key))career.permanentAugments.push({...a});}}
+  const normalized=new Map();for(const a of career.permanentAugments||[]){const key=String(a.key||'').startsWith('draft:')?`${career.careerId}:1`:a.key;if(!key)continue;const known=normalized.get(key);if(!known||String(a.key||'')===key)normalized.set(key,{...a,key});}career.permanentAugments=[...normalized.values()];
   for(const o of career.pendingOffers||[]){o.team=teamAt(o.team,parseInt(career.currentSeason)+1);o.franchise_id=franchise(o.team);if(o.kind==='stay'&&o.franchise_id!==career.franchiseId){o.kind='featured';o.roster=[];}}
   return career;
  }
