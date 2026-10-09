@@ -39,21 +39,24 @@
   const assistSkill=r.PAS*.75+r.HAN*.15+r.CLU*.1;
   const reboundMean=(.5+skillProduction(reboundSkill,.22,.035,.35))*rates.reb*opportunity;
   const assistMean=skillProduction(assistSkill,.18,.033,.24)*rates.ast*opportunity;
-  let pts=Math.max(0,Math.round(((r.threePT+r.MID+r.FIN)/3-40)*.55*(.65+rng()*.7)));
-  let reb=Math.max(0,Math.round(reboundMean*(.6+rng()*.8)));
-  let ast=Math.max(0,Math.round(assistMean*(.6+rng()*.8)));
   const stealSkill=r.PDEF*.55+r.HAN*.1+r.ATH*.2+r.CLU*.15,blockSkill=r.BLK*.55+r.IDEF*.25+r.ATH*.2;
-  const poisson=mean=>{let n=0,p=1,limit=Math.exp(-Math.max(0,mean));do{n++;p*=rng();}while(p>limit&&n<40);return n-1;};
   const stealRate={PG:1.12,SG:1.06,SF:1,PF:.9,C:.85}[position]||1;
   const blockRate={PG:.32,SG:.4,SF:.58,PF:.85,C:1}[position]||1;
-  let stl=poisson(Math.max(0,(stealSkill-40)*.045)*stealRate*opportunity),blk=poisson(Math.max(0,(blockSkill-40)*.085)*blockRate*opportunity);
-  let explosion=false;
-  if(min>=38&&stealSkill>=96&&blockSkill>=96&&reboundSkill>=96&&assistSkill>=96&&Math.min(r.FIN,r.MID)>=95&&rng()<.0003){stl=10+Math.floor(rng()*3);blk=10+Math.floor(rng()*6);reb=Math.max(reb,10);ast=Math.max(ast,10);explosion=true;}
-  if(min>=38&&reboundSkill>=98&&rng()<.0006)reb=50+Math.floor(rng()*12);
-  if(min>=36&&assistSkill>=97&&rng()<.001)ast=28+Math.floor(rng()*9);
-  if(min>=38&&Math.min(r.threePT,r.MID,r.FIN,r.HAN,r.CLU)>=98&&rng()<.0006)pts=85+Math.floor(rng()*26);
+  // Unit-mean conditions and independent long tails. No near-perfect rating gate.
+  const logNormal=sigma=>Math.exp(sigma*Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng())-sigma*sigma/2);
+  const form=logNormal(.18)*(.85+rng()*.3);
+  const poisson=mean=>{let n=0,left=Math.max(0,mean);while(left>0){const chunk=Math.min(20,left),limit=Math.exp(-chunk);let product=1,k=0;do{k++;product*=Math.max(1e-12,rng());}while(product>limit);n+=k-1;left-=chunk;}return n;};
+  const bursts=[];
+  const performance=(mean,key,sigma)=>{const roll=rng();let hot=1;if(roll<.0002){hot=3+rng()*1.5;bursts.push(key);}else if(roll<.0072){hot=1.8+rng();bursts.push(key);}return poisson(mean*form*logNormal(sigma)*hot/1.00965);};
+  let pts=performance(Math.max(0,((r.threePT+r.MID+r.FIN)/3-40)*.55),'pts',.30);
+  let reb=performance(reboundMean,'reb',.32),ast=performance(assistMean,'ast',.36);
+  let stl=performance(Math.max(0,(stealSkill-40)*.045)*stealRate*opportunity,'stl',.48);
+  let blk=performance(Math.max(0,(blockSkill-40)*.085)*blockRate*opportunity,'blk',.48);
+  // Regulation opportunity budgets shared across positions, unrelated to personal averages.
+  pts=Math.min(pts,150);reb=Math.min(reb,75);ast=Math.min(ast,50);stl=Math.min(stl,30);blk=Math.min(blk,35);
+  const explosion=bursts.length>0||pts>=60||reb>=30||ast>=20||stl>=8||blk>=10;
   const fga=Math.max(Math.ceil(pts/2),Math.round(pts/1.5)),fgm=Math.min(fga,Math.round(pts*.34)),threeMade=Math.min(fgm,Math.round(pts*.09));
-  return {min,pts,reb,ast,stl,blk,legendary_performance:explosion,tov:Math.round(rng()*4),fgm,fga,fg_pct:fga?fgm/fga:0,three_m:threeMade,three_a:Math.max(threeMade,Math.round(threeMade*2.7)),three_made:threeMade,three_attempts:Math.max(threeMade,Math.round(threeMade*2.7)),three_pct:.36,ftm:Math.max(0,pts-fgm*2-threeMade),fta:Math.max(0,pts-fgm*2-threeMade+1),ft_pct:.8,starter:o>=72,played:true,points:pts,rebounds:reb,assists:ast};
+  return {min,pts,reb,ast,stl,blk,legendary_performance:explosion,burst_categories:bursts,tov:Math.round(rng()*4),fgm,fga,fg_pct:fga?fgm/fga:0,three_m:threeMade,three_a:Math.max(threeMade,Math.round(threeMade*2.7)),three_made:threeMade,three_attempts:Math.max(threeMade,Math.round(threeMade*2.7)),three_pct:.36,ftm:Math.max(0,pts-fgm*2-threeMade),fta:Math.max(0,pts-fgm*2-threeMade+1),ft_pct:.8,starter:o>=72,played:true,points:pts,rebounds:reb,assists:ast};
  }
  function distribute(total,weights){const sum=weights.reduce((a,b)=>a+b,0)||1,out=weights.map(w=>Math.floor(total*w/sum));let left=total-out.reduce((a,b)=>a+b,0);const order=weights.map((w,i)=>({i,rem:total*w/sum-out[i]})).sort((a,b)=>b.rem-a.rem);for(let i=0;i<left;i++)out[order[i%order.length].i]++;return out;}
  function finishGame(g,roster,team,player,rng){

@@ -1,0 +1,23 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'),file='dynasty-history-9ba1c1cf68e1.js',history=vm.runInNewContext(fs.readFileSync([path.join(root,file),path.join(root,'source',file)].find(fs.existsSync),'utf8').replace('export{e as HISTORY_PACKS};','e;'));
+const c={URL,Element:{prototype:{attachShadow(){}}},document:{currentScript:{src:'https://test.local/local-runtime.js'},addEventListener(){}},window:{__REGRET_STATIC__:{seasons:[{season:'2017-18',teams:history[2017].teams.map(t=>({abbreviation:t[0],team_id:t[1]}))}]}},location:{href:'https://test.local/'},fetch:async url=>({json:async()=>String(url).endsWith('asset-manifest.json')?{files:{}}:JSON.parse(fs.readFileSync(path.join(root,String(url).split('/').at(-1)),'utf8'))}),__HIST:{HISTORY_PACKS:history}};
+vm.createContext(c);vm.runInContext(fs.readFileSync(path.join(root,'career-core.js'),'utf8'),c);vm.runInContext(fs.readFileSync(path.join(root,'local-runtime.js'),'utf8').replace("import(BASE+'dynasty-history-9ba1c1cf68e1.js')","Promise.resolve(__HIST)").replace(' function honor(',' window.testLine=line;window.testRandom=random; function honor('),c);
+const core=c.window.ParallelCareerCore,req=c.window.parallelRequest,keys=['threePT','MID','FIN','DNK','HAN','PAS','PDEF','IDEF','BLK','REB','ATH','STR','CLU'],ratings=v=>Object.fromEntries(keys.map(k=>[k,v]));
+const sim=(data={})=>req('/simulate',{data:{season:'2017-18',team:'GSW',seed:123,player:{position:'C',current_ratings:ratings(99),name:'测试中锋'},career_context:{career_year:1,career_id:'test',age:20},...data}});
+const samples=[],rng=c.window.testRandom(572019),totals={pts:0,reb:0,ast:0,stl:0,blk:0},highs={...totals};let eighty=0,hundred=0;
+for(let i=0;i<60000;i++){const l=c.window.testLine(ratings(85),rng,'C');samples.push(l.pts);for(const k of Object.keys(totals)){totals[k]+=l[k];highs[k]=Math.max(highs[k],l[k]);}eighty+=l.pts>=80;hundred+=l.pts>100;}
+const mean=totals.pts/samples.length,sd=Math.sqrt(samples.reduce((n,x)=>n+(x-mean)**2,0)/samples.length);
+assert.ok(mean>23&&mean<26.5,'Burst chances must preserve the ordinary scoring mean');
+assert.ok(sd/mean>.35,'Ordinary games must have meaningful variation');
+assert.ok(eighty>0&&hundred>0&&hundred/samples.length<.003,'Non-perfect ratings can break 100, exceptionally');
+assert.ok(highs.reb>55&&highs.ast>30&&highs.stl>11&&highs.blk>17,'All five stats can explode without 96+ gates');
+const regular=[{player_line:{pts:101,reb:10,ast:10,stl:1,blk:1}}],post=[{player_line:{pts:64,reb:42,ast:25,stl:11,blk:13}},{player_line:{pts:20,reb:3,ast:3,stl:0,blk:0}}],playIn={player_line:{pts:150,reb:50,ast:30,stl:20,blk:20}};
+const result={season:'2026-27',team:'GSW',regular_season:{games:regular},playoff_series:[{teams:['GSW','BOS'],games:post}],play_in_games:[playIn]};
+const moments=[{kind:'season-checkpoint',checkpoint:{games:1}},{kind:'game-box',game:playIn},{kind:'game-box',game:post[0]},{kind:'game-box',game:post[1]}];
+const before=core.visibleStats(result,{moments,step:1});assert.equal(before.playoffs.games,0);assert.equal(before.regular.highs.pts,101);
+const live=core.visibleStats(result,{moments,step:2});assert.equal(live.playoffs.games,1);assert.equal(live.playoffs.highs.pts,64);assert.equal(live.playoffs.counts.quintupleDouble,1);assert.equal(live.playoffs.totals.pts,64);
+const final=core.visibleStats(result,{complete:true});assert.equal(final.playoffs.totals.pts,84);assert.equal(final.regular.totals.pts,101);assert.equal(final.playoffs.games,2);
+assert.equal(JSON.stringify(core.visibleStats(result,{moments,step:2})),JSON.stringify(live));
+const old=core.archivedStats({season:'2020-21',playoffTotals:{points:400,rebounds:120,assists:65},playerAverages:{games:82},totals:{points:2000},singleGameHighs:{points:65}});assert.equal(old.playoffs.totals.pts,400);assert.ok(!Object.hasOwn(old.playoffs.highs,'pts'));assert.equal(old.regular.highs.pts,65);
+const records=JSON.parse(fs.readFileSync(path.join(root,'records.json'),'utf8'));assert.equal(records.playoffs.single.length,5);assert.equal(records.playoffs.career.length,7);assert.equal(records.playoffs.single.find(x=>x.key==='pts').target,63);assert.equal(records.single.find(x=>x.key==='pts').target,100);
+console.log('PASS: broad ordinary variance, five independent non-perfect-rating record paths, rare 80/100-point games, separate live playoff/regular totals, no future games or play-ins, reload idempotency, old playoff totals preserved.');console.log({mean,sd,eighty,hundred,highs});

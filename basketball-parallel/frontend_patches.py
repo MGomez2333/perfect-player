@@ -25,4 +25,8 @@ def patch_frontend(s):
 def patch_dynasty(s):
     old='async prepareRewardVideo(){await es(e,`releaseMemory`,{}),e.client.destroy()}'
     if s.count(old)!=1: raise ValueError('Dynasty reward lifecycle anchor missing')
-    return s.replace(old,'async prepareRewardVideo(){return true}')
+    s=s.replace(old,'async prepareRewardVideo(){return true}')
+    start=s.index('async function re(e){')
+    end=s.index('function ie(',start)
+    s=s[:start]+'async function re(e){return window.parallelCareer.localIdentity()}'+s[end:]
+    return s

@@ -30,6 +30,7 @@ jobs:
           node basketball-parallel/tests/draft-loading.cjs
           node basketball-parallel/tests/dynasty-rewards.cjs
           node basketball-parallel/tests/career-balance.cjs
+          node basketball-parallel/tests/career-volatility.cjs
       - name: Publish cached game
         run: |
           git config user.name 'github-actions[bot]'

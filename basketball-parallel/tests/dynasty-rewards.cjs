@@ -5,3 +5,9 @@ const patched=source?cp.execFileSync('python3',['-c',"import sys;sys.path.insert
 const match=patched.match(/async prepareRewardVideo\(\)\{([^}]+)\}/);assert.ok(match);
 let destroyed=0,releases=0;const context={e:{client:{destroy(){destroyed++;}}},es:async()=>{releases++;}};vm.createContext(context);
 (async()=>{const preparation=vm.runInContext('({async prepareRewardVideo(){'+match[1]+'}})',context);await preparation.prepareRewardVideo();assert.equal(releases,0);assert.equal(destroyed,0);assert.ok(patched.includes('ww(n),t.pending=null'));assert.ok(patched.includes('saveRewardReceipt(n)'));console.log('PASS: no-ad dynasty reward retains live worker and keeps reward receipt/application/save lifecycle.');})();
+
+const profile=patched.match(/async function re\(e\)\{return window\.parallelCareer\.localIdentity\(\)\}/)?.[0];
+assert.ok(profile,'Self draft must use a local identity');
+let bridgeCalls=0;const identity={accountId:'local-test',name:'本地球员',avatar:''};
+const local=vm.runInNewContext('('+profile+')',{window:{parallelCareer:{localIdentity:()=>identity}}});
+local(()=>{bridgeCalls++;throw Error('Hupu bridge must not be called')}).then(value=>{assert.equal(value,identity);assert.equal(bridgeCalls,0);console.log('PASS: self draft works without a Hupu account or bridge.');}).catch(e=>{console.error(e);process.exitCode=1;});
