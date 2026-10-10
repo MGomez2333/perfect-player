@@ -11,7 +11,7 @@ function identity(){return {accountId,name:profile?.displayId||'本机玩家',ni
 window.parallelProfile={identity,validate:valid,edit:()=>open(false)};
 // Remote account APIs intentionally remain disconnected; game modes receive this local identity directly.
 if(!profile?.displayId)document.documentElement.dataset.profileRequired='true';
-const cssURL=new URL('./responsive.css?v=20261010-r22',document.currentScript.src).href;
+const cssURL=new URL('./responsive.css?v=20261010-r23',document.currentScript.src).href;
 function style(root){if(root.querySelector('link[data-parallel-responsive]'))return;const link=document.createElement('link');link.rel='stylesheet';link.href=cssURL;link.dataset.parallelResponsive='';root.append(link)}
 const attach=Element.prototype.attachShadow;
 Element.prototype.attachShadow=function(options){const root=attach.call(this,options);new MutationObserver(()=>style(root)).observe(root,{childList:true});style(root);return root};
