@@ -8,9 +8,10 @@ const samples=[],rng=c.window.testRandom(572019),totals={pts:0,reb:0,ast:0,stl:0
 for(let i=0;i<60000;i++){const l=c.window.testLine(ratings(85),rng,'C');samples.push(l.pts);for(const k of Object.keys(totals)){totals[k]+=l[k];highs[k]=Math.max(highs[k],l[k]);}eighty+=l.pts>=80;hundred+=l.pts>100;}
 const mean=totals.pts/samples.length,sd=Math.sqrt(samples.reduce((n,x)=>n+(x-mean)**2,0)/samples.length);
 assert.ok(mean>23&&mean<26.5,'Burst chances must preserve the ordinary scoring mean');
-assert.ok(sd/mean>.35,'Ordinary games must have meaningful variation');
+assert.ok(sd/mean>.12&&sd/mean<.27,'Ordinary games stay close to ability while leaving rare breakout nights');
 assert.ok(eighty>0&&hundred>0&&hundred/samples.length<.003,'Non-perfect ratings can break 100, exceptionally');
 assert.ok(highs.reb>55&&highs.ast>30&&highs.stl>11&&highs.blk>17,'All five stats can explode without 96+ gates');
+let fortyAssists=0,lowAssists=0;const guardRng=c.window.testRandom(29031);for(let i=0;i<30000;i++){const x=c.window.testLine(ratings(99),guardRng,'PG');fortyAssists+=x.ast>=40;lowAssists+=x.ast<10;}assert.ok(fortyAssists<25,'40+ assists must be exceptional');assert.ok(lowAssists<30,'No frequent crashes from a 20-assist baseline');
 const regular=[{player_line:{pts:101,reb:10,ast:10,stl:1,blk:1}}],post=[{player_line:{pts:64,reb:42,ast:25,stl:11,blk:13}},{player_line:{pts:20,reb:3,ast:3,stl:0,blk:0}}],playIn={player_line:{pts:150,reb:50,ast:30,stl:20,blk:20}};
 const result={season:'2026-27',team:'GSW',regular_season:{games:regular},playoff_series:[{teams:['GSW','BOS'],games:post}],play_in_games:[playIn]};
 const moments=[{kind:'season-checkpoint',checkpoint:{games:1}},{kind:'game-box',game:playIn},{kind:'game-box',game:post[0]},{kind:'game-box',game:post[1]}];
@@ -20,4 +21,4 @@ const final=core.visibleStats(result,{complete:true});assert.equal(final.playoff
 assert.equal(JSON.stringify(core.visibleStats(result,{moments,step:2})),JSON.stringify(live));
 const old=core.archivedStats({season:'2020-21',playoffTotals:{points:400,rebounds:120,assists:65},playerAverages:{games:82},totals:{points:2000},singleGameHighs:{points:65}});assert.equal(old.playoffs.totals.pts,400);assert.ok(!Object.hasOwn(old.playoffs.highs,'pts'));assert.equal(old.regular.highs.pts,65);
 const records=JSON.parse(fs.readFileSync(path.join(root,'records.json'),'utf8'));assert.equal(records.playoffs.single.length,5);assert.equal(records.playoffs.career.length,7);assert.equal(records.playoffs.single.find(x=>x.key==='pts').target,63);assert.equal(records.single.find(x=>x.key==='pts').target,100);
-console.log('PASS: broad ordinary variance, five independent non-perfect-rating record paths, rare 80/100-point games, separate live playoff/regular totals, no future games or play-ins, reload idempotency, old playoff totals preserved.');console.log({mean,sd,eighty,hundred,highs});
+console.log('PASS: concentrated ordinary variance, five independent non-perfect-rating record paths, rare 80/100-point games, separate live playoff/regular totals, no future games or play-ins, reload idempotency, old playoff totals preserved.');console.log({mean,sd,eighty,hundred,highs});

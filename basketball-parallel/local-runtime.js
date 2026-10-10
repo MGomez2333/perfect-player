@@ -29,7 +29,7 @@
  const positionRates={PG:{reb:.59,ast:1},SG:{reb:.56,ast:.9},SF:{reb:.66,ast:.83},PF:{reb:.79,ast:.76},C:{reb:1,ast:.68}};
  function skillProduction(skill,slope,eliteSlope,overflowSlope){
   const elite=Math.max(0,Math.min(skill,99)-85);
-  return Math.max(0,(skill-35)*slope+elite*elite*eliteSlope+Math.max(0,skill-99)*overflowSlope);
+  return Math.max(0,(skill-35)*slope+elite*elite*eliteSlope+Math.log1p(Math.max(0,skill-99)/20)*20*overflowSlope);
  }
  function line(r,rng,position='SF',minutesBonus=0){
   const o=avg(r),min=cap(18+(o-60)*.6+minutesBonus,12,48),opportunity=Math.sqrt(min/33);
@@ -42,27 +42,35 @@
   const stealSkill=r.PDEF*.55+r.HAN*.1+r.ATH*.2+r.CLU*.15,blockSkill=r.BLK*.55+r.IDEF*.25+r.ATH*.2;
   const stealRate={PG:1.12,SG:1.06,SF:1,PF:.9,C:.85}[position]||1;
   const blockRate={PG:.32,SG:.4,SF:.58,PF:.85,C:1}[position]||1;
-  // Unit-mean conditions and independent long tails. No near-perfect rating gate.
-  const logNormal=sigma=>Math.exp(sigma*Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng())-sigma*sigma/2);
-  const form=logNormal(.18)*(.85+rng()*.3);
-  const poisson=mean=>{let n=0,left=Math.max(0,mean);while(left>0){const chunk=Math.min(20,left),limit=Math.exp(-chunk);let product=1,k=0;do{k++;product*=Math.max(1e-12,rng());}while(product>limit);n+=k-1;left-=chunk;}return n;};
-  const bursts=[];
-  const performance=(mean,key,sigma)=>{const roll=rng();let hot=1;if(roll<.0002){hot=3+rng()*1.5;bursts.push(key);}else if(roll<.0072){hot=1.8+rng();bursts.push(key);}return poisson(mean*form*logNormal(sigma)*hot/1.00965);};
-  let pts=performance(Math.max(0,((r.threePT+r.MID+r.FIN)/3-40)*.55),'pts',.30);
-  let reb=performance(reboundMean,'reb',.32),ast=performance(assistMean,'ast',.36);
-  let stl=performance(Math.max(0,(stealSkill-40)*.045)*stealRate*opportunity,'stl',.48);
-  let blk=performance(Math.max(0,(blockSkill-40)*.085)*blockRate*opportunity,'blk',.48);
-  // Regulation opportunity budgets shared across positions, unrelated to personal averages.
-  pts=Math.min(pts,150);reb=Math.min(reb,75);ast=Math.min(ast,50);stl=Math.min(stl,30);blk=Math.min(blk,35);
+  // Ordinary form is bounded and concentrated. Exceptional nights have a separate rare draw.
+  const normal=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng())))*Math.cos(2*Math.PI*rng());
+  const form=cap(1+normal()*.07,.83,1.17),bursts=[];
+  const performance=(mean,key,spread)=>{const roll=rng();let value=Math.max(0,mean*form+cap(normal(),-2.5,2.5)*Math.max(.65,mean*spread));
+   if(roll<.00015){value=mean*(key==='ast'?.9:1.8)+({pts:70,reb:42,ast:28,stl:12,blk:13}[key])*(.55+rng()*.45);bursts.push(key);}
+   else if(roll<.003){value=mean*(key==='ast'?1.3+rng()*.45:1.6+rng()*.65);bursts.push(key);}
+   return Math.round(value);};
+  let pts=performance(Math.max(0,((r.threePT+r.MID+r.FIN)/3-40)*.55),'pts',.17);
+  let reb=performance(reboundMean,'reb',.14),ast=performance(assistMean,'ast',.14);
+  let stl=performance(Math.max(0,(stealSkill-40)*.045)*stealRate*opportunity,'stl',.32);
+  let blk=performance(Math.max(0,(blockSkill-40)*.085)*blockRate*opportunity,'blk',.28);
+  // A once-in-many-seasons all-around night requires elite two-way fundamentals.
+  if(rng()<.00003&&Math.min(reboundSkill,assistSkill,stealSkill,blockSkill)>=92){reb=Math.max(reb,12);ast=Math.max(ast,12);stl=Math.max(stl,10);blk=Math.max(blk,10);bursts.push('all-around');}
+  const possessions=Math.round(94+rng()*18+(bursts.length?10:0));
+  const teammateBaskets=Math.round(possessions*(.34+rng()*.16));
+  const reboundChances=Math.round(possessions*(.67+rng()*.28));
+  const opponentTurnovers=Math.round(10+rng()*12+(bursts.includes('stl')?10:0));
+  const opponentMisses=Math.round(possessions*(.4+rng()*.16));
+  ast=Math.min(ast,teammateBaskets);reb=Math.min(reb,Math.round(reboundChances*.72));stl=Math.min(stl,opponentTurnovers);blk=Math.min(blk,opponentMisses);
+  pts=Math.min(pts,Math.round(possessions*1.45));
   const explosion=bursts.length>0||pts>=60||reb>=30||ast>=20||stl>=8||blk>=10;
   const fga=Math.max(Math.ceil(pts/2),Math.round(pts/1.5)),fgm=Math.min(fga,Math.round(pts*.34)),threeMade=Math.min(fgm,Math.round(pts*.09));
-  return {min,pts,reb,ast,stl,blk,legendary_performance:explosion,burst_categories:bursts,tov:Math.round(rng()*4),fgm,fga,fg_pct:fga?fgm/fga:0,three_m:threeMade,three_a:Math.max(threeMade,Math.round(threeMade*2.7)),three_made:threeMade,three_attempts:Math.max(threeMade,Math.round(threeMade*2.7)),three_pct:.36,ftm:Math.max(0,pts-fgm*2-threeMade),fta:Math.max(0,pts-fgm*2-threeMade+1),ft_pct:.8,starter:o>=72,played:true,points:pts,rebounds:reb,assists:ast};
+  return {min,pts,reb,ast,stl,blk,legendary_performance:explosion,burst_categories:bursts,opportunity_budget:{possessions,teammateBaskets,reboundChances,opponentTurnovers,opponentMisses},tov:Math.round(rng()*4),fgm,fga,fg_pct:fga?fgm/fga:0,three_m:threeMade,three_a:Math.max(threeMade,Math.round(threeMade*2.7)),three_made:threeMade,three_attempts:Math.max(threeMade,Math.round(threeMade*2.7)),three_pct:.36,ftm:Math.max(0,pts-fgm*2-threeMade),fta:Math.max(0,pts-fgm*2-threeMade+1),ft_pct:.8,starter:o>=72,played:true,points:pts,rebounds:reb,assists:ast};
  }
  function distribute(total,weights){const sum=weights.reduce((a,b)=>a+b,0)||1,out=weights.map(w=>Math.floor(total*w/sum));let left=total-out.reduce((a,b)=>a+b,0);const order=weights.map((w,i)=>({i,rem:total*w/sum-out[i]})).sort((a,b)=>b.rem-a.rem);for(let i=0;i<left;i++)out[order[i%order.length].i]++;return out;}
  function finishGame(g,roster,team,player,rng){
   const own=g.home===team?'home_score':'away_score',enemy=own==='home_score'?'away_score':'home_score',won=g.winner===team;
   const l=g.player_line;l.min=Math.round(l.min);
-  g[own]=Math.max(g[own],l.pts+Math.max(28,l.ast*2+12));
+  g[own]=Math.max(g[own],l.pts+Math.max(28,l.ast*2+16));
   if(won&&g[own]<=g[enemy])g[own]=g[enemy]+1;else if(!won&&g[enemy]<=g[own])g[enemy]=g[own]+1+Math.floor(rng()*10);
   g.box_score={};
   for(const t of [g.home,g.away]){
@@ -75,10 +83,20 @@
    if(self)lines.unshift({player:'我',name:player.name||'我的球员',player_id:-1,position:player.position,composite:true,starter:true,...l});
    g.box_score[t]=lines;
   }
+  const ownRows=g.box_score[team],oppRows=g.box_score[g.home===team?g.away:g.home];
+  const mateFG=ownRows.slice(1).reduce((n,x)=>n+x.fgm,0);l.ast=Math.min(l.ast,mateFG);l.assists=l.ast;ownRows[0].ast=l.ast;ownRows[0].assists=l.ast;
+  for(const [rows,other]of [[ownRows,oppRows],[oppRows,ownRows]]){
+   const steals=rows.reduce((n,x)=>n+x.stl,0),turnovers=other.reduce((n,x)=>n+x.tov,0);if(steals>turnovers){const add=distribute(steals-turnovers,other.map(()=>1));other.forEach((x,i)=>x.tov+=add[i]);}
+   const blocks=rows.reduce((n,x)=>n+x.blk,0),misses=other.reduce((n,x)=>n+x.fga-x.fgm,0);if(blocks>misses){const add=distribute(blocks-misses,other.map(()=>1));other.forEach((x,i)=>x.fga+=add[i]);}
+  }
+  const boards=[...ownRows,...oppRows].reduce((n,x)=>n+x.reb,0),misses=[...ownRows,...oppRows].reduce((n,x)=>n+x.fga-x.fgm,0);
+  if(boards>misses){const rows=[...ownRows.slice(1),...oppRows],add=distribute(boards-misses,rows.map(()=>1));rows.forEach((x,i)=>x.fga+=add[i]);}
+  for(const x of [...ownRows,...oppRows])x.fg_pct=x.fga?x.fgm/x.fga:0;
  }
  function honor(c,l,user=false){const stats={...l};for(const k of ['pts','reb','ast','stl','blk','min'])if(Number.isFinite(stats[k]))stats[k]=Math.round(stats[k]*10)/10;return {...c,...stats,is_user:user,name:c.player,score:stats.pts||0,line:`${stats.pts||0}分 · ${stats.reb||0}篮板 · ${stats.ast||0}助攻`};}
- async function simulate(d){const p=await pack(d.season),rng=random(d.seed||1),r=await assembled(d.player),o=avg(r),player={...d.player,ratings:r,overall:o,player:'我',player_id:-1},team=core.teamAt(d.team,d.career_context?.display_season||d.season),season=d.career_context?.display_season||d.season;let augment=d.career_context?.augment;const permanent=core.augments(d.career_context);const baseRatings={...r};let boostKeys=[];for(const savedAugment of permanent){const augment=savedAugment;const keys={three:['threePT'],mid:['MID'],finish:['FIN'],dunk:['DNK'],handle:['HAN'],pass:['PAS'],perimeter:['PDEF'],interior:['IDEF'],block:['BLK'],rebound:['REB'],athletic:['ATH'],strength:['STR'],creator:['HAN','PAS'],sniper:['HAN','threePT'],driver:['HAN','FIN'],'two-way':['MID','PDEF'],'three-d':['threePT','PDEF'],air:['DNK','ATH'],hub:['PAS','IDEF'],paint:['FIN','REB']};boostKeys=keys[augment.id]||[];if(augment.id==='weakness'&&abilities.includes(augment.choice))boostKeys=[augment.choice];for(const key of boostKeys)r[key]=cap(r[key]+augment.tier*2/boostKeys.length,25,110);if(augment.id==='borrow'){const borrowed=(await talents()).find(t=>t.id===augment.choice);if(borrowed)for(const[k,v]of Object.entries(borrowed.boosts))r[k]=cap(r[k]+v,25,110);}}
- function gameRatings(home,playoff){const rr={...r};for(const augment of permanent){if(augment?.id==='home-away'){const key=home===team?'MID':'threePT';rr[key]=cap(rr[key]+augment.tier*2,25,110);}if(augment?.id==='postseason'){const key=playoff?'FIN':'threePT';rr[key]=cap(rr[key]+augment.tier*2,25,110);}if(augment?.id==='wildcard'){const key=['threePT','MID','FIN'][Math.floor(rng()*3)];rr[key]=cap(rr[key]+augment.tier*2,25,110);}if(augment?.id==='ageless')for(const k of ['ATH','DNK'])rr[k]=cap(rr[k]+Math.max(0,(d.career_context?.age||20)-34)*augment.tier*.3,25,110);}return rr;}
+ async function simulate(d){const p=await pack(d.season),rng=random(d.seed||1),r=await assembled(d.player),o=avg(r),player={...d.player,ratings:r,overall:o,player:'我',player_id:-1},team=core.teamAt(d.team,d.career_context?.display_season||d.season),season=d.career_context?.display_season||d.season;let augment=d.career_context?.augment;const permanent=core.augments(d.career_context);const baseRatings={...r};let boostKeys=[];const skillBonus=core.bonuses(permanent,[],await talents()).totals;for(const k of abilities)r[k]+=Number(skillBonus[k]||0)+Number(d.player.inheritance_boosts?.[k]||0);
+
+ function gameRatings(home,playoff){const rr={...r};for(const augment of permanent){if(augment?.id==='home-away'){const key=home===team?'MID':'threePT';rr[key]=rr[key]+augment.tier*2;}if(augment?.id==='postseason'){const key=playoff?'FIN':'threePT';rr[key]=rr[key]+augment.tier*2;}if(augment?.id==='wildcard'){const key=['threePT','MID','FIN'][Math.floor(rng()*3)];rr[key]=rr[key]+augment.tier*2;}if(augment?.id==='ageless')for(const k of ['ATH','DNK'])rr[k]=rr[k]+Math.max(0,(d.career_context?.age||20)-34)*augment.tier*.3;}return rr;}
 
  const roster={};for(const t of p.teams)roster[t[0]]=p.players.filter(x=>x[2]===t[0]).map(x=>({...candidate(x,season,p),composite:false,starter:x[11]>=25,tov:2,stl:x[9],blk:x[10],ratings:ratings(x)}));roster[team]=roster[team]||roster[canon(team)]||Object.entries(roster).find(([t])=>canon(t)===canon(team))?.[1]||[];
  const strength=roster[team].slice(0,8).reduce((s,x)=>s+x.overall,0)/8;
@@ -93,8 +111,8 @@
  const series=[];const faced=new Set([canon(team)]);let survived=made;for(const round of ['R1','WCSF','WCF','Finals']){if(!survived)break;let eligible=p.teams.filter(t=>!faced.has(canon(t[0]))&&(round==='Finals'?east.has(canon(t[0]))!==east.has(canon(team)):east.has(canon(t[0]))===east.has(canon(team))));if(!eligible.length)eligible=p.teams.filter(t=>canon(t[0])!==canon(team));const opponent=eligible[Math.floor(rng()*eligible.length)][0];faced.add(canon(opponent));let a=0,b=0,sg=[];while(a<4&&b<4){const won=rng()<cap(winRate-.04,.2,.78),home=sg.length%2?opponent:team,away=sg.length%2?team:opponent,l=line(gameRatings(home,true),rng,player.position,permanent.filter(a=>a.id==='endurance').reduce((n,a)=>n+a.tier*2,0)),hi=Math.round(100+rng()*28),lo=hi-Math.round(1+rng()*14);won?a++:b++;sg.push({game:sg.length+1,round,home,away,winner:won?team:opponent,home_score:home===(won?team:opponent)?hi:lo,away_score:away===(won?team:opponent)?hi:lo,player_line:l,box_score:{[team]:[{player:'我',player_id:-1,position:player.position,starter:true,composite:true,...l},...roster[team].slice(0,8)],[opponent]:(roster[opponent]||[]).slice(0,9)},events:[],clutch_events:[]});}survived=a===4;series.push({round:round==='WCSF'&&east.has(canon(team))?'ECSF':round==='WCF'&&east.has(canon(team))?'ECF':round,teams:[team,opponent],winner:survived?team:opponent,games:sg,series:{[team]:a,[opponent]:b},locked_before_entry:{[team]:0,[opponent]:0}});}
  for(const g of series.flatMap(s=>s.games))finishGame(g,roster,team,player,rng);
  const champion=survived?team:series.at(-1)?.winner||p.teams[Math.floor(rng()*p.teams.length)][0];const standings={East:[],West:[]};for(const t of p.teams){const w=canon(t[0])===canon(team)?wins:Math.round(24+rng()*40),row={team:t[0],team_id:t[1],wins:w,losses:82-w,win_pct:w/82,seed:1};(east.has(canon(t[0]))?standings.East:standings.West).push(row);}for(const a of Object.values(standings))a.sort((a,b)=>b.wins-a.wins).forEach((x,i)=>x.seed=i+1);
- const result={simulation_version:'career-v3',mode:'season',season,source_season:d.season,team,team_label:team,team_id:p.teams.find(x=>canon(x[0])===canon(team))?.[1],seed:d.seed,career_year:d.career_context?.career_year||1,data_mode:parseInt(season)>2025?'projected':'historical',player:{...player,ratings:baseRatings},roster_snapshot:roster,retiring_teammates:[],standings,regular_season:{record:{wins,losses:82-wins},conference_seed:seed,games,player_averages:averages,player_availability:{games:82,available_games:82,missed_games:0,injuries:[],notes:[]},player_role:{starter:true,role:'核心',minutes:averages.min},roster_simulation:{}},play_in_games:[],playoff_series:series,league_honors:honors,finals_mvp:survived?user:entries[0],outcome:{champion,won_title:survived,made_playoffs:made,history_changed:true},narrative:[],stories:[],team_strength:strength};
- result.parallel_stats=core.resultStats(result);result.permanent_augments=permanent;result.player.name=d.player.name||'我的球员';
+ const result={simulation_version:'career-v3',mode:'season',season,source_season:d.season,team,team_label:team,team_id:p.teams.find(x=>canon(x[0])===canon(team))?.[1],seed:d.seed,career_year:d.career_context?.career_year||1,data_mode:parseInt(season)>2025?'projected':'historical',player:{...player,ratings:baseRatings,effective_ratings:{...r}},roster_snapshot:roster,retiring_teammates:[],standings,regular_season:{record:{wins,losses:82-wins},conference_seed:seed,games,player_averages:averages,player_availability:{games:82,available_games:82,missed_games:0,injuries:[],notes:[]},player_role:{starter:true,role:'核心',minutes:averages.min},roster_simulation:{}},play_in_games:[],playoff_series:series,league_honors:honors,finals_mvp:survived?user:entries[0],outcome:{champion,won_title:survived,made_playoffs:made,history_changed:true},narrative:[],stories:[],team_strength:strength};
+ result.salary_millions=Number(d.career_context?.salary_millions)||0;result.parallel_stats=core.resultStats(result);result.permanent_augments=permanent;result.player.name=d.player.name||'我的球员';
  boostKeys=({three:['threePT'],mid:['MID'],finish:['FIN'],dunk:['DNK'],handle:['HAN'],pass:['PAS'],perimeter:['PDEF'],interior:['IDEF'],block:['BLK'],rebound:['REB'],athletic:['ATH'],strength:['STR'],creator:['HAN','PAS'],sniper:['HAN','threePT'],driver:['HAN','FIN'],'two-way':['MID','PDEF'],'three-d':['threePT','PDEF'],air:['DNK','ATH'],hub:['PAS','IDEF'],paint:['FIN','REB'],weakness:[augment?.choice]})[augment?.id]||[];
  if(augment)result.augment_result={version:1,id:augment.id,effects:boostKeys.map(ability=>({ability,delta:augment.tier*2/boostKeys.length})),boosts:augment.boosts||{},earned:null};
  if(permanent.some(a=>a.id==='reaper')){const skills=await talents();result.reaper_rounds=series.filter(s=>s.winner===team).map(s=>{const ids=(roster[s.teams.find(t=>t!==team)]||[]).map(x=>Number(x.player_id));return{round:s.round,skills:skills.filter(x=>ids.includes(x.playerId)).map(x=>({id:x.id,mentor:x.mentor,name:x.name}))};});}
@@ -108,11 +126,12 @@
   if(path==='/team-offers')return draft(d);
   if(path==='/team-roster')return {roster:await teamRoster(d.season,d.team)};
   if(path==='/simulate')return simulate(d);
+  if(path==='/career/teams'){const p=await pack(parseInt(d.season)+1);return {teams:p.teams.map(t=>({team:core.teamAt(t[0],parseInt(d.season)+1),name:t[2]}))};}
   if(path==='/seasons')return {seasons:window.__REGRET_STATIC__.seasons};
   if(path==='/career/augment-options'){const p=await pack(d.season),skills=await talents();const matches=(s,r)=>s.playerId===Number(r[0])||s.mentor===r[1]||s.aliases.some(a=>a.replace(/[^a-z]/gi,'').toLowerCase()===r[1].replace(/[^a-z]/gi,'').toLowerCase());return {version:1,available:skills.filter(s=>p.players.some(r=>matches(s,r))).map(s=>s.id),teammates:skills.filter(s=>p.players.some(r=>canon(r[2])===canon(d.team)&&matches(s,r))).map(s=>s.id)};}
   if(path==='/career/develop'){
    const ratings={...d.player.ratings},before=avg(ratings),age=d.age||20,changes=[],resistance=cap((d.permanent_augments||[]).filter(a=>a.id==='ageless').reduce((n,a)=>n+a.tier*.1,0),0,.8);
-   if(age>=31)for(const k of abilities){const delta=(['ATH','DNK','STR'].includes(k)?-2:-1)*(1-resistance);const from=ratings[k],to=Math.round(cap(from+delta)*10)/10;changes.push({ability:k,from,to,delta:to-from});ratings[k]=to;}
+   if(age>=31)for(const k of abilities){const delta=(['ATH','DNK','STR'].includes(k)?-2:-1)*(1-resistance)*(d.body_management?.5:1);const from=ratings[k],to=Math.round(cap(from+delta)*10)/10;changes.push({ability:k,from,to,delta:to-from});ratings[k]=to;}
    return {ratings,potentials:Object.fromEntries(abilities.map(k=>[k,99])),age_before:age,age_after:age+1,overall_before:before,overall_after:avg(ratings),growth_points:age<27?6:age<32?3:1,changes,reason:resistance?'永久长青海克斯减缓年龄衰减':'训练与年龄共同影响本季成长'};
   }
   if(path==='/career/next-season'){const y=parseInt(d.season)+1;return {season:y+'-'+String((y+1)%100).padStart(2,'0'),source_season:y>2025?'2025-26':y+'-'+String((y+1)%100).padStart(2,'0'),team:core.teamAt(d.team,y),franchise_id:canon(d.team),projected:y>2025,projection_year:Math.max(0,y-2025)};}
@@ -120,8 +139,8 @@
    const year=parseInt(d.season)+1,season=year+'-'+String((year+1)%100).padStart(2,'0'),p=await pack(season),rng=random(d.seed||1),stay=p.teams.find(x=>canon(x[0])===canon(d.team));
    if(!stay)throw Error('当前球队在下一赛季不存在，请检查球队身份');
    const shuffled=p.teams.filter(x=>canon(x[0])!==canon(d.team));for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
-   const teams=[stay,...shuffled.slice(0,3)],offers=[];
-   for(const [i,t]of teams.entries()){const team=core.teamAt(t[0],year),roster=await teamRoster(season,team),record=Object.entries(d.league_records||{}).find(([key])=>canon(key)===canon(team))?.[1]||{wins:45,losses:37};offers.push({id:'local-'+canon(team)+'-'+d.seed,team,franchise_id:canon(team),role:'核心轮换',kind:i?'contender':'stay',annual_salary_millions:Math.round((d.player.overall||75)*.3),reason:i?'球队希望与你一起争夺冠军':'原球队希望你继续带队',team_record:record,title_odds:record.wins>=50?'争冠热门':record.wins>=40?'季后赛竞争者':'重建与成长',position_fit:'按阵容评估同位置竞争',roster,years:3,projected:year>2025});}
+   const requested=d.target_team?p.teams.find(t=>canon(t[0])===canon(d.target_team)):null;if(d.target_team&&!requested)throw Error('球队不存在');const teams=requested?[requested]:[stay,...shuffled.slice(0,3)],offers=[];
+   for(const [i,t]of teams.entries()){const team=core.teamAt(t[0],year),roster=await teamRoster(season,team),record=Object.entries(d.league_records||{}).find(([key])=>canon(key)===canon(team))?.[1]||{wins:Math.round(cap(41+(roster.slice(0,8).reduce((n,x)=>n+x.overall,0)/Math.max(1,Math.min(8,roster.length))-75)*1.2,18,65)),losses:0};record.losses=82-record.wins;const competition=Math.max(65,...roster.filter(x=>x.position===d.player.position).map(x=>x.overall)),payroll=roster.reduce((n,x)=>n+(x.contract?.annual_salary_millions||0),0),demand=cap(1+((d.player.overall||75)-competition)*.008,.85,1.2),budget=cap(1-(payroll-140)/500,.75,1.12);offers.push({id:'local-'+canon(team)+'-'+d.seed,team,franchise_id:canon(team),role:(d.player.overall||75)>=Math.max(...roster.map(x=>x.overall))?'球队核心':'主力轮换',kind:canon(team)===canon(d.team)?'stay':record.wins>=45?'contender':'featured',annual_salary_millions:Math.round(Math.max(1,((d.player.overall||75)-50)*.9)*(record.wins>=50?.85:1.1)*demand*budget*10)/10,reason:i?'球队希望与你一起争夺冠军':'原球队希望你继续带队',team_record:record,title_odds:record.wins>=50?'争冠热门':record.wins>=40?'季后赛竞争者':'重建与成长',position_fit:'同位置 '+roster.filter(x=>x.position===d.player.position).length+' 人 · 最高 OVR '+Math.max(0,...roster.filter(x=>x.position===d.player.position).map(x=>x.overall)),roster,years:3,projected:year>2025});}
    return {offers,butterfly:d.butterfly?{...d.butterfly,version:1,year}:undefined};
   }
   if(path.includes('save'))return null;
