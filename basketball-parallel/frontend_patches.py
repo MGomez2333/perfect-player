@@ -29,6 +29,8 @@ def patch_frontend(s):
       'Math.max(0,Math.min(r/n.abilities.length,110-t[e]))':'r/n.abilities.length',
       'Math.max(0,Math.min(n,110-i))':'n',
       'save:()=>Y(),redraw:()=>$(),moment:':'save:()=>Y(),redraw:()=>$(),catalog:()=>_e,moment:',
+      'class="growth-ability-row" data-growth-ability=':'class="growth-ability-row" style="grid-template-columns:minmax(0,1fr) minmax(94px,auto) 106px!important" data-growth-ability=',
+      '<strong data-growth-value>':'<strong style="white-space:nowrap!important;font-size:16px!important" data-growth-value>',
       'data-growth-value>${i+r}':'data-growth-value>${window.parallelCareer.rating(n,i+r,e)}',
       'o.textContent=String(a+i)':'o.textContent=window.parallelCareer.rating(n,a+i,e)',
     }
