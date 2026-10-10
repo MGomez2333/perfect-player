@@ -1,0 +1,7 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const src=fs.readFileSync(require('node:path').join(__dirname,'../player-shell.js'),'utf8');
+function boot(entries={}){const data=new Map(Object.entries(entries));const document={currentScript:{src:'https://example.com/game/player-shell.js'},documentElement:{dataset:{}},addEventListener(){}};const window={};const ctx={window,document,localStorage:{getItem:k=>data.get(k)||null},crypto:{randomUUID:()=> 'test-uuid'},Element:class{},MutationObserver:class{},URL};vm.runInNewContext(src,ctx);return{api:window.parallelProfile,document,data}}
+let a=boot({'parallel-career-v3':JSON.stringify({localAccountId:'legacy-owner',careers:{old:{}}})});assert.equal(a.api.identity().accountId,'legacy-owner');assert.equal(a.document.documentElement.dataset.profileRequired,'true');assert.equal(a.data.size,1);
+for(const id of ['篮板之王','test-player_20','本机 玩家'])assert(a.api.validate(id));for(const id of ['a','<script>','a'.repeat(21)])assert(!a.api.validate(id));
+a=boot({'parallel-profile-v1':JSON.stringify({accountId:'legacy-owner',displayId:'禁区指挥官'})});assert.equal(a.api.identity().name,'禁区指挥官');assert.equal(a.api.identity().accountId,'legacy-owner');assert.equal(a.document.documentElement.dataset.profileRequired,undefined);
+console.log('PASS local player identity, legacy ownership preservation, ID validation and remembered entry');

@@ -2,6 +2,8 @@ name: Build basketball parallel
 on:
   push:
     paths:
+      - basketball-parallel/player-shell.js
+      - basketball-parallel/responsive.css
       - basketball-parallel/build.py
       - basketball-parallel/frontend_patches.py
       - basketball-parallel/local-runtime.js
@@ -27,6 +29,7 @@ jobs:
         run: python basketball-parallel/build.py
       - name: Verify local career rules
         run: |
+          node basketball-parallel/tests/player-shell.cjs
           node basketball-parallel/tests/career-features.cjs
           node basketball-parallel/tests/draft-loading.cjs
           node basketball-parallel/tests/dynasty-rewards.cjs
