@@ -1,0 +1,235 @@
+.achievement-backdrop.pac-backdrop{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);background:#192a2e6b!important}
+.prism-achievement-cabinet{color:#1d343a;background:#fff;border:0;border-radius:24px 24px 0 0;flex-direction:column;width:min(100%,480px);height:92dvh;max-height:92dvh;padding:0;font-family:Arial,PingFang SC,Microsoft YaHei,sans-serif;display:flex;overflow:hidden;box-shadow:0 -12px 48px #17363c1a}
+.prism-achievement-cabinet .pac-header{justify-content:space-between;align-items:flex-start;gap:10px;padding:24px 22px 15px;display:flex}
+.prism-achievement-cabinet .pac-header h2{letter-spacing:-.5px;margin:0;font-family:inherit;font-size:23px;line-height:1.3}
+.prism-achievement-cabinet .pac-header p{color:#718084;margin:5px 0 0;font-size:11px;line-height:1.6}
+.prism-achievement-cabinet .pac-header button{color:#657478;background:#f3f5f5;border:0;border-radius:50%;flex:none;place-items:center;width:36px;height:36px;display:grid}
+.prism-achievement-cabinet .pac-header button svg{width:18px;height:18px}
+.prism-achievement-cabinet .pac-profile{background:#edf3f3;border-radius:12px;align-items:center;gap:12px;margin:0 22px 20px;padding:17px 16px;display:flex}
+.prism-achievement-cabinet .prism-rank-avatar{color:#94a8aa;background:#e2e9e9;border-radius:50%;flex:none;width:45px;height:45px;display:block;position:relative;overflow:hidden}
+.prism-achievement-cabinet .prism-rank-avatar>svg,.prism-achievement-cabinet .prism-rank-avatar>img{object-fit:cover;width:100%;height:100%;display:block;position:absolute;inset:0}
+.prism-achievement-cabinet .prism-rank-avatar>img[hidden]{display:none}
+.prism-achievement-cabinet .pac-profile>div{flex:1;min-width:0}
+.prism-achievement-cabinet .pac-profile strong{overflow-wrap:anywhere;font-size:15px;display:block}
+.prism-achievement-cabinet .pac-profile small{color:#657f82;margin-top:5px;font-size:10px;line-height:1.5;display:block}
+.prism-achievement-cabinet .pac-profile>p{text-align:right;flex:none;gap:2px;margin:0;display:grid}
+.prism-achievement-cabinet .pac-profile b{letter-spacing:-1px;font-variant-numeric:tabular-nums;font:700 30px/1.05 Arial,sans-serif}
+.prism-achievement-cabinet .pac-profile p>span{color:#657f82;font-size:10px}
+.prism-achievement-cabinet .pac-tabs{border:0;flex:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:0 18px;padding:0 0 13px;display:grid;overflow:visible}
+.prism-achievement-cabinet .pac-tabs .achievement-tab{min-width:0;min-height:65px;box-shadow:none;color:#788486;background:0 0;border:0;border-radius:9px;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:9px 2px;display:flex}
+.prism-achievement-cabinet .pac-tabs .achievement-tab strong{white-space:nowrap;color:inherit;letter-spacing:0;font:600 12px/1.3 Arial,Microsoft YaHei,sans-serif}
+.prism-achievement-cabinet .pac-tabs .achievement-tab span{opacity:.8;font:600 15px/1 Arial,sans-serif}
+.prism-achievement-cabinet .pac-tabs .achievement-tab.is-active{color:#fff;background:#1d4147}
+.prism-achievement-cabinet .pac-scroll{overscroll-behavior:contain;min-height:0;max-height:none;padding:7px 22px calc(28px + env(safe-area-inset-bottom));scrollbar-width:thin;flex:1;overflow:auto}
+.prism-achievement-cabinet [hidden]{display:none!important}
+.prism-achievement-cabinet .pac-section-heading{padding:8px 0 15px}
+.prism-achievement-cabinet .pac-section-heading h3{margin:0;font-size:16px}
+.prism-achievement-cabinet .pac-section-heading p{color:#788486;margin:6px 0 0;font-size:11px;line-height:1.6}
+.prism-achievement-cabinet .pac-earned-list{gap:12px;display:grid}
+.prism-achievement-cabinet .pac-earned{overflow-wrap:anywhere;background:#f7f7f3;border-radius:12px;min-width:0;padding:18px}
+.prism-achievement-cabinet .pac-earned.is-equipped{background:#f4efdf}
+.prism-achievement-cabinet .pac-earned small{color:#8b794e;font-size:10px;line-height:1.6;display:block}
+.prism-achievement-cabinet .pac-earned h4{letter-spacing:-.3px;color:#203c41;margin:5px 0;font-family:inherit;font-size:18px;line-height:1.4}
+.prism-achievement-cabinet .pac-card-heading{align-items:center;gap:12px;display:flex}
+.prism-achievement-cabinet .pac-card-heading>div{flex:1;min-width:0}
+.prism-achievement-cabinet .pac-legend-heading{align-items:center;gap:10px;margin:6px 0;display:flex}
+.prism-achievement-cabinet .pac-legend-heading h4{flex:1;min-width:0;margin:0}
+.prism-achievement-cabinet .pac-faces{flex:none;padding-left:7px;display:flex}
+.prism-achievement-cabinet .pac-faces .prism-rank-avatar{border:2px solid #f7f7f3;width:42px;height:42px;margin-left:-7px}
+.prism-achievement-cabinet .pac-story{color:#68797b;margin:10px 0 0;font-size:12px;line-height:1.7}
+.prism-achievement-cabinet .pac-actions{gap:10px;margin-top:15px;display:flex}
+.prism-achievement-cabinet .pac-actions button{color:#345a60;background:#fff;border:0;border-radius:7px;min-height:40px;padding:8px 12px;font-family:inherit;font-size:11px;font-weight:600;line-height:1.4}
+.prism-achievement-cabinet .pac-actions button[aria-pressed=true]{color:#826324;background:#e9dfbd}
+#app .prism-achievement-cabinet .pac-actions button{font-size:12px!important;line-height:1.4!important}
+.prism-achievement-cabinet .pac-pending-label{color:#899495;margin:24px 0 9px;font-size:11px}
+.prism-achievement-cabinet .pac-pending{background:#f5f7f8;border:0;border-radius:10px;margin-top:10px;overflow:hidden}
+.prism-achievement-cabinet .pac-pending>summary{cursor:pointer;align-items:center;gap:10px;min-height:56px;padding:13px 16px;list-style:none;display:flex}
+.prism-achievement-cabinet summary::-webkit-details-marker{display:none}
+.prism-achievement-cabinet .pac-pending>summary strong{flex:1;font-size:12px}
+.prism-achievement-cabinet .pac-pending>summary span{color:#7e8d90;font-size:11px}
+.prism-achievement-cabinet .pac-pending>summary i{border-bottom:1.5px solid #899799;border-right:1.5px solid #899799;width:6px;height:6px;margin:0 2px 4px 4px;transform:rotate(45deg)}
+.prism-achievement-cabinet .pac-pending[open]>summary i{margin-top:5px;transform:rotate(225deg)}
+.prism-achievement-cabinet .pac-locked{padding:10px 16px 14px}
+.prism-achievement-cabinet .pac-locked strong{color:#627276;font-size:12px;font-weight:600}
+.prism-achievement-cabinet .pac-locked p{color:#899397;margin:5px 0 0;font-size:11px;line-height:1.65}
+.prism-achievement-cabinet .pac-empty{background:#f5f7f8;border-radius:12px;padding:23px 18px}
+.prism-achievement-cabinet .pac-empty strong{font-size:15px;font-weight:600}
+.prism-achievement-cabinet .pac-empty p{color:#829093;margin:9px 0 0;font-size:12px;line-height:1.7}
+.prism-achievement-cabinet .pac-champion{align-items:center;gap:15px;display:flex}
+.prism-achievement-cabinet .pac-champion>div{flex:1;min-width:0}
+.prism-achievement-cabinet .pac-team{object-fit:contain;width:50px;height:50px}
+.prism-achievement-cabinet .pac-champion p{color:#8b794e;margin:0;font-size:12px}
+.prism-achievement-cabinet .prism-trophy{object-fit:contain;flex:none;width:40px;height:54px}
+.prism-achievement-cabinet .pac-trophies{display:flex}
+.prism-achievement-cabinet .pac-trophies .prism-trophy{width:28px;height:42px}
+.prism-achievement-cabinet .pac-team-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:19px 7px;padding:10px 12px 22px;display:grid}
+.prism-achievement-cabinet .pac-team-grid>div{justify-items:center;gap:7px;min-width:0;display:grid}
+.prism-achievement-cabinet .pac-team-grid img{object-fit:contain;filter:grayscale(.8);opacity:.65;width:36px;height:36px}
+.prism-achievement-cabinet .pac-team-grid span{color:#7e8d90;text-align:center;font-size:10px}
+.prism-achievement-cabinet .pac-status{color:#8b794e;flex:none;font-size:10px}
+.prism-achievement-cabinet .pac-boosts{color:#416e74;margin:15px 0 0;font-size:13px;font-weight:600}
+.prism-achievement-cabinet .pac-record{color:#718083;margin-top:12px;font-size:11px}
+.prism-achievement-cabinet .pac-record summary{cursor:pointer;min-height:28px}
+.prism-achievement-cabinet .pac-record p{margin:6px 0 0;line-height:1.7}
+.prism-achievement-cabinet .pac-header{padding:19px 16px 13px}
+.prism-achievement-cabinet .pac-header p{font-size:10px}
+.prism-achievement-cabinet .pac-profile{margin:0 16px 12px}
+.prism-achievement-cabinet .pac-tabs{margin:0 12px}
+.prism-achievement-cabinet .pac-scroll{padding-inline:16px}
+.prism-achievement-cabinet .pac-earned{padding:15px}
+.prism-achievement-cabinet .pac-earned h4{font-size:16px}
+.pac-backdrop,.prism-achievement-cabinet{animation:none}
+.career-hex-modal-open,.career-hex-modal-open body{overflow:hidden!important}
+.career-hex-backdrop{z-index:1400;isolation:isolate;overscroll-behavior:contain;background:#071011cc;justify-content:center;align-items:flex-end;display:flex;position:fixed;inset:0}
+.career-hex-summary{text-align:left;color:#f5f1e7;background:#1c292a;border:1px solid #526060;border-left:3px solid #dec17a;border-radius:6px;gap:5px;width:100%;margin:12px 0;padding:14px 16px;font-family:inherit;display:grid}
+.career-hex-summary>span{color:#dec17a;font-size:11px}
+.career-hex-summary strong{font-size:17px}
+.career-hex-summary small{color:#bdc9cb;font-size:12px;line-height:1.6}
+.career-hex-sheet{box-sizing:border-box;overscroll-behavior:contain;color:#183b38;width:min(100%,460px);max-height:92dvh;padding:24px 20px max(20px,env(safe-area-inset-bottom));background:#f5f0e6;border:1px solid #d8d3c5;border-radius:20px 20px 0 0;outline:none;font-family:inherit;overflow:auto;box-shadow:0 -12px 70px #0004}
+.career-hex-sheet *{box-sizing:border-box}
+.career-hex-sheet header{justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px;display:flex}
+.career-hex-kicker{color:#716b5f;letter-spacing:.5px;font-size:11px}
+.career-hex-sheet h2{color:#183b38;margin:9px 0 7px;font-size:25px;font-weight:750;line-height:1.35}
+.career-hex-sheet header p{color:#73786d;margin:0;font-size:12px}
+.career-hex-sheet button{font:inherit;cursor:pointer;touch-action:manipulation}
+.career-hex-sheet button:disabled{cursor:default}
+.career-hex-close{color:#62716a;background:#e8e4da;border:0;border-radius:50%;flex:none;width:32px;height:32px;line-height:1;font-size:23px!important}
+.career-hex-options{gap:12px;display:grid}
+.career-hex-card{--hex-quality:#61777a;--hex-wash:#e8eeed;background:#fffdf7;border:1px solid #d3d8d1;border-radius:10px;transition:border-color .15s,box-shadow .15s;position:relative;overflow:hidden}
+.career-hex-card.tier-3:after{content:"";pointer-events:none;opacity:.65;background:linear-gradient(135deg,#0000 34%,#ffffff65 34.2%,#ffffff10 52%,#0000 52.2%),linear-gradient(55deg,#0000 61%,#ffffff70 61.2%,#0000 78%);position:absolute;inset:0}
+.career-hex-card>*{z-index:1;position:relative}
+.career-hex-card .career-hex-quality{background:#ffffff50;border:1px solid;border-radius:3px;align-items:center;gap:5px;padding:3px 7px;font-size:10px;display:inline-flex}
+.career-hex-quality svg{stroke-width:2px;width:11px;height:11px}
+.career-hex-card.tier-1 .career-hex-emblem{background:linear-gradient(145deg,#f8fafa,#bcccd2);box-shadow:inset 0 1px #fff}
+.career-hex-card.tier-2 .career-hex-emblem{background:linear-gradient(145deg,#ffedaa,#d6af56);box-shadow:inset 0 1px #fff7dc}
+.career-hex-card.tier-3 .career-hex-emblem{background:linear-gradient(135deg,#79beb9,#dbf3ef 42%,#f1da9a 67%,#91ccd0);box-shadow:inset 0 1px #fff}
+.career-hex-card.is-selected .career-hex-selected{color:#fff;background:#183b38;border-radius:3px;padding:4px 7px}
+.career-hex-card:before{content:"";background:var(--hex-quality);width:3px;position:absolute;top:0;bottom:0;left:0}
+.career-hex-card-top{min-height:30px;color:var(--hex-quality);justify-content:space-between;align-items:center;padding:10px 14px 0;font-size:11px;display:flex}
+.career-hex-quality{letter-spacing:1px;font-weight:700}
+.career-hex-selected{align-items:center;gap:3px;font-size:11px;font-weight:700;display:inline-flex}
+.career-hex-selected svg{width:13px;height:13px}
+.career-hex-pick{text-align:left;color:#183b38;background:0 0;border:0;align-items:center;gap:13px;width:100%;min-height:86px;display:flex;padding:11px 14px 15px!important}
+.career-hex-pick:disabled{opacity:1!important}
+.career-hex-emblem{border:1px solid var(--hex-quality);background:var(--hex-wash);width:48px;height:48px;color:var(--hex-quality);border-radius:13px;flex:none;place-items:center;display:grid}
+.career-hex-emblem svg{stroke-width:1.6px;width:26px;height:26px}
+.career-hex-copy{gap:6px;min-width:0;display:grid}
+.career-hex-copy strong{font-size:20px;font-weight:750;line-height:1.3}
+.career-hex-copy>span{color:#486356;font-variant-numeric:tabular-nums;font-size:14px;line-height:1.55}
+.career-hex-card>footer{color:#818577;border-top:1px solid #e8e8df;justify-content:space-between;align-items:center;gap:8px;min-height:42px;padding:0 14px;font-size:11px;display:flex}
+.career-hex-reroll{color:#526b5f;background:0 0;border:0;align-items:center;gap:5px;min-height:42px;padding:0;display:inline-flex;font-size:12px!important}
+.career-hex-reroll small{border:1px solid #cdd4c9;border-radius:3px;padding:1px 3px;font-size:9px;line-height:1.3}
+.career-hex-reroll svg{width:13px;height:13px}
+.career-hex-reroll:disabled{opacity:.45}
+.career-hex-actions{bottom:calc(-1 * max(20px,env(safe-area-inset-bottom)));padding:18px 0 max(0px,env(safe-area-inset-bottom));background:#f5f0e6;margin-top:0;position:sticky}
+.career-hex-confirm{color:#f5f0e6;background:#183b38;border:1px solid #183b38;border-radius:8px;width:100%;min-height:48px;font-size:14px!important;font-weight:700!important}
+.career-hex-confirm:disabled{color:#829085;background:#dfe3d9;border-color:#dfe3d9}
+.career-hex-error{color:#ae462d;font-size:12px;line-height:1.5}
+.career-hex-error:not(:empty){padding:0 0 10px}
+.career-hex-subchoices{gap:7px;padding:0 14px 14px;display:grid}
+.career-hex-subchoices button{color:#183b38;text-align:left;background:#f8f7ef;border:1px solid #cdd4c9;border-radius:6px;min-height:42px;padding:10px 12px;font-size:12px}
+.career-hex-subchoices button[aria-pressed=true]{border-color:var(--hex-quality);background:var(--hex-wash);color:#183b38;font-weight:700}
+.career-hex-subchoices small{color:#617366;margin-top:4px;display:block}
+.career-hex-sheet button:focus-visible{outline-offset:3px;outline:2px solid #247b71}
+.career-hex-options.is-obtained .career-hex-emblem{width:58px;height:58px}
+.career-hex-options.is-obtained .career-hex-card{animation:.28s ease-out both career-hex-arrive}
+.career-hex-options.is-obtained .career-hex-pick{padding:23px 16px!important}
+.career-hex-backdrop{align-items:center;padding:20px}
+.career-hex-sheet{border-radius:16px}
+.career-hex-sheet{padding-left:16px;padding-right:16px}
+.career-hex-sheet h2{font-size:23px}
+.career-hex-copy strong{font-size:18px}
+.career-hex-emblem{width:42px;height:42px}
+.career-hex-pick{gap:11px}
+.career-hex-card{transition:none}
+.career-hex-options.is-obtained .career-hex-card{animation:none}
+.career-hex-sheet{color:#f6f6f3;background:#131516;border-color:#454747;border-radius:12px 12px 0 0}
+.career-hex-sheet h2{color:#f6f6f3}
+.career-hex-sheet .career-hex-kicker{color:#b5b6b1}
+.career-hex-sheet header p{color:#a6aaa5}
+.career-hex-close{color:#d2d4cf;background:#292c2c}
+.career-hex-card{border-radius:6px}
+.career-hex-card .career-hex-quality{background:#00000026}
+.career-hex-pick{color:#f9f7ed}
+.career-hex-copy>span{color:#f0e8d6}
+.career-hex-emblem{color:#243b40;border-radius:9px}
+.career-hex-card.tier-2 .career-hex-emblem{color:#60400f}
+.career-hex-card>footer{color:#ced2c8!important;background:#00000020!important;border-top-color:#ffffff20!important}
+.career-hex-reroll{color:#f1ecdc}
+.career-hex-reroll small{border-color:#ffffff40}
+.career-hex-actions{background:#131516}
+.career-hex-sheet .career-hex-confirm{color:#fff;background:#ce002d;border-color:#ce002d;border-radius:4px}
+.career-hex-sheet .career-hex-confirm:disabled{color:#9ea5a0;background:#333737;border-color:#454949}
+.career-hex-subchoices button{color:#f4f2ea;background:#11191abb;border-color:#ffffff40}
+.career-hex-subchoices button[aria-pressed=true]{color:#183b38;background:#e8dec0}
+.career-hex-subchoices small{color:inherit}
+.career-hex-card.is-selected{box-shadow:0 0 0 2px var(--hex-quality)}
+.career-hex-card.is-selected .career-hex-selected{color:#183b38;background:#f4edd7}
+.career-hex-sound-row{justify-content:flex-end;margin:-14px 0 8px;display:flex}
+.career-hex-sound{color:#b5b6b1;background:0 0;border:0;min-height:36px;padding:6px 0 6px 12px;font-size:11px!important}
+.career-hex-sound:focus-visible{outline-offset:2px;outline:2px solid #d6b66d}
+.career-hex-gains{color:#f6f3ea;flex-wrap:wrap;gap:20px 0;padding:0 18px 24px;display:flex}
+.career-hex-gain{border-left:1px solid #ffffff30;flex:110px;min-width:0;padding:0 12px}
+.career-hex-gain:first-child{border-left:0;padding-left:0}
+.career-hex-gain>span{font-size:14px;font-weight:600;display:block}
+.career-hex-gain>small{color:#d5dad4;min-height:18px;margin-bottom:5px;font-size:10px;line-height:1.5;display:block}
+.career-hex-gain>strong{color:var(--hex-quality);font-variant-numeric:tabular-nums;margin:6px 0 4px;font:650 42px/1.1 Bahnschrift,Microsoft YaHei,sans-serif;display:block}
+.career-hex-gain em{margin-left:5px;font:400 13px PingFang SC,Microsoft YaHei,sans-serif}
+.career-hex-gain p{white-space:nowrap;line-height:1.5;color:#e0e5db!important;margin:6px 0 0!important;font-size:12px!important}
+.career-hex-gain p span{color:#a8b7b1;padding:0 3px}
+.career-hex-gains.is-new .career-hex-gain{animation:.38s ease-out both career-hex-gain-in}
+.career-hex-gains.is-new .career-hex-gain:nth-child(2){animation-delay:80ms}
+.career-hex-gains.is-new .career-hex-gain:nth-child(3){animation-delay:.16s}
+.career-hex-gains.is-new .career-hex-gain{animation:none}
+#app.prismatic-experience .career-hex-summary{background:#e9eee8!important;border:1px solid #c7d3c9!important;border-left:3px solid #3d827b!important;border-radius:6px!important;margin:18px 0!important;padding:16px!important}
+#app.prismatic-experience .career-hex-summary{color:var(--prism-ink)!important;text-align:left!important}
+#app.prismatic-experience .career-hex-summary>span{color:#446b65!important;font-size:11px!important}
+#app.prismatic-experience .career-hex-summary>strong{color:var(--prism-ink)!important;font-size:20px!important}
+#app.prismatic-experience .career-hex-summary>small{color:#446b65!important;font-size:13px!important}
+#app.prismatic-experience :is(.career-overview>span,.career-consequence-status>span,.career-signature-skills article,.feedback-receipt,.championship-receipt,.career-hex-summary,.career-season-row,.season-echo-opening-evidence,.national-callup-receipt){color:#172026!important;background:#f5f6f8!important;border:0!important}
+#app.prismatic-experience .career-hex-summary{border:0!important;border-radius:10px!important;padding:14px!important}
+#app.prismatic-experience .career-hex-summary strong{font-size:15px!important}
+#app.prismatic-experience .career-hex-summary small{font-size:11px!important}
+#app.prismatic-experience .career-hex-summary{grid-template-columns:minmax(0,1fr) auto!important;gap:5px 12px!important;margin:0 0 16px!important;padding:13px!important;display:grid!important}
+#app.prismatic-experience .career-hex-summary>span{grid-column:1/-1!important;font-size:10px!important}
+#app.prismatic-experience .career-hex-summary>strong{font-size:15px!important}
+#app.prismatic-experience .career-hex-summary>small{align-self:center!important;font-size:11px!important}
+.career-hex-backdrop{background:#17202670}
+.career-hex-sheet{color:#172026;padding:20px 18px max(16px,env(safe-area-inset-bottom));max-height:90dvh;box-shadow:none;background:#fff;border:0;border-radius:18px 18px 0 0}
+.career-hex-sheet>header{margin-bottom:18px}
+.career-hex-sheet h2{color:#172026;margin:7px 0;font-size:22px}
+.career-hex-sheet .career-hex-kicker{color:#78838b;font-size:10px}
+.career-hex-sheet header p{color:#78838b;font-size:12px}
+.career-hex-header-actions{align-items:center;gap:5px;display:flex}
+.career-hex-sheet .career-hex-sound,.career-hex-close{color:#68717b;background:#fff;border:1px solid #e7ecef;border-radius:8px;place-items:center;width:36px;height:36px;padding:0;display:grid}
+.career-hex-sound svg{width:17px;height:17px}
+.career-hex-options{gap:12px}
+.career-hex-card{border-radius:12px;transition:box-shadow .15s,transform .15s}
+.career-hex-card.tier-1{--hex-quality:#536d7a;--hex-wash:#e7eef2;background:linear-gradient(120deg,#e7eef2,#f7f9fa);border-color:#c9d5dc}
+.career-hex-card.tier-2{--hex-quality:#8a621c;--hex-wash:#f3e3b5;background:linear-gradient(120deg,#f3e3b5,#fff9e9);border-color:#d4b978}
+.career-hex-card.tier-3{--hex-quality:#286c70;--hex-wash:#d0ebe6;background:linear-gradient(125deg,#c4e6e1,#e8f2f5 44%,#f9e9bc);border-color:#86bcb8}
+.career-hex-card.tier-3:after{opacity:.3}
+.career-hex-card:before{width:4px}
+.career-hex-card.is-selected{border-color:#172026;box-shadow:0 0 0 2px #172026}
+.career-hex-card-top{min-height:32px;padding:11px 13px 0}
+.career-hex-card .career-hex-quality{letter-spacing:0;background:#ffffff85;border:0;border-radius:5px;padding:4px 7px;font-size:10px}
+.career-hex-card .career-hex-selected{color:#6b7c82;background:0 0;font-size:10px}
+.career-hex-card.is-selected .career-hex-selected{color:#fff;background:#172026;border-radius:5px}
+.career-hex-pick{color:#172026;gap:12px;min-height:82px;padding:12px 13px!important}
+.career-hex-copy strong{font-size:18px;line-height:1.4}
+.career-hex-copy>span{color:#49616b;font-size:12px;line-height:1.7}
+.career-hex-emblem{border:1px solid #ffffffb0;border-radius:10px;width:49px;height:49px}
+.career-hex-card>footer{min-height:40px;padding:0 12px;font-size:10px;color:#687b80!important;background:#ffffff70!important;border-top:1px solid #ffffffa0!important}
+.career-hex-reroll{color:#405a64;min-height:40px;font-size:11px!important}
+.career-hex-reroll small{border-color:#a3b5bb;font-size:9px}
+.career-hex-actions{padding:16px 0 max(0px,env(safe-area-inset-bottom));background:#fff}
+.career-hex-sheet .career-hex-confirm{color:#fff;background:#c81935;border:0;border-radius:9px;min-height:48px;font-size:13px!important}
+.career-hex-sheet .career-hex-confirm:disabled{color:#89949b;background:#edf0f2;border:0}
+.career-hex-subchoices button{color:#344e58;background:#ffffffa0;border-color:#fff;border-radius:8px;min-height:44px}
+.career-hex-subchoices button[aria-pressed=true]{color:#fff;background:#172026;border-color:#172026}
+.career-hex-gains{color:#344e58;gap:10px;padding:0 15px 18px}
+.career-hex-gain{background:#ffffff80;border:0;border-radius:8px;padding:12px!important}
+.career-hex-gain>strong{font-size:32px}
+.career-hex-gain>small{color:#687b80}
+.career-hex-gain p{color:#687b80!important}
+.career-hex-gain p span{color:#8a9a9f}
