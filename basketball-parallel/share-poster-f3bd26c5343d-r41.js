@@ -1,5 +1,5 @@
-import * as __basketballAdR41 from "./reward-video-3a515d553eed-r41.js?v=20261011-r27";
-import {originalAwardUrl as __parallelTrophy,leagueCopy as __leagueCopy,mountLeagueBrand as __leagueMount} from './parallel-brand-r39.js?v=20261011-r27';
+import * as __basketballAdR41 from "./reward-video-3a515d553eed-r41.js?v=20261011-r28";
+import {originalAwardUrl as __parallelTrophy,leagueCopy as __leagueCopy,mountLeagueBrand as __leagueMount} from './parallel-brand-r39.js?v=20261011-r28';
 var PosterDesignR6=(function(e){Object.defineProperty(e,Symbol.toStringTag,{value:`Module`});var t=Object.defineProperty,n=(e,t,n)=>()=>{if(n)throw n[0];try{return e&&(t=e(e=0)),t}catch(e){throw n=[e],e}},r=(e,n)=>{let r={};for(var i in e)t(r,i,{get:e[i],enumerable:!0});return n||t(r,Symbol.toStringTag,{value:`Module`}),r};function i(e){let t=e.allSeasons,n=t[0],r=t.at(-1),i=new Set(t.map(e=>e.team));return{title:e.story.editorial.tier===`era-icon`?`用自己的名字，
 重新解释极限`:e.championships>=2?`那些捧杯的夜晚，
 还记得吗`:e.championships===1?`终于，也站上过
