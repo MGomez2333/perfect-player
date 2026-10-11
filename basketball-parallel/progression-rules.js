@@ -11,8 +11,8 @@
   if(breakout){const gap=Math.max(0,95-ability);boost=Math.round(3+gap*(.18+roll(p.id+':size:'+year)*.24));target=clamp(Math.max(potential,ability+Math.max(0,baseline)+boost),ability,99);delta=Math.max(0,baseline)+boost;ledger.exposure=0;}
   delta=Math.min(target-ability,delta);
   const chosen=path||p.parallelTrainingPath||(/C|中锋/.test(p.englishPosition||p.position)?'rebound':'two'),map={creator:'organization',passing_big:'organization',big:'rebound',stopper:'defense',two_way:'defense',stretch:'three',playmaker:'organization',passing:'organization',shooting:'three',scoring:'two',finishing:'two',rim:'defense',defense:'defense',rebounding:'rebound'},skill=map[chosen]||(['two','three','ft','organization','rebound','defense'].includes(chosen)?chosen:'two');
-  if(breakout){p.developmentSkills??={};p.developmentSkills[skill]=(p.developmentSkills[skill]||0)+Math.max(2,Math.round(boost*.6));p.parallelBreakoutYear=year;}
-  const result={ability,potential:target,line,delta,breakout,boost,skill};ledger.seasons[year]=result;ledger.lastStatus=breakout?'突破赛季':chance>=.09?'突破积累充分':training?'专项训练积累中':'比赛经验积累中';return result;
+  if(breakout&&!p.parallelTraining){p.developmentSkills??={};p.developmentSkills[skill]=(p.developmentSkills[skill]||0)+Math.max(2,Math.round(boost*.6));p.parallelBreakoutYear=year;}
+  const result=(p.parallelTraining&&root.ParallelDevelopment?root.ParallelDevelopment.settle(p,{year,ability,potential:target,line,baseline,breakout,boost}):null)||{ability,potential:target,line,delta,breakout,boost,skill};ledger.seasons[year]=result;ledger.lastStatus=breakout?'突破赛季':chance>=.09?'突破积累充分':training?'专项训练积累中':'比赛经验积累中';return result;
  }
  const api={develop,roll};if(typeof module!=='undefined')module.exports=api;root.ParallelProgression=api;
 })(typeof window!=='undefined'?window:globalThis);
