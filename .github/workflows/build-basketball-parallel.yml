@@ -2,6 +2,7 @@ name: Build basketball parallel
 on:
   push:
     paths:
+      - .github/workflows/build-basketball-parallel.yml
       - basketball-parallel/player-development.js
       - basketball-parallel/development-integration.js
       - basketball-parallel/development_patches.py
@@ -21,6 +22,9 @@ on:
       - basketball-parallel/tests/**
       - basketball-parallel/source-snapshot.part*
   workflow_dispatch:
+concurrency:
+  group: basketball-parallel-build
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
