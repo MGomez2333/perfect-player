@@ -8,11 +8,11 @@ assert.equal(core.salary(c),20);assert.equal(core.salary(c),0);core.migrateWalle
 const reload=JSON.parse(JSON.stringify(c));core.migrateWallet(reload);assert.equal(core.balance(reload),10);assert.equal(core.salary(reload,'2030-31',5),0);
 const worker=fs.readFileSync(path.join(root,'dynasty-worker-8b3a61738a69-r39.js'),'utf8');
 const start=worker.indexOf('function Eu(e,t){'),end=worker.indexOf('function ',start+12),fn=worker.slice(start,end);
-const context={r:Math,z:e=>e.ability,B:e=>e.potential,Cu:()=>({maxGain:4,maxLoss:0,decline:0}),bh:()=>false,wu:(e,t)=>({gp:82,avgMin:t.minutes,performance:.5,availability:1}),Y:(min,max,n)=>Math.max(min,Math.min(max,n)),l:{season:{year:2026}},H:()=>.5,ym:()=>false};
+const context={ParallelProgression:require("../progression-rules.js"),r:Math,z:e=>e.ability,B:e=>e.potential,Cu:()=>({maxGain:4,maxLoss:0,decline:0}),bh:()=>false,wu:(e,t)=>({gp:82,avgMin:t.minutes,performance:.5,availability:1}),Y:(min,max,n)=>Math.max(min,Math.min(max,n)),l:{season:{year:2026}},H:()=>.5,ym:()=>false};
 const growth=vm.runInNewContext('('+fn+')',context),p={id:'young',age:21,ability:70,potential:99};
-const g26=growth(p,{minutes:26}).delta,g30=growth(p,{minutes:30}).delta,g36=growth(p,{minutes:36}).delta;
-assert.ok(g30>=g26+1);assert.ok(g36>=g26+2);assert.ok(g36>4,'Growth must exceed the former annual cap');assert.equal(growth({...p,summerGrowth:{year:2026,amount:1}},{minutes:36}).delta,g36);
-assert.ok(growth(p,{minutes:29.9}).delta<=g30);assert.ok(growth({...p,ability:98},{minutes:36}).delta<=1);
+const g26=growth({...p},{minutes:26}).delta,g30=growth({...p},{minutes:30}).delta,g36=growth({...p},{minutes:36}).delta;
+assert.ok(g30>=g26+1);assert.ok(g36>=g26+2);assert.ok(g36>4,'Growth must exceed the former annual cap');assert.equal(growth({...p,parallelDevelopment:undefined,summerGrowth:{year:2026,amount:1}},{minutes:36}).delta,g36);
+assert.ok(growth({...p},{minutes:29.9}).delta<=g30);assert.ok(growth({...p,ability:98},{minutes:36}).delta<=1);
 const runtime=fs.readFileSync(path.join(root,'dynasty-runtime-49266a1a7e20-r41.js'),'utf8'),m=runtime.slice(runtime.indexOf('function Mc(){'),runtime.indexOf('function Nc('));assert.ok(!m.includes('tradeCounterClaims'));assert.ok(runtime.includes('t?.fingerprint===e?t:null'));
 const frontend=fs.readFileSync(path.join(root,'career-prismatic.js'),'utf8');assert.ok(frontend.includes('s=3,c=S(r)'));assert.ok(frontend.includes('window.parallelCareer.rating(n,i+r,e)'));assert.ok(!frontend.includes('Math.min(110,t+n[e])'));
 console.log('PASS: 99(+12)=111, uncapped separate inheritance, trainable base unchanged, salary/purchase persistence and limits, 26/30/36 minute growth:',g26,g30,g36,'summer independent, repeat negotiation, prismatic-only draws.');
