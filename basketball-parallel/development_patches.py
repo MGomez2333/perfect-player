@@ -23,6 +23,7 @@ def patch_development(s,worker=False):
  else:
   s=s.replace('Pu(n);let r=Fb(',f'Pu(n);{api}.tick(n,{api}.totals(n,k.season,t.abbr));let r=Fb(')
   s=wrap(s,'Fb','e,t','const native=pdOriginal_Fb(e,t);return e.parallelTraining?globalThis.ParallelProgression.develop(e,{year:k.season.year,ability:native.ability,potential:native.potential,line:native.line,baseline:native.delta,path:e.developmentRoute?.path}):native;')
+  s=s.replace('k.livingTab===`team`&&(f+=pmDevelopmentPanel())','k.livingTab===`team`&&(f=pmDevelopmentPanel()+f)')
   s=s.replace('function pmBind(root){','function pmBind(root){pdBind(root);')
   s=s.replace('function pmDevelopmentPanel(){','function pmDevelopmentPanel(){return pdPanel();}function pdLegacyDevelopmentPanel(){')
   s=s.replace('function F(e=!0){','function F(e=!0){pdTick();',1)
