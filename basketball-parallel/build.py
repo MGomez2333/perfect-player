@@ -8,10 +8,16 @@ PREFIX='/perfect-player/basketball-parallel/'
 SKIP=('hupu-web-guard.js','colorbox-ai_v2.1.109.js','26911-soeiccrc','26813-eadw44rc','2686-h8to7krc')
 def target(u):
  if u.startswith(BASE):return u[len(BASE):].split('?')[0]
- return 'external/'+hashlib.sha256(u.encode()).hexdigest()[:12]+'-'+urlparse(u).path.split('/')[-1]
+ name=urlparse(u).path.split('/')[-1]
+ # Use URL-safe filenames: literal percent escapes otherwise decode to a different file.
+ if '%' in name or not name.isascii():name='asset'+Path(name).suffix
+ return 'external/'+hashlib.sha256(u.encode()).hexdigest()[:12]+'-'+name
 def fetch(u):
  path=ROOT/target(u)
  if path.exists() and path.stat().st_size>0:return path.read_bytes()
+ legacy=ROOT/('external/'+hashlib.sha256(u.encode()).hexdigest()[:12]+'-'+urlparse(u).path.split('/')[-1])
+ if legacy!=path and legacy.is_file() and legacy.stat().st_size>0:
+  path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(legacy.read_bytes());return path.read_bytes()
  for n in range(4):
   try:
    b=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=60).read()
@@ -47,7 +53,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=48) as ex:
   if i%100==0:print('images',i,'/',len(images),'failed',len(fail),flush=True)
 if fail:
  (ROOT/'asset-failures.json').write_text(json.dumps(fail,ensure_ascii=False,indent=2));raise RuntimeError(f'{len(fail)} missing assets')
-urlmap={u:PREFIX+target(u)+('?v=20261011-r28' if u.endswith('.js') else '') for u in entries.keys()|images}
+urlmap={u:PREFIX+target(u)+('?v=20261011-r29' if u.endswith('.js') else '') for u in entries.keys()|images}
 for u,s in entries.items():
  if 'dynasty-worker-' in u and u.endswith('.js'): s=patch_progression(s)
  if 'dynasty-runtime-' in u and u.endswith('.js'): s=patch_dynasty(s)
@@ -55,14 +61,14 @@ for u,s in entries.items():
  s=s.replace('function Cl(e){return e.team_label.replace','function Cl(e){return (e.team_label||e.team||``).replace')
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
  # Cache-bust relative JS module/worker URLs as well as absolute pinned asset URLs.
- s=re.sub(r'(["\x27`])(\./[^"\x27`\s?]+\.js)\1', lambda m:m[1]+m[2]+'?v=20261011-r28'+m[1] if '${' not in m[2] else m[0],s)
+ s=re.sub(r'(["\x27`])(\./[^"\x27`\s?]+\.js)\1', lambda m:m[1]+m[2]+'?v=20261011-r29'+m[1] if '${' not in m[2] else m[0],s)
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./player-shell.js?v=20261011-r28"></script><script src="./career-core.js?v=20261011-r28"></script><script src="./career-extras.js?v=20261011-r28"></script><script src="./future-league.js?v=20261011-r28"></script><script src="./local-runtime.js?v=20261011-r28"></script>')
+  s=s.replace('<head>','<head><script src="./player-shell.js?v=20261011-r29"></script><script src="./career-core.js?v=20261011-r29"></script><script src="./career-extras.js?v=20261011-r29"></script><script src="./future-league.js?v=20261011-r29"></script><script src="./local-runtime.js?v=20261011-r29"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
-  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261011-r28')
+  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261011-r29')
   s=s.replace('U.draftPlayerDraw>0&&U.seasons.some(', 'U.draftPlayerDraw>0&&(U.draftSeason===`all-time`||U.seasons.some(').replace('e.teams.some(e=>e.abbreviation===U.draftTeam));U.draftPlayerDraw','e.teams.some(e=>e.abbreviation===U.draftTeam)));U.draftPlayerDraw')
   s=s.replace('if(U.loading=!0,U.error=null,$(),await X(),d())try{','if(U.loading=!0,U.error=null,$(),d())try{')
   s=s.replace('let e=await Un({position:l,seed:U.seed','let e=await window.parallelCareer.wait(Un({position:l,seed:U.seed').replace('lockedTeam:c.lockedTeam||void 0});if(!d())return;U.offers','lockedTeam:c.lockedTeam||void 0}),15000);if(!d())return;U.offers')
