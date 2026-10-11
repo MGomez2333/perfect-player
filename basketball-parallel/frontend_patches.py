@@ -60,6 +60,7 @@ def patch_dynasty(s):
     s=s.replace('每个对手每季1次，每季最多3次。','调整球员或选秀权后可再次询价，次数不限；相同方案保留原答复。')
     s=s.replace('for(;r.length>8;)delete t.tradeCounterOffers[r.shift()]','')
     s=s.replace('function nS(){','function pmNativeOffers(){',1)
+    s=s.replace('hu(t,e,k.season.year),k.leftTeam=n','hu(t,e,k.season.year),globalThis.ParallelManagerRules.hired(t.manager,k.season.year),k.leftTeam=n')
     anchor='function F(e=!0){'
     assert anchor in s
     s=s.replace(anchor,(ROOT/'manager-integration.js').read_text()+'\n'+anchor+'if(k.season)pmPlan();',1)

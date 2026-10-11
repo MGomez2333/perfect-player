@@ -13,5 +13,6 @@
   const r={key,...input,targetMet,over,budget:p.budget,change,reputation:s.reputation,status,strikes:s.strikes};s.reviews.push(r);s.reviews=s.reviews.slice(-50);if(dismissed)s.dismissed={year:input.year,team:input.team,reason:'连续未完成考核目标'};return r;
  }
  function offers(m,rows){const s=state(m);if(s.mode!=='assessment')return rows;return rows.filter((o,i)=>i<2||o.profile?.type==='rebuild'||s.reputation>=(o.profile?.type==='contender'?72:52));}
- const api={state,enable,plan,review,offers};if(typeof module!=='undefined')module.exports=api;root.ParallelManagerRules=api;
+ function hired(m,year){const s=state(m);s.strikes=0;delete s.dismissed;if(s.mode==='assessment')s.startYear=Math.max(s.startYear||0,Number(year)+1);}
+ const api={state,enable,plan,review,offers,hired};if(typeof module!=='undefined')module.exports=api;root.ParallelManagerRules=api;
 })(typeof window!=='undefined'?window:globalThis);
