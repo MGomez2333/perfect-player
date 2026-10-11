@@ -47,20 +47,22 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=48) as ex:
   if i%100==0:print('images',i,'/',len(images),'failed',len(fail),flush=True)
 if fail:
  (ROOT/'asset-failures.json').write_text(json.dumps(fail,ensure_ascii=False,indent=2));raise RuntimeError(f'{len(fail)} missing assets')
-urlmap={u:PREFIX+target(u)+('?v=20261011-r26' if u.endswith('.js') else '') for u in entries.keys()|images}
+urlmap={u:PREFIX+target(u)+('?v=20261011-r27' if u.endswith('.js') else '') for u in entries.keys()|images}
 for u,s in entries.items():
  if 'dynasty-worker-' in u and u.endswith('.js'): s=patch_progression(s)
  if 'dynasty-runtime-' in u and u.endswith('.js'): s=patch_dynasty(s)
  s=s.replace('观看广告','领取奖励').replace('看广告','领取奖励').replace('重新观看','重新领取')
  s=s.replace('function Cl(e){return e.team_label.replace','function Cl(e){return (e.team_label||e.team||``).replace')
  for origin in sorted(urlmap,key=len,reverse=True):s=s.replace(origin,urlmap[origin])
+ # Cache-bust relative JS module/worker URLs as well as absolute pinned asset URLs.
+ s=re.sub(r'(["\x27`])(\./[^"\x27`\s?]+\.js)\1', lambda m:m[1]+m[2]+'?v=20261011-r27'+m[1] if '${' not in m[2] else m[0],s)
  if u.endswith('__ai_app.html'):
   s=re.sub(r'<script\b[^>]*src="[^"]+"[^>]*>\s*</script>','',s)
-  s=s.replace('<head>','<head><script src="./player-shell.js?v=20261011-r26"></script><script src="./career-core.js?v=20261011-r26"></script><script src="./career-extras.js?v=20261011-r26"></script><script src="./future-league.js?v=20261011-r26"></script><script src="./local-runtime.js?v=20261011-r26"></script>')
+  s=s.replace('<head>','<head><script src="./player-shell.js?v=20261011-r27"></script><script src="./career-core.js?v=20261011-r27"></script><script src="./career-extras.js?v=20261011-r27"></script><script src="./future-league.js?v=20261011-r27"></script><script src="./local-runtime.js?v=20261011-r27"></script>')
   s=s.replace('function Cs(){','function Cs(){return true;')
   s=s.replace('function Pw(){','function Pw(){return true;')
   s=s.replace('async function Yt(e,t={}){','async function Yt(e,t={}){return window.parallelRequest(e,{...t,data:window.parallelCareer?.prepare(e,t.data)||t.data});')
-  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261011-r26')
+  s=s.replace('career-prismatic.js','career-prismatic.js?v=20261011-r27')
   s=s.replace('U.draftPlayerDraw>0&&U.seasons.some(', 'U.draftPlayerDraw>0&&(U.draftSeason===`all-time`||U.seasons.some(').replace('e.teams.some(e=>e.abbreviation===U.draftTeam));U.draftPlayerDraw','e.teams.some(e=>e.abbreviation===U.draftTeam)));U.draftPlayerDraw')
   s=s.replace('if(U.loading=!0,U.error=null,$(),await X(),d())try{','if(U.loading=!0,U.error=null,$(),d())try{')
   s=s.replace('let e=await Un({position:l,seed:U.seed','let e=await window.parallelCareer.wait(Un({position:l,seed:U.seed').replace('lockedTeam:c.lockedTeam||void 0});if(!d())return;U.offers','lockedTeam:c.lockedTeam||void 0}),15000);if(!d())return;U.offers')
