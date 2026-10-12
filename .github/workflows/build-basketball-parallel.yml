@@ -5,6 +5,9 @@ on:
       - .github/workflows/build-basketball-parallel.yml
       - basketball-parallel/player-development.js
       - basketball-parallel/development-integration.js
+      - basketball-parallel/draft-filters.js
+      - basketball-parallel/draft-integration.js
+      - basketball-parallel/draft-countries.json
       - basketball-parallel/development_patches.py
       - basketball-parallel/future-league.js
       - basketball-parallel/manager-rules.js
@@ -40,6 +43,8 @@ jobs:
         run: python basketball-parallel/build.py
       - name: Verify local career rules
         run: |
+          node basketball-parallel/tests/draft-era.cjs
+          node basketball-parallel/tests/draft-filters.cjs
           node basketball-parallel/tests/player-development.cjs
           node basketball-parallel/tests/development-worker.cjs
           python basketball-parallel/tests/china-portraits.py

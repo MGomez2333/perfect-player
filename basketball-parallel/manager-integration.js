@@ -1,3 +1,4 @@
+function pmEntryMode(manager,mode,year){return mode===`assessment`?globalThis.ParallelManagerRules.enable(manager,Number(year)):globalThis.ParallelManagerRules.state(manager);}
 /* Inserted in dynasty runtime's state-owning closure by the build. */
 function pmState(){return globalThis.ParallelManagerRules.state(Y().manager);}
 function pmPlan(){if(!k.season||!k.leftTeam)return;const world=Y(),s=pmState();if(s.mode!==`assessment`||world.manager.team===null)return;const year=k.season.stage===`finished`?Number(k.season.year)+1:Number(k.season.year);if(year<s.startYear)return;const rows=[...k.leftTeam.players].sort((a,b)=>W(b)-W(a)).slice(0,8),strength=rows.reduce((n,p)=>n+W(p),0)/Math.max(1,rows.length),f=po(k.leftTeam,year);globalThis.ParallelManagerRules.plan(world.manager,{year,team:k.leftTeam.abbr,strength,cap:Ve(year).salaryCap,payroll:f.payroll,tax:f.tax,goal:sn().key});}

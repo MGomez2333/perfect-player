@@ -5,3 +5,9 @@ const c={self:{postMessage(){}},TextDecoder,TextEncoder,console,setTimeout,clear
 const before=c.__testEngine.inspect(p);D.configure(p,{main:'three',secondary:'passing',target:'PG',shot:'outside',touch:'high',pass:'create'},before.court,{year:2026,games:0,gp:0,min:0});D.tick(p,{year:2026,games:82,gp:82,min:2952});const after=c.__testEngine.inspect(p);console.log(JSON.stringify({before:before.court,after:after.court,threeBefore:before.specialty.tendencies.three,threeAfter:after.specialty.tendencies.three,passBefore:before.model.ast36,passAfter:after.model.ast36,position:p.englishPosition}));
 
 assert.ok(after.court.three>before.court.three);assert.ok(after.model.ast36>before.model.ast36);assert.equal(after.specialty.tendencies.three,.58);assert.equal(p.englishPosition,"PG");
+
+const scorer=structuredClone(p);scorer.specialtyRole='isolation';scorer.parallelTraining.touch='auto';scorer.parallelTraining.shot='auto';scorer.parallelTraining.pass='auto';scorer.parallelTraining.initiation='low';scorer.parallelTraining.shots='low';const low=c.__testEngine.inspect(scorer);
+scorer.parallelTraining.initiation='focal';scorer.parallelTraining.shots='focal';scorer.parallelTraining.pass='create';const focal=c.__testEngine.inspect(scorer);
+assert.equal(focal.specialty.role,'isolation');assert.ok(focal.model.usage>low.model.usage);assert.ok(focal.model.parallelInitiationWeight>low.model.parallelInitiationWeight);assert.ok(focal.specialty.tendencies.handling>low.specialty.tendencies.handling);assert.ok(focal.specialty.tendencies.shooting>low.specialty.tendencies.shooting);assert.ok(focal.specialty.tendencies.passing>low.specialty.tendencies.passing);
+assert.ok(s.includes('*(e.model.parallelInitiationWeight||1)'),'actual handler selector must consume initiation weight');
+console.log('PASS: isolation role and simultaneous scoring/playmaking priority reach the real worker model and possession selector.');
