@@ -43,6 +43,7 @@ jobs:
         run: python basketball-parallel/build.py
       - name: Verify local career rules
         run: |
+          node basketball-parallel/tests/navigation.cjs
           node basketball-parallel/tests/draft-era.cjs
           node basketball-parallel/tests/draft-filters.cjs
           node basketball-parallel/tests/player-development.cjs

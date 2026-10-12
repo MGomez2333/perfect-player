@@ -51,7 +51,7 @@ def patch_development(s,worker=False):
   # The existing progression patch inserts mentorship between these anchors.
   s=s.replace('Bi(n);if(Number(n.age)<=25',f'Bi(n);{api}.tick(n,{api}.totals(n,l.season,t.abbr));if(Number(n.age)<=25')
  else:
-  s=s.replace('exit(){typeof o.onExitRequested', 'async exit(){if(k.simulating||k.offseasonAuto||k.rewardPending){$(`请先结束当前模拟或领取奖励，再返回主页。`);return;}if(k.homeTeamSelected){const result=await I();if(!result.ok){$(result.message);return;}}typeof o.onExitRequested')
+  s=s.replace('exit(){typeof o.onExitRequested', 'async exit(){if(k.simulating||k.offseasonAuto||k.rewardPending){$(`请先结束当前模拟或领取奖励，再返回主页。`);return;}if(k.homeTeamSelected){const result=await I();if(!result.ok){$(result.message);return;}}const home=D.host?.closest(`.dynasty-mode-shell`)?.querySelector(`[data-action="exit-dynasty"]`);if(home){home.click();return;}typeof o.onExitRequested')
   s=s.replace('selectTeam:Us,', 'selectTeam(e,mode){k.parallelEntryMode=mode;Us(e);},')
   s=s.replace('i&&(k.managerStory.livingLeague=i),n?ks(', 'i&&(k.managerStory.livingLeague=i),n&&i&&pmEntryMode(i.manager,k.parallelEntryMode,k.data.seasonYear||2026),n?ks(')
   s=s.replace('Pu(n);let r=Fb(',f'Pu(n);{api}.tick(n,{api}.totals(n,k.season,t.abbr));let r=Fb(')
