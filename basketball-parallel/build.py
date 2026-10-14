@@ -29,7 +29,7 @@ def fetch(u):
    time.sleep(n+1)
 def refs(s,u):
  return {urljoin(u,v) for v in re.findall(r'["\x27`]((?:https?://|\./|\.\./|/)[^"\x27`\s]*?\.(?:js|css|json|csv)(?:\?[^"\x27`\s]*)?)["\x27`]',s) if '${' not in v and '\\' not in v and not any(k in v for k in SKIP)}
-VERSION='20261014-r37'
+VERSION='20261014-r38'
 snapshot=zipfile.ZipFile(io.BytesIO(b''.join(p.read_bytes() for p in sorted(ROOT.glob('dynasty-source.part*')))))
 manifest=json.loads((ROOT/'dynasty-source-manifest.json').read_text())
 entries={u:snapshot.read(target(u)).decode().replace("\r\n","\n") for u in manifest}
@@ -52,7 +52,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=32) as ex:
   if i%200==0:print('images',i,'/',len(images),'failed',len(fail),flush=True)
 if fail:
  (ROOT/'asset-failures.json').write_text(json.dumps(fail,ensure_ascii=False,indent=2));raise RuntimeError(f'{len(fail)} missing assets')
-urlmap={u:PREFIX+target(u)+('?v='+VERSION if '.js' in u else '') for u in entries.keys()|images}
+urlmap={u:PREFIX+target(u)+('?v='+VERSION if '.js' in u else '') for u in sorted(entries.keys()|images)}
 url_pattern=re.compile('|'.join(re.escape(u) for u in sorted(urlmap,key=len,reverse=True)))
 for u,s in entries.items():
  if 'dynasty-ui-' in u:s=patch_entry_navigation(s)

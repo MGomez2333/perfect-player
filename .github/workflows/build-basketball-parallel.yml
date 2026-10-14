@@ -19,6 +19,7 @@ on:
       - basketball-parallel/dynasty-template.js
       - basketball-parallel/dynasty-logos.js
       - basketball-parallel/tests/**
+      - basketball-parallel/package*.json
   workflow_dispatch:
 concurrency:
   group: basketball-parallel-build
@@ -39,6 +40,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - run: npm ci --prefix basketball-parallel --ignore-scripts --no-audit --no-fund
       - name: Verify dynasty rules and compatibility
         run: |
           node basketball-parallel/tests/navigation.cjs
@@ -47,6 +49,8 @@ jobs:
           node basketball-parallel/tests/player-development.cjs
           node basketball-parallel/tests/development-worker.cjs
           node basketball-parallel/tests/dynasty-rewards.cjs
+          node basketball-parallel/tests/expansion-r37.cjs
+          node basketball-parallel/tests/storage-compat.cjs
           node basketball-parallel/tests/player-shell.cjs
           node --experimental-vm-modules basketball-parallel/tests/era-history.cjs
           python basketball-parallel/tests/china-portraits.py
