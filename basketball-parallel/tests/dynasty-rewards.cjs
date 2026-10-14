@@ -1,13 +1,7 @@
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cp=require('node:child_process'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),file='dynasty-runtime-49266a1a7e20-r41.js';
-const source=fs.existsSync(path.join(root,'source',file));
-const patched=source?cp.execFileSync('python3',['-c',"import sys;sys.path.insert(0,sys.argv[1]);from frontend_patches import patch_dynasty;print(patch_dynasty(open(sys.argv[1]+'/source/'+sys.argv[2]).read()))",root,file],{encoding:'utf8',maxBuffer:8*1024*1024}):fs.readFileSync(path.join(root,file),'utf8');
-const match=patched.match(/async prepareRewardVideo\(\)\{([^}]+)\}/);assert.ok(match);
-let destroyed=0,releases=0;const context={e:{client:{destroy(){destroyed++;}}},es:async()=>{releases++;}};vm.createContext(context);
-(async()=>{const preparation=vm.runInContext('({async prepareRewardVideo(){'+match[1]+'}})',context);await preparation.prepareRewardVideo();assert.equal(releases,0);assert.equal(destroyed,0);assert.ok(patched.includes('ww(n),t.pending=null'));assert.ok(patched.includes('saveRewardReceipt(n)'));console.log('PASS: no-ad dynasty reward retains live worker and keeps reward receipt/application/save lifecycle.');})();
-
-const profile=patched.match(/async function re\(e\)\{return window\.parallelCareer\.localIdentity\(\)\}/)?.[0];
-assert.ok(profile,'Self draft must use a local identity');
-let bridgeCalls=0;const identity={accountId:'local-test',name:'本地球员',avatar:''};
-const local=vm.runInNewContext('('+profile+')',{window:{parallelCareer:{localIdentity:()=>identity}}});
-local(()=>{bridgeCalls++;throw Error('Hupu bridge must not be called')}).then(value=>{assert.equal(value,identity);assert.equal(bridgeCalls,0);console.log('PASS: self draft works without a Hupu account or bridge.');}).catch(e=>{console.error(e);process.exitCode=1;});
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const runtime=fs.readFileSync(require.resolve('../dynasty-runtime-f68dfaa59e08-r90.js'),'utf8'),services=fs.readFileSync(require.resolve('../dynasty-services-f9116e72ede4-r90.js'),'utf8');
+const start=services.indexOf('async prepareRewardVideo(t){'),end=services.indexOf(',getItem(t)',start),body=services.slice(start,end);
+assert.ok(start>0&&end>start);let journal=0,destroyed=0;const owner={slotId:'test',generation:1},e={active:'test',current:{},summary:{team:'TST'},legacyStorage:{},client:{destroy:()=>destroyed++}};
+const c={e,r:()=>{},i:()=>owner,n:new Map,j:()=>journal++,Date};
+(async()=>{const prepare=vm.runInNewContext('({'+body+'}).prepareRewardVideo',c);assert.deepEqual(await prepare({id:'reward-test'}),owner);assert.equal(journal,1);assert.equal(destroyed,0);assert.ok(runtime.includes('await ue.saveRewardReceipt'));console.log('PASS: local rewards retain durable ownership/journal without tearing down live worker.');})();
+const identity={accountId:'test',name:'测试玩家'},fn=runtime.match(/async function re\(e\)\{return window\.parallelProfile\.identity\(\)\}/)?.[0];assert.ok(fn);vm.runInNewContext('('+fn+')',{window:{parallelProfile:{identity:()=>identity}}})().then(value=>assert.equal(value,identity));

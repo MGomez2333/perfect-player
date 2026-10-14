@@ -3,27 +3,22 @@ on:
   push:
     paths:
       - .github/workflows/build-basketball-parallel.yml
+      - basketball-parallel/build.py
+      - basketball-parallel/*patches.py
       - basketball-parallel/player-development.js
       - basketball-parallel/development-integration.js
-      - basketball-parallel/draft-filters.js
-      - basketball-parallel/draft-integration.js
+      - basketball-parallel/draft-*.js
       - basketball-parallel/draft-countries.json
-      - basketball-parallel/development_patches.py
-      - basketball-parallel/future-league.js
-      - basketball-parallel/manager-rules.js
-      - basketball-parallel/manager-integration.js
+      - basketball-parallel/manager-*.js
       - basketball-parallel/progression-rules.js
       - basketball-parallel/player-shell.js
       - basketball-parallel/responsive.css
-      - basketball-parallel/build.py
-      - basketball-parallel/frontend_patches.py
-      - basketball-parallel/local-runtime.js
-      - basketball-parallel/career-core.js
-      - basketball-parallel/career-extras.js
-      - basketball-parallel/records.json
-      - basketball-parallel/legend-profiles.json
+      - basketball-parallel/dynasty-source*
+      - basketball-parallel/dynasty-home.*
+      - basketball-parallel/dynasty-app.js
+      - basketball-parallel/dynasty-template.js
+      - basketball-parallel/dynasty-logos.js
       - basketball-parallel/tests/**
-      - basketball-parallel/source-snapshot.part*
   workflow_dispatch:
 concurrency:
   group: basketball-parallel-build
@@ -41,24 +36,20 @@ jobs:
           python-version: '3.12'
       - name: Cache original modules and images
         run: python basketball-parallel/build.py
-      - name: Verify local career rules
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify dynasty rules and compatibility
         run: |
           node basketball-parallel/tests/navigation.cjs
           node basketball-parallel/tests/draft-era.cjs
           node basketball-parallel/tests/draft-filters.cjs
           node basketball-parallel/tests/player-development.cjs
           node basketball-parallel/tests/development-worker.cjs
-          python basketball-parallel/tests/china-portraits.py
-          node basketball-parallel/tests/release-r26.cjs
-          node basketball-parallel/tests/future-integration.cjs
-          node basketball-parallel/tests/player-shell.cjs
-          node basketball-parallel/tests/career-features.cjs
-          node basketball-parallel/tests/draft-loading.cjs
           node basketball-parallel/tests/dynasty-rewards.cjs
-          node basketball-parallel/tests/career-balance.cjs
-          node basketball-parallel/tests/career-volatility.cjs
-          node basketball-parallel/tests/permanent-augments.cjs
-          node basketball-parallel/tests/release-r20.cjs
+          node basketball-parallel/tests/player-shell.cjs
+          node --experimental-vm-modules basketball-parallel/tests/era-history.cjs
+          python basketball-parallel/tests/china-portraits.py
       - name: Publish cached game
         run: |
           git config user.name 'github-actions[bot]'

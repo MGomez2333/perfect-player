@@ -21,6 +21,10 @@ def patch_development(s,worker=False):
   s=s.replace(old,new)
  # Model naming differs, but the shared possession selector has stable field names.
  s=s.replace('*(.3+n.tendencies.handling)', '*(.3+n.tendencies.handling)*(e.model.parallelInitiationWeight||1)')
+ # Weight defensive event ownership without boosting skill or success rates.
+ old='e.min*S(e,n)' if worker else 'e.min*b(e,n)'
+ assert s.count(old)==1, ('defense selector',s.count(old))
+ s=s.replace(old,old+'*globalThis.ParallelDevelopment.defenseWeight(e.model,n)',1)
  # Keep applied development separate from full-season reporting.
  if worker:
   for old,new in {
@@ -84,15 +88,15 @@ def patch_draft(s):
   s=s.replace(old,new,1)
  # A manual selection must not be diluted by the multi-era fallback.
  once('e.historicalYear:vp(e.year,e.historicalYear)', 'e.historicalYear:e.parallelStrictEra?e.historicalYear:vp(e.year,e.historicalYear)')
- once('if(t.historicalYear=e,', 'if(t.parallelStrictEra=true,t.historicalYear=e,')
+ once('d.historicalYear=origin;', 'd.parallelStrictEra=true;d.historicalYear=origin;')
  once('u(Tt(e,r,1e3,o),!0),u(gt(e,r),!1);', 'u(Tt(e,r,1e3,o),!0);if(k.season?.draft?.parallelStrictEra&&Number(k.season.draft.year)===Number(e))return l.map((e,t)=>Bo({...e,mockRank:t+1},k.entryDataVersion));u(gt(e,r),!1);')
  # Migration only before any selections, and only for saves that explicitly changed era.
  once('Cp(a),Yw(a);', 'if(a.eraChoice?.selected&&!a.parallelStrictEra&&!a.applied&&!a.selections.length){a.parallelStrictEra=true;bp(a,false);a.shortlist=(a.shortlist||[]).filter(id=>a.prospects.some(p=>p.id===id));}Cp(a),Yw(a);')
- once('i=k.draftOnlyShortlist?r.filter(e=>t.shortlist?.includes(e.id)):r,a=[...i]', 'i=(k.draftOnlyShortlist?r.filter(e=>t.shortlist?.includes(e.id)):r).filter(p=>globalThis.ParallelDraftFilters.match(p,k.parallelDraftFilter)),a=[...i]')
- once('<div class="draft-prospect-list">${a.map(e=>Q_(e,t)).join(``)}</div>', '${pdDraftControls(i.length,r.length)}<div class="draft-prospect-list">${a.map(e=>Q_(e,t)).join(``)}</div>')
+ once("const filteredBoard = arrival?.focus?sourceBoard.filter(p=>arrival.ids.includes(p.id)):k.draftOnlyShortlist ? sourceBoard.filter(p => draft.shortlist?.includes(p.id)) : sourceBoard;", "const filteredBoard = (arrival?.focus?sourceBoard.filter(p=>arrival.ids.includes(p.id)):k.draftOnlyShortlist ? sourceBoard.filter(p => draft.shortlist?.includes(p.id)) : sourceBoard).filter(p=>globalThis.ParallelDraftFilters.match(p,k.parallelDraftFilter));")
+ once('<div class="draft-prospect-list">${board.map', '${pdDraftControls(filteredBoard.length,sourceBoard.length)}<div class="draft-prospect-list">${board.map')
  once('O.querySelector(`[data-draft-watch-filter]`)?.addEventListener', 'pdDraftBind(O),O.querySelector(`[data-draft-watch-filter]`)?.addEventListener')
  s=s.replace('优先使用所选年代名单，不足时按现有返场规则补充。', '更换后只保留所选年代的历史新秀，不足名额由生成新秀补齐。')
- s=s.replace('function ev(){',(ROOT/'draft-integration.js').read_text()+'\nfunction ev(){',1)
+ s=s.replace('function ev() {',(ROOT/'draft-integration.js').read_text()+'\nfunction ev() {',1)
  import json
  countries=json.loads((ROOT/'draft-countries.json').read_text())
  return 'globalThis.ParallelDraftCountries='+json.dumps(countries,ensure_ascii=False,separators=(',',':'))+';\n'+(ROOT/'draft-filters.js').read_text()+'\n'+s

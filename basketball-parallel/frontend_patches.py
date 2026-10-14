@@ -1,60 +1,14 @@
 from pathlib import Path
 ROOT=Path(__file__).parent
 
-def patch_frontend(s):
-    changes={
-      'if(H.loading=!0,H.error=null,$(),await Y(),d())try{': 'if(H.loading=!0,H.error=null,$(),d())try{',
-      'async function nl(e){return sc(`/team-offers`,{method:`POST`,data:e})}': 'async function nl(e){return window.parallelCareer.wait(sc(`/team-offers`,{method:`POST`,data:e}),15000)}',
-      'H.expandedCandidateId=null,await Y()}catch(e){d()': 'H.expandedCandidateId=null,Y().catch(()=>{})}catch(e){d()',
-
-      'function $(){if(document.documentElement': 'function $(){window.parallelCareer?.bind(G,H,{save:()=>Y(),redraw:()=>$(),moment:()=>H.result?Fk(H.result)[H.broadcastStep]:null,moments:()=>H.result?Fk(H.result):[],grantSkill:(c,id,kind)=>ht(c,id,kind),openAchievements:()=>{H.achievementsOpen=!0;$()}});if(document.documentElement',
-      'function Z(e,t){return e===': 'function Z(e,t){if(e===`我`||e===`你`)return window.parallelCareer?.name(H)||`我的球员`;return e===',
-      'function gt(e,t){': 'function gt(e,t){for(const a of e.permanentAugments||[]){if(a.id===`apprentice`&&a.choice){let r=xe(a.choice),h=e.rewards?.mentorHistory||[];if(r){let rows=h.filter(x=>x.teammateIds.includes(r.playerId));if(new Set(rows.map(x=>x.season)).size>=2&&rows.some(x=>x.wonTitle))ht(e,r.id,`apprentice`);}}}',
-      'H.draftPlayerDraw>0&&H.seasons.some(': 'H.draftPlayerDraw>0&&(H.draftSeason===`all-time`||H.seasons.some(',
-      'e.teams.some(e=>e.abbreviation===H.draftTeam));H.draftPlayerDraw': 'e.teams.some(e=>e.abbreviation===H.draftTeam)));H.draftPlayerDraw',
-      'function MM(e){H.career?': 'function MM(e){window.parallelCareer?.remember(H.career,e);H.career?',
-      'function AM(e){!V': 'function AM(e){window.parallelCareer?.attach(e);!V',
-      'function Ri(e,t){let n=': 'function Ri(e,t){let n=',
-      'return{careerYear:t,season:e.season,team:e.team,record:e.regular_season.record': 'return{...window.parallelCareer?.summary(e),careerYear:t,season:e.season,team:e.team,record:e.regular_season.record',
-      'r.honors=[...new Set(r.seasons.flatMap(e=>e.honors))]': 'window.parallelCareer?.settle(e,r),r.honors=[...new Set(r.seasons.flatMap(e=>e.honors))]',
-      'playerName:H.userProfile?.nickname||`我的球员`': 'playerName:window.parallelCareer?.name(H)||`我的球员`',
-    }
-    for old,new in changes.items():
-        if old not in s: raise ValueError('Frontend patch anchor missing: '+old[:80])
-        s=s.replace(old,new)
-    s=s.replace('function Tu(e,t){','function Tu(e,t){if(Number(t)>=1000000000)t=(Number(t)-1000000000)%10000000;e=e.replace(/·(?:[二三四五六七八九十]+|[0-9]+)世$/u,``);')
-    s=s.replace('function Se(e,t){','function Se(e,t){if(Number(t)>=1000000000)t=(Number(t)-1000000000)%10000000;e=e.replace(/·(?:[二三四五六七八九十]+|[0-9]+)世$/u,``);')
-    s=s.replace('playerId:e.player_id,playerName:e.player','playerId:e.origin_player_id||e.player_id,playerName:e.player')
-    s=s.replace('new Set(t.map(e=>e.player_id))','new Set(t.map(e=>e.origin_player_id||e.player_id))')
-    extra={
-      's=o<40?1:o<80?2:3':'s=3',
-      '&&Object.entries(n.boosts).some(([t])=>e[t]<110)':'',
-      'Math.min(110,t+n[e])':'t+n[e]',
-      'function kT(e,t=H.career){let n=OT(t);return n.length?Oe(e,n):{...e}}':'function kT(e,t=H.career){return window.ParallelCareerCore.effective(e,window.ParallelCareerCore.bonuses(t?.permanentAugments||[],OT(t),_e).totals)}',
-      '.filter(e=>t.ratings[e]<110)':'',
-      'if(t.abilities)return t.abilities.some(t=>e.ratings[t]<110);':'if(t.abilities)return true;',
-      'Math.max(0,Math.min(r/n.abilities.length,110-t[e]))':'r/n.abilities.length',
-      'Math.max(0,Math.min(n,110-i))':'n',
-      'save:()=>Y(),redraw:()=>$(),moment:':'save:()=>Y(),redraw:()=>$(),catalog:()=>_e,moment:',
-      'class="growth-ability-row" data-growth-ability=':'class="growth-ability-row" style="grid-template-columns:minmax(0,1fr) minmax(94px,auto) 106px!important" data-growth-ability=',
-      '<strong data-growth-value>':'<strong style="white-space:nowrap!important;font-size:16px!important" data-growth-value>',
-      'data-growth-value>${i+r}':'data-growth-value>${window.parallelCareer.rating(n,i+r,e)}',
-      'o.textContent=String(a+i)':'o.textContent=window.parallelCareer.rating(n,a+i,e)',
-    }
-    for old,new in extra.items():
-        if old not in s: raise ValueError('Career rule anchor missing: '+old)
-        s=s.replace(old,new)
-    return s
-
-
 def patch_dynasty(s):
     old='async prepareRewardVideo(){await es(e,`releaseMemory`,{}),e.client.destroy()}'
-    if s.count(old)!=1: raise ValueError('Dynasty reward lifecycle anchor missing')
-    s=s.replace(old,'async prepareRewardVideo(){return true}')
+    # r90 services own the reward journal and storage lifecycle.
+    if old in s: s=s.replace(old,'async prepareRewardVideo(){return true}')
     start=s.index('async function re(e){')
     end=s.index('function ie(',start)
-    s=s[:start]+'async function re(e){return window.parallelCareer.localIdentity()}'+s[end:]
-    begin=s.index('function Mc(){')
+    s=s[:start]+'async function re(e){return window.parallelProfile.identity()}'+s[end:]
+    begin=s.index('function Mc(')
     end=s.index('function Nc(',begin)
     s=s[:begin]+'function Mc(){return Mt().length!==2?`获取明确还价仅支持两队交易，请先拆分多人方案。`:``}'+s[end:]
     s=s.replace('每个对手每季1次，每季最多3次。','调整球员或选秀权后可再次询价，次数不限；相同方案保留原答复。')
