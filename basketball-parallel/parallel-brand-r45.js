@@ -1,4 +1,4 @@
-import {originalAwardUrl} from './parallel-awards-r39.js?v=20261014-r37';
+import {originalAwardUrl} from './parallel-awards-r39.js?v=20261014-r38';
 export {originalAwardUrl};
 export function leagueCopy(value){
  if(typeof value!=='string')return value;

@@ -49,7 +49,7 @@ var e=class {
   constructor({compute=false}={}) {
     this.transport76=createStateTransportR76();
     this.storageOnly=!compute;
-    this.file=compute?"./dynasty-worker-c269660e8472-r90.js?v=20261014-r37":"./dynasty-storage-worker-915dc79d7ddb-r80.js?v=20261014-r37";
+    this.file=compute?"./dynasty-worker-c269660e8472-r90.js?v=20261014-r38":"./dynasty-storage-worker-915dc79d7ddb-r80.js?v=20261014-r38";
     this.build=compute?"9106139af167d515b5eb4178f7e72bac69d3106e7e7e881583a729bb72909f47":"aea67c5581079779fa73d693af733ecf82d3a59f58cb916326a7abe40875c576";
     this.pending=new Map();this.id=0;this.failed=null;this.started=false;this.attempt=0;
     this.url=new URL(this.file,document.baseURI);
