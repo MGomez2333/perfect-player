@@ -18,5 +18,14 @@ async function load(name){name=name.replace('/perfect-player/basketball-parallel
  const oc=await load('dynasty-opening-career-9d26fcbba7b8-r53.js');await oc.evaluate();const hs=await load('dynasty-history-support-560fa2646916-r83.js');await hs.evaluate();
  const player=team(1984,'LAL').players.find(p=>String(p.nbaId)==='77142');const baseline=oc.namespace.openingCareer(player,1984);const honors=c.__bp22HistorySupportR65.openingHallBaseline(baseline,[],[]);
  assert.equal(baseline.through,1983);assert.equal(honors.honorsVerified,true);assert.equal(new Map(honors.honors).get('总冠军'),2);assert.equal(new Map(honors.honors).get('FMVP'),2);
+ // Run the actual season-boundary transition: expansion must not replace existing rosters.
+ const runtime=fs.readFileSync(path.join(root,'dynasty-runtime-f68dfaa59e08-r90.js'),'utf8');
+ const start=runtime.indexOf('function baseLivingAdvanceEraR52('),end=runtime.indexOf('function baseRenderDraftDlcHubR52(',start);assert.ok(start>0&&end>start);
+ const state={data:structuredClone(history.get(1984)),season:{freeAgents:Array.from({length:150},(_,i)=>({id:'TEST-FA-'+i,name:'测试自由球员'+i,gameRating:60+i%20,askingSalary:1000000}))}};
+ const original=state.data.teams.find(t=>t.abbr==='LAL').players,first=original[0];first.parallelTraining={main:'three',defense:'focal'};const events=[];
+ const advance=vm.runInNewContext('('+runtime.slice(start,end).trim()+')',{k:state,A:Math,Qd:m.namespace.historicalLeagueR52,le:b.namespace.default,je:null,P:abbr=>state.data.teams.find(t=>t.abbr===abbr),ft:x=>x,Sm:()=>{},W:p=>p.gameRating,j:1000000,cu:(w,e)=>events.push(e),Y:()=>({})});
+ for(let year=1985;year<=2008;year++){const market=advance(year);state.season.freeAgents=market.freeAgents;}
+ assert.equal(state.data.teams.length,30);assert.equal(state.data.teams.find(t=>t.abbr==='OKC').name,'俄克拉荷马城雷霆');assert.ok(state.data.teams.find(t=>t.abbr==='MEM').name.includes('孟菲斯'));
+ assert.equal(state.data.teams.find(t=>t.abbr==='LAL').players,original);assert.equal(first.parallelTraining.defense,'focal');assert.equal(events.length,7);
  console.log('PASS: all 16 early seasons, historical rosters, expansion sizes, migration/renaming/conferences and pre-opening honors.');
 })().catch(e=>{console.error(e);process.exitCode=1});

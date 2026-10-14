@@ -19,7 +19,7 @@ function renderHome(){
 async function returnHome(){
  if(runtime?.isSimulationRunning()||runtime?.isRewardPending())throw Error('请等待当前模拟或奖励完成后返回。');
  if(runtime){const saved=await runtime.flushSave();if(saved?.ok===false)throw Error(saved.message);runtime.destroy(false);runtime=null;}
- host.replaceChildren();host.hidden=true;home.hidden=false;document.body.classList.remove('playing-dynasty');renderHome();window.scrollTo(0,0);
+ host.shadowRoot?.replaceChildren();host.replaceChildren();host.hidden=true;home.hidden=false;document.body.classList.remove('playing-dynasty');renderHome();window.scrollTo(0,0);
 }
 async function enter(){
  status.textContent='正在载入王朝…';services.assertDynastySaveReadable();

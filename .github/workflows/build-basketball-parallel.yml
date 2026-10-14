@@ -47,6 +47,7 @@ jobs:
           node basketball-parallel/tests/draft-era.cjs
           node basketball-parallel/tests/draft-filters.cjs
           node basketball-parallel/tests/player-development.cjs
+          node basketball-parallel/tests/development-save.cjs
           node basketball-parallel/tests/development-worker.cjs
           node basketball-parallel/tests/dynasty-rewards.cjs
           node basketball-parallel/tests/expansion-r37.cjs

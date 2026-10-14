@@ -29,7 +29,7 @@ def fetch(u):
    time.sleep(n+1)
 def refs(s,u):
  return {urljoin(u,v) for v in re.findall(r'["\x27`]((?:https?://|\./|\.\./|/)[^"\x27`\s]*?\.(?:js|css|json|csv)(?:\?[^"\x27`\s]*)?)["\x27`]',s) if '${' not in v and '\\' not in v and not any(k in v for k in SKIP)}
-VERSION='20261014-r38'
+VERSION='20261014-r39'
 snapshot=zipfile.ZipFile(io.BytesIO(b''.join(p.read_bytes() for p in sorted(ROOT.glob('dynasty-source.part*')))))
 manifest=json.loads((ROOT/'dynasty-source-manifest.json').read_text())
 entries={u:snapshot.read(target(u)).decode().replace("\r\n","\n") for u in manifest}
