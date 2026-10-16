@@ -1,9 +1,10 @@
-import * as services from './dynasty-runtime-f68dfaa59e08-r90.js?v=20261014-r39';
-import css from './dynasty-entry-style-e71847e68b4a.js?v=20261014-r39';
-import data from './dynasty-entry-data-03482d7b9607.js?v=20261014-r39';
-import {managerAssetData} from './dynasty-entry-media-ff6151fd96ac.js?v=20261014-r39';
-import {mountDynastyTemplate} from './dynasty-template-release.js?v=20261014-r39';
-import logos from './dynasty-logos-release.js?v=20261014-r39';
+import * as services from './dynasty-runtime-f68dfaa59e08-r90.js?v=20261016-r40';
+import css from './dynasty-entry-style-e71847e68b4a.js?v=20261016-r40';
+import data from './dynasty-entry-data-03482d7b9607.js?v=20261016-r40';
+import {managerAssetData} from './dynasty-entry-media-ff6151fd96ac.js?v=20261016-r40';
+import polish from './dynasty-polish.js?v=20261016-r40';
+import {mountDynastyTemplate} from './dynasty-template-release.js?v=20261016-r40';
+import logos from './dynasty-logos-release.js?v=20261016-r40';
 const home=document.querySelector('#dynasty-home'),host=document.querySelector('#dynasty-game'),status=document.querySelector('#home-status');
 let runtime=null,busy=false;
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -24,7 +25,7 @@ async function returnHome(){
 async function enter(){
  status.textContent='正在载入王朝…';services.assertDynastySaveReadable();
  home.hidden=true;host.hidden=false;document.body.classList.add('playing-dynasty');
- const root=host.shadowRoot||host.attachShadow({mode:'open'});mountDynastyTemplate(root,css);
+ const root=host.shadowRoot||host.attachShadow({mode:'open'});mountDynastyTemplate(root,css+polish);
  host.style.setProperty('--dynasty-entry-image',`url("${managerAssetData['dynasty-entry-arena']||''}")`);
  const reward=async()=>({ok:true,rewarded:true});
  try{runtime=services.mountManagerRuntime({root,data:structuredClone(data),storage:services.createDynastyStorage(),resolveAssetUrl(key){const value=managerAssetData[key.replace(/^\.\//,'').replaceAll('\\','/')]||'';return value.startsWith('shared-team:')?logos[value.slice(12)]||'':value;},requestRewardVideo:reward,onRestartRequested:()=>action(async()=>{await returnHome();await services.startNewDynastySlot();await enter();}),onExitRequested:()=>action(returnHome)});
