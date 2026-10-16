@@ -16,6 +16,7 @@ on:
       - basketball-parallel/dynasty-source*
       - basketball-parallel/dynasty-home.*
       - basketball-parallel/dynasty-app.js
+      - basketball-parallel/dynasty-polish.js
       - basketball-parallel/dynasty-template.js
       - basketball-parallel/dynasty-logos.js
       - basketball-parallel/tests/**

@@ -2,6 +2,7 @@ import * as services from './dynasty-runtime-f68dfaa59e08-r90.js';
 import css from './dynasty-entry-style-e71847e68b4a.js';
 import data from './dynasty-entry-data-03482d7b9607.js';
 import {managerAssetData} from './dynasty-entry-media-ff6151fd96ac.js';
+import polish from './dynasty-polish.js';
 import {mountDynastyTemplate} from './dynasty-template.js';
 import logos from './dynasty-logos.js';
 const home=document.querySelector('#dynasty-home'),host=document.querySelector('#dynasty-game'),status=document.querySelector('#home-status');
@@ -24,7 +25,7 @@ async function returnHome(){
 async function enter(){
  status.textContent='正在载入王朝…';services.assertDynastySaveReadable();
  home.hidden=true;host.hidden=false;document.body.classList.add('playing-dynasty');
- const root=host.shadowRoot||host.attachShadow({mode:'open'});mountDynastyTemplate(root,css);
+ const root=host.shadowRoot||host.attachShadow({mode:'open'});mountDynastyTemplate(root,css+polish);
  host.style.setProperty('--dynasty-entry-image',`url("${managerAssetData['dynasty-entry-arena']||''}")`);
  const reward=async()=>({ok:true,rewarded:true});
  try{runtime=services.mountManagerRuntime({root,data:structuredClone(data),storage:services.createDynastyStorage(),resolveAssetUrl(key){const value=managerAssetData[key.replace(/^\.\//,'').replaceAll('\\','/')]||'';return value.startsWith('shared-team:')?logos[value.slice(12)]||'':value;},requestRewardVideo:reward,onRestartRequested:()=>action(async()=>{await returnHome();await services.startNewDynastySlot();await enter();}),onExitRequested:()=>action(returnHome)});
