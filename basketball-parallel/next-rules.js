@@ -9,15 +9,29 @@
  function config(state){state.managerStory??={};return state.managerStory.parallelNext??={version:1,seed:Math.floor(Math.random()*0x100000000),salaryMode:'strict',following:{}};}
  function draft(players,state,year){const cfg=config(state),existing=new Map((state.season?.draft?.prospects||[]).map(p=>[String(p.id),p]));return players.map(p=>{const old=existing.get(String(p.id));if(old){for(const key of ['truePotential','simPotential','parallelHidden','parallelScout','parallelGeneration'])if(old[key]!==undefined)p[key]=structuredClone(old[key]);hidden(p);return p;}if(p.parallelGeneration||p.selfDraft)return p;const seed=`${cfg.seed}:${year}:${p.id}:${p.historicalDraft?.year||''}`;p.parallelGeneration=seed;const ability=Number(p.trueAbility??p.simAbility??p.gameRating??70);if(p.historicalDraft){const base=Number(p.truePotential??p.simPotential??85),lo=Math.max(ability,base-25),hi=Math.max(lo,Math.min(99,base+20));p.truePotential=Math.round(lo+hash(seed+':potential')*(hi-lo));if(p.simPotential!==undefined)p.simPotential=p.truePotential;if(p.historicalModel)p.historicalModel={...p.historicalModel,gamePotential:p.truePotential,simPotentialFloor:Math.min(ability,p.truePotential),simPotentialCeiling:p.truePotential};}p.parallelHidden={version:1,values:Object.fromEntries(Object.keys(labels).map(k=>[k,1+Math.floor(hash(seed+':'+k)*20)]))};return p;});}
  function growth(p){const h=hidden(p),work=(h.professionalism*.45+h.determination*.35+h.ambition*.20)/20;const ability=Number(p.simAbility??p.trueAbility??p.gameRating??70),potential=Number(p.simPotential??p.truePotential??p.gamePotential??ability);p.parallelGrowthOrigin??=ability;const reachable=p.parallelGrowthOrigin+(potential-p.parallelGrowthOrigin)*(.45+.55*work);return (.12+1.45*work)*(p.parallelTraining?.allowBreakthrough?1:clamp((reachable-ability)/5,0,1));}
- function scout(p,level=Number(p.scoutLevel||0)){
-  const h=hidden(p);level=clamp(level,0,3);p.parallelScout??={version:1,reports:{}};if(p.parallelScout.reports[level])return p.parallelScout.reports[level];
-  const seed=p.parallelGeneration||`${p.id}:scout`,bias=hash(seed+':blindspot'),bad=bias<.16,sign=hash(seed+':direction')<.5?-1:1,systematic=bad?sign*(9+hash(seed+':bias')*9):(hash(seed+':bias')-.5)*6;
-  const uncertainty=[12,9,6,4][level],estimate=(truth,key,scale=1)=>truth+systematic*scale+(hash(seed+':'+key+':'+level)-.5)*uncertainty*.6;
-  const a=Number(p.trueAbility??p.simAbility??p.gameRating??70),pa=Number(p.truePotential??p.simPotential??p.gamePotential??a),ac=clamp(Math.round(estimate(a,'ability',.25)),25,99),pc=clamp(Math.round(estimate(pa,'potential')),a,99);
-  const traits=Object.fromEntries(Object.keys(labels).map(key=>[key,clamp(Math.round(estimate(h[key],key,.5)),1,20)]));
-  const report={level,abilityLow:clamp(ac-Math.ceil(uncertainty/3),25,99),abilityHigh:clamp(ac+Math.ceil(uncertainty/3),25,99),potentialLow:clamp(pc-uncertainty,a,99),potentialHigh:clamp(pc+uncertainty,a,99),confidence:['信息有限','初步观察','重点考察','较有把握'][level],traits};p.parallelScout.reports[level]=report;return report;
+ function opinion(p,level,channel='personal'){
+  const seed=(p.parallelGeneration||`${p.id}:scout`)+':'+channel,noise=key=>hash(seed+':'+key),bad=noise('blindspot')<.16;
+  const systematic=bad?(noise('direction')<.5?-1:1)*(9+noise('bias')*9):(noise('bias')-.5)*6;
+  const a=Number(p.trueAbility??p.simAbility??p.gameRating??70),pa=Number(p.truePotential??p.simPotential??p.gamePotential??a);
+  const uncertainty=[8,6,4,3][level],evidence=[.45,.65,.85,.95][level];
+  const ac=clamp(Math.round(a+systematic*.25+(noise('ability:'+level)-.5)*4),25,99);
+  const prior=clamp(ac+Math.max(2,23-Number(p.age||20))*1.6,70,88);
+  const pc=clamp(Math.round(prior*(1-evidence)+(pa+systematic)*evidence+(noise('potential:'+level)-.5)*4),ac,99);
+  const traits=Object.fromEntries(Object.keys(labels).map(key=>[key,clamp(Math.round(hidden(p)[key]+systematic*.5+(noise(key+':'+level)-.5)*uncertainty*.6),1,20)]));
+  return {level,abilityLow:clamp(ac-2,25,99),abilityHigh:clamp(ac+2,25,99),potentialLow:clamp(pc-uncertainty,ac,99),potentialHigh:clamp(pc+uncertainty,ac,99),confidence:['信息有限','初步观察','重点考察','较有把握'][level],traits};
  }
- function estimates(p){if(p.selfDraft||p.parallelHidden?.revealed)return {ability:String(p.trueAbility??p.simAbility),potential:String(p.truePotential??p.simPotential)};const r=scout(p);return {ability:`${r.abilityLow}–${r.abilityHigh}`,potential:`${r.potentialLow}–${r.potentialHigh}`};}
+ function scout(p,level=Number(p.scoutLevel||0)){
+  level=clamp(Math.round(level),0,3);
+  if(p.parallelScout?.version!==2)p.parallelScout={version:2,reports:{},legacyReports:structuredClone(p.parallelScout?.reports||{})};
+  return p.parallelScout.reports[level]??=(opinion(p,level));
+ }
+ function market(p){
+  if(p.parallelMarket?.version!==2){const r=opinion(p,1,'league');const ability=(r.abilityLow+r.abilityHigh)/2,potential=(r.potentialLow+r.potentialHigh)/2;
+   p.parallelMarket={version:2,ability,potential,score:ability*.65+potential*.35+clamp(21-Number(p.age||20),-7,3)*.6+(hash((p.parallelGeneration||p.id)+':buzz')-.5)*5};}
+  return p.parallelMarket;
+ }
+ function compareProspects(a,b){return market(b).score-market(a).score||String(a.id).localeCompare(String(b.id));}
+ function estimates(p){if(p.selfDraft||p.parallelHidden?.revealed)return {ability:String(p.trueAbility??p.simAbility),potential:String(p.truePotential??p.simPotential)};const r=scout(p);return {ability:`${r.abilityLow}–${r.abilityHigh}`,potential:r.level===0?'待考察':`${r.potentialLow}–${r.potentialHigh}`};}
  function model(p,m){const h=hidden(p),t=p.parallelTraining||{};m.parallelHidden={...h};m.parallelDefenseRole=t.defenseRole||'auto';m.parallelReboundWeight={low:.3,high:1.6,focal:2.8}[t.rebounds]||1;m.parallelPass=t.pass||'auto';m.parallelShots=t.shots||'auto';m.parallelRole=t.offenseRole||p.specialtyRole||'auto';if(m.parallelRole==='heliocentric')m.parallelInitiationWeight=(m.parallelInitiationWeight||1)*1.6;
   if(m.identity)m.identity.consistency=clamp((m.identity.consistency||.8)+(h.consistency-10)*.012,.5,.97);
   if(m.performance){m.performance.parallelHidden={...h};m.performance.stamina=clamp((m.performance.stamina||0)+(h.durability-10)*.025,-1,1);}
@@ -38,5 +52,5 @@
  function pressure(performance,pressure,result){const h=performance?.parallelHidden;if(!h)return result;return {...result,shot:result.shot+(h.clutch-10)*.0018*pressure,ft:result.ft+(h.clutch-10)*.001*pressure,turnover:result.turnover-(h.determination-10)*.0008*pressure};}
  function budget(base,mode){if(mode!=='relaxed')return {...base};return Object.fromEntries(Object.entries(base).map(([key,value])=>[key,['salaryCap','luxuryTax','firstApron','secondApron'].includes(key)?Math.round(value*1.25):value]));}
  function follow(state,ability){const cfg=config(state),year=Number(state.season?.year);cfg.following??={};for(const entry of Object.values(cfg.following)){const team=state.data?.teams?.find(t=>t.players.some(p=>(String(p.id)===entry.id||String(p.parallelOriginId)===entry.id))),p=team?.players.find(p=>(String(p.id)===entry.id||String(p.parallelOriginId)===entry.id))||state.season?.freeAgents?.find(p=>(String(p.id)===entry.id||String(p.parallelOriginId)===entry.id));if(!p)continue;const stats=state.season?.playerStats?.[p.id]||{};entry.name=p.name;entry.team=team?.abbr||'FA';entry.history??=[];const row={year,team:entry.team,ability:ability(p),gp:Number(stats.gp||0),pts:Number(stats.pts||0),reb:Number(stats.reb||0),ast:Number(stats.ast||0)};const old=entry.history.find(x=>x.year===year);if(old)Object.assign(old,row);else entry.history.push(row);if(entry.lastTeam&&entry.lastTeam!==entry.team)(entry.moves??=[]).push({year,from:entry.lastTeam,to:entry.team});entry.lastTeam=entry.team;}}
- const api={labels,offense,defense,hash,hidden,config,draft,growth,scout,estimates,model,eventWeight,possession,pressure,budget,follow};root.ParallelNext=api;if(typeof module!=='undefined')module.exports=api;
+ const api={labels,offense,defense,hash,hidden,config,draft,growth,scout,opinion,market,compareProspects,estimates,model,eventWeight,possession,pressure,budget,follow};root.ParallelNext=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

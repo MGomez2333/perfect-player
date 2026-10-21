@@ -19,6 +19,12 @@ def patch_next(s,worker=False):
  wrap(fn,'...args',f'return {api}.draft(nrOriginal_{fn}(...args),{state},args[0]);')
  # Promotion to a roster/free agency constructs a new object; explicitly carry saved traits.
  s=re.sub(r'\.\.\.\((\w+)\.historicalModel\|\|\{\}\)',lambda m:m[0]+','+','.join(f'{key}:{m[1]}.{key}' for key in ['parallelHidden','parallelScout','parallelGeneration'])+f',parallelOriginId:{m[1]}.parallelOriginId||{m[1]}.id',s)
+ # Public board uses a persistent league opinion, never exact PA; personal scouting is separate.
+ comparator='vh' if worker else 'Zg'
+ wrap(comparator,'e,t',f'return {api}.compareProspects(e,t);')
+ # AI evaluates its own imperfect report, retaining team needs and age preferences.
+ ai='js' if worker else 'am'
+ wrap(ai,'e,t,n,r',f'const report={api}.opinion(e,2,`team:${{t.abbr}}`);return nrOriginal_{ai}({{...e,trueAbility:(report.abilityLow+report.abilityHigh)/2,truePotential:(report.potentialLow+report.potentialHigh)/2,mockRank:0}},t,n,r);')
  # Cap policy changes team budgets; salary scale uses the unmodified rule function.
  cap='O' if worker else 'Ve'
  anchor='function '+cap+'(year='
