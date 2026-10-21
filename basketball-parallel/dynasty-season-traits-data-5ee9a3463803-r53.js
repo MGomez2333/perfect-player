@@ -1,2 +1,2 @@
-import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r42';
+import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r42.1';
 const e=globalThis.__DYNASTY_DATA_R53__['916d5089897b696fda386de16c021b72cd02b94c56729d930f0e76cf60045b6a']();export{e as SEASON_TRAITS};

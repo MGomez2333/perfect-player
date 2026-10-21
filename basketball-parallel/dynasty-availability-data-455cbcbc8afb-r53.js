@@ -1,2 +1,2 @@
-import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r42';
+import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r42.1';
 const e=globalThis.__DYNASTY_DATA_R53__['e9e59ff5f34c89cdbaaffb6de85206b70a330c1d5bfcc5071a408f1e15800f49']();export{e as AVAILABILITY_DATA};

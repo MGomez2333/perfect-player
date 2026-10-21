@@ -1,10 +1,10 @@
-import * as services from './dynasty-runtime-f68dfaa59e08-r90.js?v=20261021-r42';
-import css from './dynasty-entry-style-e71847e68b4a.js?v=20261021-r42';
-import data from './dynasty-entry-data-03482d7b9607.js?v=20261021-r42';
-import {managerAssetData} from './dynasty-entry-media-ff6151fd96ac.js?v=20261021-r42';
-import polish from './dynasty-polish.js?v=20261021-r42';
-import {mountDynastyTemplate} from './dynasty-template-release.js?v=20261021-r42';
-import logos from './dynasty-logos-release.js?v=20261021-r42';
+import * as services from './dynasty-runtime-f68dfaa59e08-r90.js?v=20261021-r42.1';
+import css from './dynasty-entry-style-e71847e68b4a.js?v=20261021-r42.1';
+import data from './dynasty-entry-data-03482d7b9607.js?v=20261021-r42.1';
+import {managerAssetData} from './dynasty-entry-media-ff6151fd96ac.js?v=20261021-r42.1';
+import polish from './dynasty-polish.js?v=20261021-r42.1';
+import {mountDynastyTemplate} from './dynasty-template-release.js?v=20261021-r42.1';
+import logos from './dynasty-logos-release.js?v=20261021-r42.1';
 const home=document.querySelector('#dynasty-home'),host=document.querySelector('#dynasty-game'),status=document.querySelector('#home-status');
 let runtime=null,busy=false;
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
