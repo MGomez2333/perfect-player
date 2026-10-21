@@ -111,4 +111,27 @@ export default `
 @media(max-width:600px){.nr-dialog{width:100%;max-width:100%;max-height:90dvh;margin:auto 0 0;border-radius:26px 26px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}.dynasty-document .pd-training{padding:18px 16px}.dynasty-document .pd-training .pd-group{padding:16px 12px 4px}.dynasty-document .pd-grid{gap:0 10px}.dynasty-document .bottom-nav button{min-height:52px}.dynasty-document .self-draft-person{margin-top:8px}.dynasty-document .bottom-sheet>header{padding:20px}}
 @media(max-width:360px){.dynasty-document .nr-toolbar small{display:none}.dynasty-document .pd-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.dynasty-document *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* Override the legacy inline control theme as well as the shared surfaces. */
+.dynasty-document .primary-button,.dynasty-document .self-draft-buttons .primary-button{background:#007aff!important;color:#fff!important;border:0!important;border-radius:12px!important;box-shadow:none!important}
+.dynasty-document #dynastyTeamHeader{background:#fff!important;color:#1c1c1e!important;border:0!important;border-radius:20px!important;box-shadow:none!important}
+.dynasty-document #dynastyTeamHeader h1,.dynasty-document #dynastyTeamHeader h2,.dynasty-document #dynastyTeamHeader strong{color:#1c1c1e!important}
+.dynasty-document #dynastyTeamHeader button{color:#737780!important}
+.dynasty-document #uiSubnav button{border-bottom:0!important}
+.dynasty-document #uiSubnav button[aria-selected=true]{color:#007aff!important}
+.dynasty-document .self-roll-cell{background:#f2f2f7;border-radius:16px;padding:18px 14px}
+.dynasty-document .self-roll-cell>span,.dynasty-document .self-roll-cell small{color:#8e8e93}
+.dynasty-document .self-roll-cell>strong{font-size:36px;color:#1c1c1e;letter-spacing:-1px}
+.dynasty-document .self-roll-cell button{border:0!important;border-radius:10px!important;background:#fff!important;color:#007aff!important;font-weight:600}
+.dynasty-document .self-roll-position{border-color:#e5e5ea;color:#1c1c1e}
+.dynasty-document .self-roll-position button{color:#007aff!important}
+.dynasty-document .self-roll-offer{background:#edf5ff;border-radius:16px}
+.dynasty-document .self-roll-compare b{color:#007aff}
+.dynasty-document .nr-chevron{display:inline-block}
+.nr-dialog .nr-primary{background:#007aff;color:white;border:0;border-radius:12px;min-height:46px;padding:12px 18px;font-size:14px;font-weight:650}
+.nr-dialog .nr-secondary{background:#eff5ff;color:#0066d6;border:0;border-radius:12px;min-height:40px;padding:10px 14px;font-size:13px;font-weight:600}
+
+.dynasty-document.ui-v2,.dynasty-document.ui-v2 #app{background:#f2f2f7!important;color:#1c1c1e}
+.dynasty-document.ui-v2 #uiNav{background:#ffffffed!important;border-color:#e5e5ea!important}
+.dynasty-document.ui-v2 #uiNav button.active{color:#007aff!important}
+.dynasty-document.ui-v2 #uiReturnHome{color:#007aff!important;border:0!important;background:transparent!important}
 `;

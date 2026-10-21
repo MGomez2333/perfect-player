@@ -77,6 +77,7 @@ def patch_next(s,worker=False):
  # Shorter inter-game presentation delay; keep yielding and pause/stop checks.
  s=s.replace('1350/', '220/')
  if not worker:
+  s=s.replace('球探大榜','联盟预测大榜')
   once('c.specialtyRole=u;',"c.specialtyRole=u;if(c.parallelTraining)c.parallelTraining.offenseRole=u;")
   once('function F(e=!0){pdTick();','function F(e=!0){nrTick();pdTick();')
   once('function pdClock(p){',(ROOT/'next-integration.js').read_text()+'\nfunction pdClock(p){')
