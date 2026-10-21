@@ -134,4 +134,8 @@ export default `
 #uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document.ui-v2 #uiNav{background:#ffffffed!important;border-color:#e5e5ea!important}
 #uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document.ui-v2 #uiNav button.active{color:#007aff!important}
 #uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document.ui-v2 #uiReturnHome{color:#007aff!important;border:0!important;background:transparent!important}
+
+#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document #dynastyTeamHeader small{color:#737780!important}
+#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document #uiSubnav button[aria-selected=true]::after{background:#007aff!important}
+#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot#uiDynastyRoot.dynasty-document #uiNav button[aria-current=page]{color:#007aff!important;background:#edf5ff!important}
 `;
