@@ -46,7 +46,7 @@
  }
  function model(p,m){root.ParallelNext?.model(p,m);const t=p.parallelTraining;if(!t)return m;if(t.shots&&t.shots!=='auto')m.usage=clamp(m.usage*{low:.12,high:1.7,focal:3.4}[t.shots],.015,.9);else if(t.touch!=='auto')m.usage=clamp(m.usage*(t.touch==='high'?1.22:.78),.08,.42);
   m.parallelDefenseWeight={low:.55,high:1.5,focal:2.2}[t.defense]||1;
-  m.parallelInitiationWeight=({low:.12,high:2,focal:5}[t.initiation]||1)*(t.offenseRole==='heliocentric'?1.6:1);
+  m.parallelInitiationWeight=({low:.2,high:1.8,focal:4}[t.initiation]||1)*(t.offenseRole==='heliocentric'?1.25:1);
   if(t.pass!=='auto')m.ast36*=t.pass==='create'?1.12:.82;
   const familiarity=t.familiarity[t.target]??25;m.consistency=Math.max(.5,m.consistency-(100-familiarity)*.0005);
   m.threeShare=t.shot==='auto'?m.threeShare:{inside:.05,mid:.16,outside:.58}[t.shot];return m;

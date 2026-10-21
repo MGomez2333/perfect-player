@@ -19,3 +19,15 @@ assert.deepEqual([...JSON.parse(JSON.stringify(board))].sort(N.compareProspects)
 const legacy={id:'legacy',age:20,trueAbility:72,truePotential:87,parallelScout:{version:1,reports:{1:{potentialLow:80,potentialHigh:99}}},parallelHidden:{version:1,values:Object.fromEntries(Object.keys(N.labels).map(k=>[k,12]))}};const original=structuredClone(legacy);N.scout(legacy,1);assert.equal(legacy.trueAbility,original.trueAbility);assert.equal(legacy.truePotential,original.truePotential);assert.deepEqual(legacy.parallelHidden,original.parallelHidden);assert.deepEqual(legacy.parallelScout.legacyReports,original.parallelScout.reports);
 for(const file of ['dynasty-runtime-f68dfaa59e08-r90.js','dynasty-worker-c269660e8472-r90.js']){const source=require('fs').readFileSync(require('path').join(__dirname,'..',file),'utf8');assert.ok(source.includes('return globalThis.ParallelNext.compareProspects(e,t);'));assert.ok(source.includes('globalThis.ParallelNext.opinion(e,2,`team:${t.abbr}`)'));}
 console.log(`PASS r42: public rank independent of exact PA and personal scouting; stable on reload; ${ceilingReports}/300 initial reports reach 99; legacy player values preserved.`);
+// r43 opening personalities: stable identity profiles and conservative save migration.
+const paul={id:'cp-2008',name:'克里斯-保罗',simAbility:92,simPotential:97},harden={id:'jh',name:'詹姆斯·哈登'},simmons={id:'bs',name:'本-西蒙斯'};
+assert.ok(N.hidden(paul).ambition>N.hidden(harden).ambition);assert.ok(N.hidden(harden).ambition>N.hidden(simmons).ambition);
+assert.deepEqual(N.hidden({id:'cp-other-year',name:'Chris Paul'}),N.hidden(paul));
+assert.equal(paul.simAbility,92);assert.equal(paul.simPotential,97);
+const identities=Array.from({length:100},(_,i)=>({id:'opening-'+i,name:'球员'+i}));
+assert.ok(new Set(identities.map(p=>JSON.stringify(N.hidden(p)))).size>90);
+for(const p of identities){const old=structuredClone(p);assert.deepEqual(N.hidden(JSON.parse(JSON.stringify(p))),old.parallelHidden.values);assert.ok(Object.values(N.hidden(p)).every(n=>n>=1&&n<=20));}
+const allTen=()=>({version:1,values:Object.fromEntries(Object.keys(N.labels).map(k=>[k,10]))});
+const placeholder={name:'克里斯-保罗',parallelHidden:allTen()};assert.equal(N.hidden(placeholder).ambition,19);assert.equal(placeholder.parallelHidden.source,'opening-profile');
+for(const p of [{name:'克里斯-保罗',selfDraft:true,parallelHidden:allTen()},{name:'克里斯-保罗',parallelGeneration:'repeat-1',parallelHidden:allTen()},{name:'克里斯-保罗',parallelHidden:{...allTen(),source:'custom'}},{name:'克里斯-保罗',parallelHidden:{...allTen(),values:{...allTen().values,clutch:11}}}]){const old=structuredClone(p.parallelHidden);N.hidden(p);assert.deepEqual(p.parallelHidden,old);}
+console.log('PASS r43: differentiated opening profiles, stable identity and reload, neutral legacy migration, custom and reborn attributes preserved.');

@@ -47,6 +47,7 @@ jobs:
         run: |
           node basketball-parallel/tests/next-rules.cjs
           node basketball-parallel/tests/next-engine.cjs
+          node basketball-parallel/tests/creation-balance.cjs
           node basketball-parallel/tests/navigation.cjs
           node basketball-parallel/tests/draft-era.cjs
           node basketball-parallel/tests/draft-filters.cjs
