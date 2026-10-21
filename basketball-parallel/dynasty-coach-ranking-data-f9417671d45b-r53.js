@@ -1,2 +1,2 @@
-import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r42.3';
+import '/perfect-player/basketball-parallel/external/a57601abac77-261010-vj6nkbrc-upload-1791628283546-63.js?v=20261021-r43';
 const e=globalThis.__DYNASTY_DATA_R53__['0fa59d0e7f726c80759f9b9c9938b71ff85e09620c9effea5c3f2950595a4a14']();export{e as COACH_RANKING_BASELINE};
