@@ -4,7 +4,7 @@ const base={finish:85,mid:86,three:45,ft:84,handle:60,passing:72,perimeter:50,ri
 const player=()=>({id:'yao',age:21,simAbility:82,simPotential:88,englishPosition:'C',position:'中锋',realPositions:['C']});
 const cfg={main:'three',secondary:'mid',target:'PF',shot:'outside',touch:'low',pass:'auto'};
 const p=player();D.configure(p,cfg,base,{year:2026,games:40,gp:40,min:1200});D.tick(p,{year:2026,games:40,gp:40,min:1200});assert.deepEqual(D.ratings(p.parallelTraining,{}),base);
-D.tick(p,{year:2026,games:60,gp:60,min:1920});const trained=D.ratings(p.parallelTraining,{});assert.ok(trained.three>base.three);assert.ok(trained.three-base.three>trained.rim-base.rim);assert.equal(p.englishPosition,'PF');assert.ok(p.realPositions.includes('C'));
+D.tick(p,{year:2026,games:60,gp:60,min:1920});const trained=D.ratings(p.parallelTraining,{});assert.ok(trained.three>base.three);assert.ok(trained.three-base.three>trained.rim-base.rim);assert.equal(p.englishPosition,'PF');assert.deepEqual(p.realPositions,['PF']);assert.ok(p.parallelTraining.originalPositions.includes('C'));
 const saved=JSON.parse(JSON.stringify(p));D.tick(saved,{year:2026,games:60,gp:60,min:1920});assert.deepEqual(saved,p,'reload must not duplicate growth');
 D.configure(p,{...cfg,main:'passing',secondary:'handle'},trained,{year:2026,games:60,gp:60,min:1920});assert.deepEqual(D.ratings(p.parallelTraining,{}),trained,'changing plan must not grant retroactive progress');
 assert.equal(D.summer(p,2026),true);assert.equal(D.summer(p,2026),false);

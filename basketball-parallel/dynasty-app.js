@@ -14,7 +14,8 @@ function renderHome(){
  const summary=services.dynastySummary(),slots=services.listDynastySlots();
  document.querySelector('#continue-dynasty').disabled=!summary;
  document.querySelector('#current-summary').textContent=summary?`${summary.teamName||summary.team||'我的球队'} · ${summary.seasonLabel||''} · ${summary.recordLabel||'季前准备'}`:'从选择球队与赛季开始，建立你的王朝。';
- document.querySelector('#dynasty-slots').innerHTML=slots.length?slots.map(slot=>{const s=slot.summary||slot;return `<button class="save-slot" data-slot="${escape(slot.id)}"><strong>${escape(s.teamName||s.team||'王朝存档')}</strong><span>${escape(s.seasonLabel||'')} · ${escape(s.recordLabel||'季前准备')}</span><small>继续这段王朝 →</small></button>`;}).join(''):'<p class="muted">建立的王朝会显示在这里。</p>';
+ document.querySelector('#dynasty-slots').innerHTML=slots.length?slots.map(slot=>{const s=slot.summary||slot;return `<div><button class="save-slot" data-slot="${escape(slot.id)}"><strong>${escape(s.teamName||s.team||'王朝存档')}</strong><span>${escape(s.seasonLabel||'')} · ${escape(s.recordLabel||'季前准备')}</span><small>继续这段王朝 →</small></button><button data-delete-slot="${escape(slot.id)}" aria-label="删除${escape(s.teamName||s.team||'王朝存档')}" style="margin:4px 0 16px;min-height:44px">删除此存档</button></div>`;}).join(''):'<p class="muted">建立的王朝会显示在这里。</p>';
+ document.querySelectorAll('[data-delete-slot]').forEach(b=>b.onclick=()=>action(async()=>{const slot=slots.find(s=>s.id===b.dataset.deleteSlot),s=slot?.summary||slot;if(!s)return;if(!confirm(`删除存档：${s.teamName||s.team||'王朝'} · ${s.seasonLabel||''} · ${s.recordLabel||''}？此操作无法撤销，其他存档不受影响。`))return;await services.deleteDynastySlot(slot.id);renderHome();}));
  document.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>action(async()=>{await services.restoreDynastySlot(b.dataset.slot);await enter();}));
 }
 async function returnHome(){

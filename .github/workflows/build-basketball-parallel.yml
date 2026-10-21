@@ -5,6 +5,7 @@ on:
       - .github/workflows/build-basketball-parallel.yml
       - basketball-parallel/build.py
       - basketball-parallel/*patches.py
+      - basketball-parallel/next-*.js
       - basketball-parallel/player-development.js
       - basketball-parallel/development-integration.js
       - basketball-parallel/draft-*.js
@@ -44,6 +45,8 @@ jobs:
       - run: npm ci --prefix basketball-parallel --ignore-scripts --no-audit --no-fund
       - name: Verify dynasty rules and compatibility
         run: |
+          node basketball-parallel/tests/next-rules.cjs
+          node basketball-parallel/tests/next-engine.cjs
           node basketball-parallel/tests/navigation.cjs
           node basketball-parallel/tests/draft-era.cjs
           node basketball-parallel/tests/draft-filters.cjs

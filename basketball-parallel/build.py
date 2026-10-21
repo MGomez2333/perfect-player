@@ -1,4 +1,5 @@
 from pathlib import Path
+from next_patches import patch_next
 from frontend_patches import patch_dynasty, patch_progression
 from development_patches import patch_development, patch_entry_navigation
 import urllib.request,concurrent.futures,re,json,hashlib,time,zipfile,io
@@ -29,7 +30,7 @@ def fetch(u):
    time.sleep(n+1)
 def refs(s,u):
  return {urljoin(u,v) for v in re.findall(r'["\x27`]((?:https?://|\./|\.\./|/)[^"\x27`\s]*?\.(?:js|css|json|csv)(?:\?[^"\x27`\s]*)?)["\x27`]',s) if '${' not in v and '\\' not in v and not any(k in v for k in SKIP)}
-VERSION='20261016-r40'
+VERSION='20261021-r41'
 snapshot=zipfile.ZipFile(io.BytesIO(b''.join(p.read_bytes() for p in sorted(ROOT.glob('dynasty-source.part*')))))
 manifest=json.loads((ROOT/'dynasty-source-manifest.json').read_text())
 entries={u:snapshot.read(target(u)).decode().replace("\r\n","\n") for u in manifest}
@@ -56,8 +57,8 @@ urlmap={u:PREFIX+target(u)+('?v='+VERSION if '.js' in u else '') for u in sorted
 url_pattern=re.compile('|'.join(re.escape(u) for u in sorted(urlmap,key=len,reverse=True)))
 for u,s in entries.items():
  if 'dynasty-ui-' in u:s=patch_entry_navigation(s)
- if 'dynasty-worker-' in u:s=patch_development(patch_progression(s),worker=True)
- if 'dynasty-runtime-' in u:s=patch_development(patch_dynasty(s))
+ if 'dynasty-worker-' in u:s=patch_next(patch_development(patch_progression(s),worker=True),worker=True)
+ if 'dynasty-runtime-' in u:s=patch_next(patch_development(patch_dynasty(s)))
  if 'dynasty-runtime-' in u or 'dynasty-worker-' in u:
   # Keep this release on the existing economic rules in runtime and worker.
   s=re.sub(r'function activateManagementR73\(\)\{.*?\n\}', 'function activateManagementR73(){return false;}',s,flags=re.S)

@@ -12,7 +12,7 @@
  function seasonFrom(p){const t=p.parallelTraining;if(!t)return overall(p);return Number.isFinite(t.seasonStartOverall)?t.seasonStartOverall:clamp(Math.round(t.baseOverall+keys.reduce((n,k)=>n+(t.seasonStart?.[k]??t.origin[k])-t.origin[k],0)/9),55,99);}
  function reportRow(p,row,year){const t=p?.parallelTraining;if(!t||Number(t.cursor?.year)!==Number(year)||!t.settledYears?.includes(Number(year)))return row;const from=seasonFrom(p);return {...row,from,delta:row.to-from};}
  function sync(p){const t=p.parallelTraining;if(!t)return;t.external=external(p);const v=ratings(t,t.base),change=keys.reduce((n,k)=>n+v[k]-t.origin[k],0)/keys.length;p.simAbility=clamp(Math.round(t.baseOverall+change),55,99);if(t.allowBreakthrough===true)p.simPotential=Math.max(Number(p.simPotential??p.truePotential??p.gamePotential??p.simAbility),p.simAbility);return v;}
- function allocate(p,budget,reason,year){const t=p.parallelTraining;if(!t||budget<=0)return;const weights={};for(const k of keys)weights[k]=k===t.main?.45:k===t.secondary?.25:.30/7;
+ function allocate(p,budget,reason,year){const t=p.parallelTraining;if(!t||budget<=0)return;budget*=root.ParallelNext?.growth(p)??1;const weights={};for(const k of keys)weights[k]=k===t.main?.45:k===t.secondary?.25:.30/7;
   // Cap the actual attribute allocation, not only the displayed overall.
   if(t.allowBreakthrough!==true){const ceiling=Math.max(overall(p),Number(p.simPotential??p.truePotential??p.gamePotential??overall(p)));const raw=t.baseOverall+keys.reduce((n,k)=>n+t.base[k]+t.gains[k]+t.external[k]-t.externalOrigin[k]-t.origin[k],0)/9;budget=Math.min(budget,Math.max(0,(ceiling-raw)*9));}
   const beforeGains={...t.gains},beforeOverall=overall(p);let spent=0;for(const k of keys){const before=t.base[k]+t.gains[k]+t.external[k]-t.externalOrigin[k],gain=Math.max(0,Math.min(99-before,budget*weights[k]));t.gains[k]+=gain;spent+=gain;}
@@ -31,8 +31,8 @@
   const target=t.target,old=t.familiarity[target]??Math.max(15,55-Math.abs(Object.keys(positions).indexOf(target)-Object.keys(positions).indexOf(t.originalPosition))*8);
   t.familiarity[target]=Math.min(100,old+gp*.65+games*.15);t.cursor={...clock};applyPosition(p);
  }
- function applyPosition(p){const t=p.parallelTraining;if(!t||!positions[t.target])return p;const role=t.target;p.englishPosition=role;p.position=role==='C'?'中锋':['PG','SG'].includes(role)?'后卫':'前锋';p.positionLabel=positions[role];p.realPositions=[role,...t.originalPositions.filter(x=>x!==role)];p.realPositionRoles=[...new Set(p.realPositions.map(x=>x==='C'?'中锋':['PG','SG'].includes(x)?'后卫':'前锋'))];return p;}
- function configure(p,values,nine,clock,ability=overall(p)){tick(p,clock);const t=init(p,nine,clock,ability);if(!keys.includes(values.main)||!keys.includes(values.secondary)||values.main===values.secondary)throw Error('主练和辅练请选择不同属性');if(!positions[values.target])throw Error('请选择有效位置');for(const [key,allowed] of Object.entries({shot:['auto','inside','mid','outside'],touch:['auto','low','high'],pass:['auto','finish','create']}))if(!allowed.includes(values[key]))throw Error('打法设置无效');for(const key of ['initiation','shots','defense'])if(values[key]!==undefined&&!['auto','low','high','focal'].includes(values[key]))throw Error('参与权重无效');values.allowBreakthrough=values.allowBreakthrough===true||values.allowBreakthrough==='on';Object.assign(t,values);applyPosition(p);sync(p);return t;}
+ function applyPosition(p){const t=p.parallelTraining;if(!t||!positions[t.target])return p;const role=t.target;p.englishPosition=role;p.position=role==='C'?'中锋':['PG','SG'].includes(role)?'后卫':'前锋';p.positionLabel=positions[role];p.realPositions=[role];p.realPositionRoles=[...new Set(p.realPositions.map(x=>x==='C'?'中锋':['PG','SG'].includes(x)?'后卫':'前锋'))];return p;}
+ function configure(p,values,nine,clock,ability=overall(p)){tick(p,clock);const t=init(p,nine,clock,ability);if(!keys.includes(values.main)||!keys.includes(values.secondary)||values.main===values.secondary)throw Error('主练和辅练请选择不同属性');if(!positions[values.target])throw Error('请选择有效位置');for(const [key,allowed] of Object.entries({shot:['auto','inside','mid','outside'],touch:['auto','low','high'],pass:['auto','finish','create']}))if(!allowed.includes(values[key]))throw Error('打法设置无效');for(const key of ['initiation','shots','defense'])if(values[key]!==undefined&&!['auto','low','high','focal'].includes(values[key]))throw Error('参与权重无效');for(const [key,allowed] of Object.entries({offenseRole:Object.keys(root.ParallelNext?.offense||{}),defenseRole:Object.keys(root.ParallelNext?.defense||{}),rebounds:['auto','low','high','focal']}))if(values[key]!==undefined&&!allowed.includes(values[key]))throw Error('职责设置无效');values.allowBreakthrough=values.allowBreakthrough===true||values.allowBreakthrough==='on';Object.assign(t,values);if(values.offenseRole)p.specialtyRole=values.offenseRole==='heliocentric'?'handler':values.offenseRole;applyPosition(p);sync(p);return t;}
  function summer(p,year){const t=p.parallelTraining;if(!t||t.summerYears.includes(year))return false;allocate(p,18,'夏训专项',year);t.summerYears.push(year);return true;}
  function settle(p,{year,ability,potential,line,baseline,breakout,boost}){const t=p.parallelTraining;if(!t)return null;const before=overall(p);if(!t.settledYears.includes(year)){if(baseline<0){for(const k of keys)t.gains[k]+=baseline;sync(p);}if(breakout)allocate(p,Math.max(9,boost*9),'突破赛季',year);t.settledYears.push(year);}return {summaryFrom:seasonFrom(p),ability:before,potential:Math.max(potential,overall(p)),line,delta:overall(p)-before,breakout,boost};}
  function tendencies(p,result){const t=p.parallelTraining;if(!t)return result;const b=result.tendencies;
@@ -40,17 +40,18 @@
   if(t.touch!=='auto'&&(!t.initiation||t.initiation==='auto')&&(!t.shots||t.shots==='auto')){b.handling=t.touch==='high'?.88:.25;b.shooting=t.touch==='high'?.8:.3;}
   if(t.initiation&&t.initiation!=='auto')b.handling={low:.15,high:.8,focal:.95}[t.initiation];
   if(t.shots&&t.shots!=='auto')b.shooting={low:.15,high:.8,focal:.95}[t.shots];
+  if(t.offenseRole&&t.offenseRole!=='auto')result.role=t.offenseRole==='heliocentric'?'handler':t.offenseRole;
   if(t.pass!=='auto')b.passing=t.pass==='create'?.9:.3;
   return result;
  }
- function model(p,m){const t=p.parallelTraining;if(!t)return m;if(t.shots&&t.shots!=='auto')m.usage=clamp(m.usage*{low:.6,high:1.35,focal:1.8}[t.shots],.05,.6);else if(t.touch!=='auto')m.usage=clamp(m.usage*(t.touch==='high'?1.22:.78),.08,.42);
+ function model(p,m){root.ParallelNext?.model(p,m);const t=p.parallelTraining;if(!t)return m;if(t.shots&&t.shots!=='auto')m.usage=clamp(m.usage*{low:.12,high:1.7,focal:3.4}[t.shots],.015,.9);else if(t.touch!=='auto')m.usage=clamp(m.usage*(t.touch==='high'?1.22:.78),.08,.42);
   m.parallelDefenseWeight={low:.55,high:1.5,focal:2.2}[t.defense]||1;
-  m.parallelInitiationWeight={low:.5,high:1.5,focal:2.3}[t.initiation]||1;
+  m.parallelInitiationWeight=({low:.12,high:2,focal:5}[t.initiation]||1)*(t.offenseRole==='heliocentric'?1.6:1);
   if(t.pass!=='auto')m.ast36*=t.pass==='create'?1.12:.82;
   const familiarity=t.familiarity[t.target]??25;m.consistency=Math.max(.5,m.consistency-(100-familiarity)*.0005);
   m.threeShare=t.shot==='auto'?m.threeShare:{inside:.05,mid:.16,outside:.58}[t.shot];return m;
  }
- const defenseWeight=(m,event)=>['def','block','perimeter','rim','steal','intercept','boxout'].includes(event)?(m.parallelDefenseWeight||1):1;
+ const defenseWeight=(m,event)=>(root.ParallelNext?.eventWeight(m,event)??1)*(['def','block','perimeter','rim','steal','intercept','boxout'].includes(event)?(m.parallelDefenseWeight||1):1);
  const viewState=p=>p.parallelTraining?{...p.parallelTraining,external:external(p)}:null;
  const api={defenseWeight,reportRow,seasonFrom,viewState,keys,labels,positions,totals,init,ratings,sync,tick,configure,summer,settle,applyPosition,tendencies,model};root.ParallelDevelopment=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
