@@ -12,7 +12,7 @@ gen=out/'gen';gen.mkdir(exist_ok=True)
 manifest=out/'AndroidManifest.xml'
 manifest.write_text((root/'app/src/main/AndroidManifest.xml').read_text().replace('<manifest ', '<manifest package="com.mgomez2333.basketballparallel" ',1))
 run(tools/'aapt2','link','-o',out/'resources.apk','-I',platform,'--manifest',manifest,
-    '--java',gen,'--min-sdk-version','26','--target-sdk-version','35','--version-code','41','--version-name','20261021-r41-offline.1',
+    '--java',gen,'--min-sdk-version','26','--target-sdk-version','35','--version-code','43','--version-name','20261022-r43-offline.1',
     '-A',root/'app/src/main/assets',out/'res.zip')
 classes=out/'classes';classes.mkdir(exist_ok=True)
 run('javac','-encoding','UTF-8','--release','8','-classpath',platform,'-d',classes,

@@ -9,8 +9,8 @@ android {
         applicationId 'com.mgomez2333.basketballparallel'
         minSdk 26
         targetSdk 35
-        versionCode 41
-        versionName '20261021-r41-offline.1'
+        versionCode 43
+        versionName '20261022-r43-offline.1'
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
     }
     signingConfigs {
